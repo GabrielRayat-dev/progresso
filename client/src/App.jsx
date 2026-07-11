@@ -44,13 +44,13 @@ export default function App() {
       <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
 
       {/* Protected routes */}
-      <Route path="/dashboard" element={<ProtectedRoute><Layout><Dashboard /></Layout></ProtectedRoute>} />
-      <Route path="/projects" element={<ProtectedRoute><Layout><Projects /></Layout></ProtectedRoute>} />
-      <Route path="/projects/:id" element={<ProtectedRoute><Layout><ProjectDetail /></Layout></ProtectedRoute>} />
-      <Route path="/tasks" element={<ProtectedRoute><Layout><MyTasks /></Layout></ProtectedRoute>} />
-      <Route path="/analytics" element={<ProtectedRoute><Layout><Analytics /></Layout></ProtectedRoute>} />
-      <Route path="/calendar" element={<ProtectedRoute><Layout><Calendar /></Layout></ProtectedRoute>} />
-      <Route path="/profile" element={<ProtectedRoute><Layout><Profile /></Layout></ProtectedRoute>} />
+      <Route path="/dashboard" element={<ProtectedRoute><Layout title="Dashboard"><Dashboard /></Layout></ProtectedRoute>} />
+      <Route path="/projects" element={<ProtectedRoute><Layout title="Projects"><Projects /></Layout></ProtectedRoute>} />
+      <Route path="/projects/:id" element={<ProtectedRoute><Layout title="Project detail"><ProjectDetail /></Layout></ProtectedRoute>} />
+      <Route path="/tasks" element={<ProtectedRoute><Layout title="My tasks"><MyTasks /></Layout></ProtectedRoute>} />
+      <Route path="/analytics" element={<ProtectedRoute><Layout title="Analytics"><Analytics /></Layout></ProtectedRoute>} />
+      <Route path="/calendar" element={<ProtectedRoute><Layout title="Calendar"><Calendar /></Layout></ProtectedRoute>} />
+      <Route path="/profile" element={<ProtectedRoute><Layout title="Profile"><Profile /></Layout></ProtectedRoute>} />
 
       {/* 404 */}
       <Route path="*" element={<NotFound />} />
