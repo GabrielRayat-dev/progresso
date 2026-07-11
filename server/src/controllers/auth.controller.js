@@ -114,4 +114,111 @@ const getProfile = async (req, res) => {
   }
 }
 
-module.exports = { register, login, getProfile }
+// ─── CHANGE PASSWORD ──────────────────────────────────────
+const changePassword = async (req, res) => {
+  const { current_password, new_password } = req.body
+
+  if (!current_password || !new_password) {
+    return res.status(400).json({ 
+      error: 'Current password and new password are required.' 
+    })
+  }
+
+  if (new_password.length < 6) {
+    return res.status(400).json({ 
+      error: 'New password must be at least 6 characters.' 
+    })
+  }
+
+  try {
+    const user = await UserModel.findByEmail(
+      (await UserModel.findById(req.user.id)).email
+    )
+
+    const match = await bcrypt.compare(current_password, user.password)
+    if (!match) {
+      return res.status(401).json({ 
+        error: 'Current password is incorrect.' 
+      })
+    }
+
+    const hashed = await bcrypt.hash(new_password, 10)
+    await UserModel.updatePassword(req.user.id, hashed)
+
+    res.json({ message: 'Password changed successfully!' })
+
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+}
+
+// ─── UPDATE PROFILE NAME ──────────────────────────────────
+const updateProfile = async (req, res) => {
+  const { full_name } = req.body
+
+  if (!full_name) {
+    return res.status(400).json({ 
+      error: 'Full name is required.' 
+    })
+  }
+
+  try {
+    const user = await UserModel.updateName(req.user.id, full_name)
+    res.json({ message: 'Profile updated!', user })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+}
+
+// ─── UPLOAD AVATAR ────────────────────────────────────────
+const uploadAvatar = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded.' })
+    }
+
+    const supabase = require('../supabase')
+    const fileExt = req.file.originalname.split('.').pop()
+    const fileName = `avatar_${req.user.id}_${Date.now()}.${fileExt}`
+
+    // Upload to Supabase Storage
+    const { error } = await supabase.storage
+      .from('avatars')
+      .upload(fileName, req.file.buffer, {
+        contentType: req.file.mimetype,
+        upsert: true
+      })
+
+    if (error) {
+      return res.status(500).json({ error: error.message })
+    }
+
+    // Get public URL
+    const { data } = supabase.storage
+      .from('avatars')
+      .getPublicUrl(fileName)
+
+    const avatar_url = data.publicUrl
+
+    // Save URL to database
+    const user = await UserModel.updateAvatar(req.user.id, avatar_url)
+
+    res.json({ 
+      message: 'Avatar uploaded successfully!', 
+      avatar_url,
+      user 
+    })
+
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+}
+
+module.exports = { 
+  register, 
+  login, 
+  getProfile, 
+  changePassword, 
+  updateProfile,
+  uploadAvatar
+}

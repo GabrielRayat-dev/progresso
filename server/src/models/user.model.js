@@ -31,10 +31,29 @@ const UserModel = {
     return result.rows[0]
   },
 
+  // Update full name
+  updateName: async (id, full_name) => {
+    const result = await db.query(
+      `UPDATE users SET full_name=$1 WHERE id=$2 
+      RETURNING id, full_name, email, avatar_url`,
+      [full_name, id]
+    )
+    return result.rows[0]
+  },
+
+  // Update password
+  updatePassword: async (id, password) => {
+    await db.query(
+      'UPDATE users SET password=$1 WHERE id=$2',
+      [password, id]
+    )
+  },
+
   // Update avatar
   updateAvatar: async (id, avatar_url) => {
     const result = await db.query(
-      'UPDATE users SET avatar_url = $1 WHERE id = $2 RETURNING id, full_name, email, avatar_url',
+      `UPDATE users SET avatar_url=$1 WHERE id=$2 
+      RETURNING id, full_name, email, avatar_url`,
       [avatar_url, id]
     )
     return result.rows[0]
