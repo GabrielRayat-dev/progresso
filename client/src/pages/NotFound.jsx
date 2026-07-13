@@ -1,7 +1,34 @@
+import { Link } from 'react-router-dom'
+
 export default function NotFound() {
   return (
-    <div className="text-textprimary p-6">
-      <h1 className="text-2xl font-bold">NotFound</h1>
+    <div className="min-h-screen bg-background flex items-center justify-center px-4">
+      <div className="text-center">
+        <div className="w-16 h-16 rounded-2xl bg-primary bg-opacity-10 flex items-center justify-center mx-auto mb-6">
+          <i className="ti ti-error-404 text-primary text-3xl" aria-hidden="true"></i>
+        </div>
+        <h1 className="text-4xl font-medium text-textprimary mb-2">404</h1>
+        <h2 className="text-xl font-medium text-textprimary mb-3">Page not found</h2>
+        <p className="text-textsecondary text-sm mb-8 max-w-sm mx-auto">
+          The page you are looking for does not exist or has been moved.
+        </p>
+        <div className="flex items-center justify-center gap-3">
+          <Link
+            to="/dashboard"
+            className="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-lg text-sm hover:opacity-90 transition-opacity"
+          >
+            <i className="ti ti-layout-dashboard" aria-hidden="true"></i>
+            Go to dashboard
+          </Link>
+          <Link
+            to="/"
+            className="flex items-center gap-2 border border-border text-textsecondary px-5 py-2.5 rounded-lg text-sm hover:text-textprimary transition-colors"
+          >
+            <i className="ti ti-home" aria-hidden="true"></i>
+            Home
+          </Link>
+        </div>
+      </div>
     </div>
   )
 }
