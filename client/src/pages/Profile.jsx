@@ -86,7 +86,7 @@ export default function Profile() {
   }
 
   return (
-    <div className="max-w-2xl">
+    <div className="max-w-2xl mx-auto">
       <div className="mb-6">
         <h2 className="text-xl font-medium text-textprimary">Profile</h2>
         <p className="text-textsecondary text-sm mt-1">Manage your account settings</p>
@@ -97,7 +97,10 @@ export default function Profile() {
         <h3 className="text-textprimary text-sm font-medium mb-4">Profile picture</h3>
         <div className="flex items-center gap-5">
           <div className="relative">
-            <div className="w-16 h-16 rounded-full bg-primary bg-opacity-20 flex items-center justify-center overflow-hidden">
+            <div
+              className="w-16 h-16 rounded-full flex items-center justify-center overflow-hidden"
+              style={{ background: 'rgba(108, 99, 255, 0.2)' }}
+            >
               {user?.avatar_url ? (
                 <img
                   src={user.avatar_url}
@@ -164,13 +167,13 @@ export default function Profile() {
         <h3 className="text-textprimary text-sm font-medium mb-4">Update name</h3>
 
         {nameMsg && (
-          <div className="flex items-center gap-2 bg-success bg-opacity-10 border border-success border-opacity-30 rounded-lg px-4 py-3 mb-4">
+          <div className="flex items-center gap-2 border border-success border-opacity-30 rounded-lg px-4 py-3 mb-4" style={{ background: '#0A2A1A' }}>
             <i className="ti ti-circle-check text-success text-sm" aria-hidden="true"></i>
             <span className="text-success text-sm">{nameMsg}</span>
           </div>
         )}
         {nameError && (
-          <div className="flex items-center gap-2 bg-danger bg-opacity-10 border border-danger border-opacity-30 rounded-lg px-4 py-3 mb-4">
+          <div className="flex items-center gap-2 border border-danger border-opacity-30 rounded-lg px-4 py-3 mb-4" style={{ background: '#2A0A0A' }}>
             <i className="ti ti-alert-circle text-danger text-sm" aria-hidden="true"></i>
             <span className="text-danger text-sm">{nameError}</span>
           </div>
@@ -205,13 +208,13 @@ export default function Profile() {
         <h3 className="text-textprimary text-sm font-medium mb-4">Change password</h3>
 
         {passMsg && (
-          <div className="flex items-center gap-2 bg-success bg-opacity-10 border border-success border-opacity-30 rounded-lg px-4 py-3 mb-4">
+          <div className="flex items-center gap-2 border border-success border-opacity-30 rounded-lg px-4 py-3 mb-4" style={{ background: '#0A2A1A' }}>
             <i className="ti ti-circle-check text-success text-sm" aria-hidden="true"></i>
             <span className="text-success text-sm">{passMsg}</span>
           </div>
         )}
         {passError && (
-          <div className="flex items-center gap-2 bg-danger bg-opacity-10 border border-danger border-opacity-30 rounded-lg px-4 py-3 mb-4">
+          <div className="flex items-center gap-2 border border-danger border-opacity-30 rounded-lg px-4 py-3 mb-4" style={{ background: '#2A0A0A' }}>
             <i className="ti ti-alert-circle text-danger text-sm" aria-hidden="true"></i>
             <span className="text-danger text-sm">{passError}</span>
           </div>

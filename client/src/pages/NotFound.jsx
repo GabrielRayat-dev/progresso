@@ -4,7 +4,7 @@ export default function NotFound() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
       <div className="text-center">
-        <div className="w-16 h-16 rounded-2xl bg-primary bg-opacity-10 flex items-center justify-center mx-auto mb-6">
+        <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6" style={{ background: '#1E1A3F' }}>
           <i className="ti ti-error-404 text-primary text-3xl" aria-hidden="true"></i>
         </div>
         <h1 className="text-4xl font-medium text-textprimary mb-2">404</h1>

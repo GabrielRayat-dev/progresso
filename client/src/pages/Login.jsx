@@ -30,7 +30,7 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4">
+    <div className="min-h-screen bg-background flex items-center justify-center px-6 py-10">
       <div className="w-full max-w-md">
 
         {/* Logo */}
@@ -42,13 +42,13 @@ export default function Login() {
         </div>
 
         {/* Card */}
-        <div className="bg-surface border border-border rounded-2xl p-8">
+        <div className="bg-surface border border-border rounded-2xl p-8 shadow-lg">
           <h1 className="text-xl font-medium text-textprimary mb-1">Welcome back</h1>
           <p className="text-textsecondary text-sm mb-6">Sign in to your account to continue</p>
 
           {/* Error */}
           {error && (
-            <div className="flex items-center gap-2 bg-danger bg-opacity-10 border border-danger border-opacity-30 rounded-lg px-4 py-3 mb-4">
+            <div className="flex items-center gap-2 border border-danger border-opacity-30 rounded-lg px-4 py-3 mb-4" style={{ background: '#2A0A0A' }}>
               <i className="ti ti-alert-circle text-danger text-sm" aria-hidden="true"></i>
               <span className="text-danger text-sm">{error}</span>
             </div>

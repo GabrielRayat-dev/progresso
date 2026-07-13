@@ -38,63 +38,68 @@ export default function Sidebar() {
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 px-3 py-4 space-y-1">
+      <nav className="flex-1 py-4 space-y-1 overflow-y-auto">
         {navItems.map((item) => {
           const isActive = location.pathname === item.path
           return (
             <Link
               key={item.path}
               to={item.path}
-              className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
+              style={isActive ? { background: '#1E1A3F' } : undefined}
+              className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-colors ${
                 isActive
-                  ? 'bg-primary bg-opacity-15 text-primary font-medium'
+                  ? 'text-primary font-medium'
                   : 'text-textsecondary hover:text-textprimary hover:bg-background'
               }`}
             >
-              <i className={`ti ${item.icon} text-base`} aria-hidden="true"></i>
-              {item.label}
+              <i className={`ti ${item.icon} text-base flex-shrink-0`} aria-hidden="true"></i>
+              <span>{item.label}</span>
             </Link>
           )
         })}
       </nav>
 
       {/* Bottom */}
-      <div className="px-3 py-4 border-t border-border space-y-1">
+      <div className="px-4 py-4 border-t border-border space-y-1">
         <Link
           to="/profile"
-          className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
+          style={location.pathname === '/profile' ? { background: '#1E1A3F' } : undefined}
+          className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-colors ${
             location.pathname === '/profile'
-              ? 'bg-primary bg-opacity-15 text-primary font-medium'
+              ? 'text-primary font-medium'
               : 'text-textsecondary hover:text-textprimary hover:bg-background'
           }`}
         >
-          <i className="ti ti-settings text-base" aria-hidden="true"></i>
-          Settings
+          <i className="ti ti-settings text-base flex-shrink-0" aria-hidden="true"></i>
+          <span>Settings</span>
         </Link>
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-textsecondary hover:text-danger hover:bg-background transition-colors"
+          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm text-textsecondary hover:text-danger hover:bg-background transition-colors"
         >
-          <i className="ti ti-logout text-base" aria-hidden="true"></i>
-          Sign out
+          <i className="ti ti-logout text-base flex-shrink-0" aria-hidden="true"></i>
+          <span>Sign out</span>
         </button>
       </div>
 
       {/* User */}
-      <div className="px-3 py-4 border-t border-border">
-        <Link to="/profile" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-          <div className="w-8 h-8 rounded-full bg-primary bg-opacity-20 flex items-center justify-center flex-shrink-0">
+      <div className="px-4 py-4 border-t border-border">
+        <Link
+          to="/profile"
+          style={location.pathname === '/profile' ? { background: '#1E1A3F' } : undefined}
+          className="flex items-center gap-3 hover:opacity-80 transition-opacity rounded-lg px-2 py-1.5"
+        >
+          <div
+            className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden"
+            style={{ background: 'rgba(108, 99, 255, 0.2)' }}
+          >
             {user?.avatar_url ? (
-              <img
-                src={user.avatar_url}
-                alt={user.full_name}
-                className="w-8 h-8 rounded-full object-cover"
-              />
+              <img src={user.avatar_url} alt={user.full_name} className="w-8 h-8 rounded-full object-cover" />
             ) : (
               <span className="text-primary text-xs font-medium">{initials}</span>
             )}
           </div>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <p className="text-textprimary text-xs font-medium truncate">{user?.full_name}</p>
             <p className="text-textsecondary text-xs truncate">{user?.email}</p>
           </div>

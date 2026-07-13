@@ -5,7 +5,7 @@ export default function Landing() {
     <div className="min-h-screen bg-background text-textprimary">
 
       {/* Navbar */}
-      <nav className="flex items-center justify-between px-8 py-5 border-b border-border">
+      <nav className="flex items-center justify-between px-8 py-5 border-b border-border max-w-7xl mx-auto">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
             <i className="ti ti-chart-bar text-white text-sm" aria-hidden="true"></i>
@@ -29,7 +29,7 @@ export default function Landing() {
       </nav>
 
       {/* Hero */}
-      <section className="flex flex-col items-center text-center px-6 pt-20 pb-16">
+      <section className="flex flex-col items-center text-center px-6 pt-20 pb-16 max-w-4xl mx-auto">
         <div className="inline-flex items-center gap-2 bg-surface border border-border rounded-full px-4 py-1.5 text-xs text-textsecondary mb-8">
           <div className="w-1.5 h-1.5 rounded-full bg-success"></div>
           Built for Filipino students and dev teams
@@ -70,7 +70,7 @@ export default function Landing() {
       <section className="px-8 py-12 max-w-4xl mx-auto">
         <div className="bg-surface border border-border rounded-2xl p-8 mb-6">
           <div className="flex items-start gap-4 mb-6">
-            <div className="w-10 h-10 rounded-lg bg-danger bg-opacity-10 flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#2A0A0A' }}>
               <i className="ti ti-mood-sad text-danger text-lg" aria-hidden="true"></i>
             </div>
             <div>
@@ -95,7 +95,7 @@ export default function Landing() {
 
         <div className="bg-surface border border-primary border-opacity-40 rounded-2xl p-8">
           <div className="flex items-start gap-4 mb-6">
-            <div className="w-10 h-10 rounded-lg bg-primary bg-opacity-10 flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#1E1A3F' }}>
               <i className="ti ti-circle-check text-primary text-lg" aria-hidden="true"></i>
             </div>
             <div>
@@ -131,16 +131,16 @@ export default function Landing() {
         </p>
         <div className="grid grid-cols-3 gap-4">
           {[
-            { icon: 'ti-folder', color: 'text-primary', bg: 'bg-primary', title: 'Project types', desc: 'Tag projects as Thesis, School, Freelance, or Personal. Filter and organize by type.' },
-            { icon: 'ti-users', color: 'text-secondary', bg: 'bg-secondary', title: 'Team roles', desc: 'Leader, Member, and Viewer roles per project. Invite teammates by email.' },
-            { icon: 'ti-activity', color: 'text-success', bg: 'bg-success', title: 'Activity logs', desc: 'Every action logged automatically. See who changed what and when.' },
-            { icon: 'ti-message', color: 'text-warning', bg: 'bg-warning', title: 'Task comments', desc: 'Leave comments directly on tasks. No more hunting for updates in group chats.' },
-            { icon: 'ti-chart-bar', color: 'text-primary', bg: 'bg-primary', title: 'Analytics', desc: 'Charts for task completion, member progress, and project health.' },
-            { icon: 'ti-bell', color: 'text-danger', bg: 'bg-danger', title: 'Notifications', desc: 'Get notified when assigned, commented on, or when deadlines are near.' },
+            { icon: 'ti-folder', color: '#6C63FF', bg: '#1E1A3F', title: 'Project types', desc: 'Tag projects as Thesis, School, Freelance, or Personal. Filter and organize by type.' },
+            { icon: 'ti-users', color: '#4ECDC4', bg: '#0A2A2A', title: 'Team roles', desc: 'Leader, Member, and Viewer roles per project. Invite teammates by email.' },
+            { icon: 'ti-activity', color: '#2ECC71', bg: '#0A2A1A', title: 'Activity logs', desc: 'Every action logged automatically. See who changed what and when.' },
+            { icon: 'ti-message', color: '#F39C12', bg: '#2A1F0A', title: 'Task comments', desc: 'Leave comments directly on tasks. No more hunting for updates in group chats.' },
+            { icon: 'ti-chart-bar', color: '#6C63FF', bg: '#1E1A3F', title: 'Analytics', desc: 'Charts for task completion, member progress, and project health.' },
+            { icon: 'ti-bell', color: '#E74C3C', bg: '#2A0A0A', title: 'Notifications', desc: 'Get notified when assigned, commented on, or when deadlines are near.' },
           ].map((f, i) => (
             <div key={i} className="bg-surface border border-border rounded-xl p-5 hover:border-primary transition-colors">
-              <div className={`w-9 h-9 rounded-lg ${f.bg} bg-opacity-10 flex items-center justify-center mb-4`}>
-                <i className={`ti ${f.icon} ${f.color} text-base`} aria-hidden="true"></i>
+              <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-4" style={{ background: f.bg }}>
+                <i className={`ti ${f.icon} text-base`} style={{ color: f.color }} aria-hidden="true"></i>
               </div>
               <h4 className="text-textprimary font-medium text-sm mb-2">{f.title}</h4>
               <p className="text-textsecondary text-xs leading-relaxed">{f.desc}</p>
@@ -176,7 +176,7 @@ export default function Landing() {
       </section>
 
       {/* CTA */}
-      <section className="px-8 py-16 text-center">
+      <section className="px-8 py-12 max-w-4xl mx-auto text-center">
         <div className="bg-surface border border-border rounded-2xl max-w-2xl mx-auto p-12">
           <h2 className="text-2xl font-medium text-textprimary mb-3">
             Ready to move forward?
@@ -198,19 +198,21 @@ export default function Landing() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border px-8 py-6 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded bg-primary flex items-center justify-center">
-            <i className="ti ti-chart-bar text-white text-xs" aria-hidden="true"></i>
+      <footer className="border-t border-border px-8 py-6">
+        <div className="flex items-center justify-between max-w-7xl mx-auto">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded bg-primary flex items-center justify-center">
+              <i className="ti ti-chart-bar text-white text-xs" aria-hidden="true"></i>
+            </div>
+            <span className="text-sm font-medium text-textprimary">Progresso</span>
           </div>
-          <span className="text-sm font-medium text-textprimary">Progresso</span>
+          <p className="text-xs text-textsecondary">
+            Built by Gabriel Rayat · BSCS 3rd year
+          </p>
+          <p className="text-xs text-textsecondary">
+            Move forward, together.
+          </p>
         </div>
-        <p className="text-xs text-textsecondary">
-          Built by Gabriel Rayat · BSCS 3rd year
-        </p>
-        <p className="text-xs text-textsecondary">
-          Move forward, together.
-        </p>
       </footer>
 
     </div>

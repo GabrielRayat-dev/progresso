@@ -142,9 +142,16 @@ export default function Calendar() {
                 <div
                   key={day}
                   onClick={() => setSelectedDay(isSelected ? null : day)}
+                  style={
+                    isSelected
+                      ? { background: '#1E1A3F' }
+                      : todayCell
+                      ? { background: 'rgba(108, 99, 255, 0.08)' }
+                      : undefined
+                  }
                   className={`min-h-20 border-b border-r border-border p-2 cursor-pointer transition-colors ${
-                    isSelected ? 'bg-primary bg-opacity-10' :
-                    todayCell ? 'bg-primary bg-opacity-5' :
+                    isSelected ? '' :
+                    todayCell ? '' :
                     pastDay ? 'bg-background opacity-60' :
                     'hover:bg-background'
                   }`}
@@ -160,10 +167,18 @@ export default function Calendar() {
                     {dayTasks.slice(0, 2).map(t => (
                       <div
                         key={t.id}
+                        style={{
+                          background:
+                            t.status === 'done'
+                              ? '#0A2A1A'
+                              : t.status === 'blocked'
+                              ? '#2A0A0A'
+                              : '#1E1A3F',
+                        }}
                         className={`text-xs px-1 py-0.5 rounded truncate ${
-                          t.status === 'done' ? 'bg-success bg-opacity-10 text-success' :
-                          t.status === 'blocked' ? 'bg-danger bg-opacity-10 text-danger' :
-                          'bg-primary bg-opacity-10 text-primary'
+                          t.status === 'done' ? 'text-success' :
+                          t.status === 'blocked' ? 'text-danger' :
+                          'text-primary'
                         }`}
                       >
                         {t.title}

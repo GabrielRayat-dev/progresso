@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../api/index'
 
-const typeBadge = {
-  thesis: 'bg-primary bg-opacity-10 text-primary',
-  school: 'bg-secondary bg-opacity-10 text-secondary',
-  freelance: 'bg-warning bg-opacity-10 text-warning',
-  personal: 'bg-success bg-opacity-10 text-success',
+const typePill = {
+  thesis: { className: 'text-primary', style: { background: '#1E1A3F' } },
+  school: { className: 'text-secondary', style: { background: '#0A2A2A' } },
+  freelance: { className: 'text-warning', style: { background: '#2A1F0A' } },
+  personal: { className: 'text-success', style: { background: '#0A2A1A' } },
 }
 
 const filters = ['All', 'Thesis', 'School', 'Freelance', 'Personal']
@@ -96,9 +96,10 @@ export default function Projects() {
           <button
             key={f}
             onClick={() => setFilter(f)}
+            style={filter === f ? { background: '#1E1A3F' } : undefined}
             className={`text-xs px-4 py-1.5 rounded-full border transition-colors ${
               filter === f
-                ? 'bg-primary bg-opacity-15 text-primary border-primary border-opacity-40'
+                ? 'text-primary border-primary border-opacity-40'
                 : 'border-border text-textsecondary hover:text-textprimary'
             }`}
           >
@@ -137,9 +138,14 @@ export default function Projects() {
               >
                 <div className="flex items-start justify-between mb-3">
                   <h3 className="text-textprimary font-medium text-sm leading-tight flex-1 pr-3">{project.name}</h3>
-                  <span className={`text-xs px-2 py-0.5 rounded-full flex-shrink-0 ${typeBadge[project.type] || 'bg-surface text-textsecondary'}`}>
-                    {project.type}
-                  </span>
+                  {(() => {
+                    const cfg = typePill[project.type] || { className: 'bg-surface text-textsecondary', style: undefined }
+                    return (
+                      <span className={`text-xs px-2 py-0.5 rounded-full flex-shrink-0 ${cfg.className}`} style={cfg.style}>
+                        {project.type}
+                      </span>
+                    )
+                  })()}
                 </div>
 
                 {project.description && (
@@ -203,7 +209,7 @@ export default function Projects() {
             </div>
 
             {error && (
-              <div className="flex items-center gap-2 bg-danger bg-opacity-10 border border-danger border-opacity-30 rounded-lg px-4 py-3 mb-4">
+              <div className="flex items-center gap-2 border border-danger border-opacity-30 rounded-lg px-4 py-3 mb-4" style={{ background: '#2A0A0A' }}>
                 <i className="ti ti-alert-circle text-danger text-sm" aria-hidden="true"></i>
                 <span className="text-danger text-sm">{error}</span>
               </div>

@@ -19,19 +19,19 @@ const statusLabels = {
   blocked: 'Blocked',
 }
 
-const statusBg = {
-  todo: 'bg-surface text-textsecondary',
-  in_progress: 'bg-warning bg-opacity-10 text-warning',
-  for_review: 'bg-primary bg-opacity-10 text-primary',
-  done: 'bg-success bg-opacity-10 text-success',
-  blocked: 'bg-danger bg-opacity-10 text-danger',
+const statusPill = {
+  todo: { className: 'bg-surface text-textsecondary', style: undefined },
+  in_progress: { className: 'text-warning', style: { background: '#2A1F0A' } },
+  for_review: { className: 'text-primary', style: { background: '#1E1A3F' } },
+  done: { className: 'text-success', style: { background: '#0A2A1A' } },
+  blocked: { className: 'text-danger', style: { background: '#2A0A0A' } },
 }
 
-const typeBadge = {
-  thesis: 'bg-primary bg-opacity-10 text-primary',
-  school: 'bg-secondary bg-opacity-10 text-secondary',
-  freelance: 'bg-warning bg-opacity-10 text-warning',
-  personal: 'bg-success bg-opacity-10 text-success',
+const typePill = {
+  thesis: { className: 'text-primary', style: { background: '#1E1A3F' } },
+  school: { className: 'text-secondary', style: { background: '#0A2A2A' } },
+  freelance: { className: 'text-warning', style: { background: '#2A1F0A' } },
+  personal: { className: 'text-success', style: { background: '#0A2A1A' } },
 }
 
 export default function Dashboard() {
@@ -159,9 +159,14 @@ export default function Dashboard() {
                   >
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-textprimary text-sm font-medium truncate">{project.name}</span>
-                      <span className={`text-xs px-2 py-0.5 rounded-full ${typeBadge[project.type] || 'bg-surface text-textsecondary'}`}>
-                        {project.type}
-                      </span>
+                      {(() => {
+                        const cfg = typePill[project.type] || { className: 'bg-surface text-textsecondary', style: undefined }
+                        return (
+                          <span className={`text-xs px-2 py-0.5 rounded-full ${cfg.className}`} style={cfg.style}>
+                            {project.type}
+                          </span>
+                        )
+                      })()}
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="flex-1 h-1.5 bg-border rounded-full overflow-hidden">
@@ -219,9 +224,14 @@ export default function Dashboard() {
                     </p>
                     <p className="text-textsecondary text-xs truncate">{task.project_name}</p>
                   </div>
-                  <span className={`text-xs px-2 py-0.5 rounded-full flex-shrink-0 ${statusBg[task.status]}`}>
-                    {statusLabels[task.status]}
-                  </span>
+                  {(() => {
+                    const cfg = statusPill[task.status] || statusPill.todo
+                    return (
+                      <span className={`text-xs px-2 py-0.5 rounded-full flex-shrink-0 ${cfg.className}`} style={cfg.style}>
+                        {statusLabels[task.status]}
+                      </span>
+                    )
+                  })()}
                 </div>
               ))}
             </div>
@@ -233,7 +243,7 @@ export default function Dashboard() {
       {/* Empty state if no projects */}
       {projects.length === 0 && tasks.length === 0 && (
         <div className="mt-6 bg-surface border border-border rounded-xl p-12 text-center">
-          <div className="w-14 h-14 bg-primary bg-opacity-10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: '#1E1A3F' }}>
             <i className="ti ti-rocket text-primary text-2xl" aria-hidden="true"></i>
           </div>
           <h3 className="text-textprimary font-medium mb-2">Welcome to Progresso!</h3>

@@ -3,12 +3,12 @@ import { useParams, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import api from '../api/index'
 
-const statusBg = {
-  todo: 'bg-surface text-textsecondary border border-border',
-  in_progress: 'bg-warning bg-opacity-10 text-warning',
-  for_review: 'bg-primary bg-opacity-10 text-primary',
-  done: 'bg-success bg-opacity-10 text-success',
-  blocked: 'bg-danger bg-opacity-10 text-danger',
+const statusPill = {
+  todo: { className: 'bg-surface text-textsecondary border border-border', style: undefined },
+  in_progress: { className: 'text-warning', style: { background: '#2A1F0A' } },
+  for_review: { className: 'text-primary', style: { background: '#1E1A3F' } },
+  done: { className: 'text-success', style: { background: '#0A2A1A' } },
+  blocked: { className: 'text-danger', style: { background: '#2A0A0A' } },
 }
 
 const statusLabels = {
@@ -17,6 +17,22 @@ const statusLabels = {
   for_review: 'For review',
   done: 'Done',
   blocked: 'Blocked',
+}
+
+const statusTint = {
+  todo: '#1A1D27',
+  in_progress: '#2A1F0A',
+  for_review: '#1E1A3F',
+  done: '#0A2A1A',
+  blocked: '#2A0A0A',
+}
+
+const statusDot = {
+  todo: 'bg-textsecondary',
+  in_progress: 'bg-warning',
+  for_review: 'bg-primary',
+  done: 'bg-success',
+  blocked: 'bg-danger',
 }
 
 const priorityDot = {
@@ -45,6 +61,8 @@ export default function ProjectDetail() {
   const [showInvite, setShowInvite] = useState(false)
   const [inviteEmail, setInviteEmail] = useState('')
   const [inviting, setInviting] = useState(false)
+  const [openStatusTaskId, setOpenStatusTaskId] = useState(null)
+  const [hoveredStatus, setHoveredStatus] = useState(null)
 
   useEffect(() => { fetchAll() }, [id])
   useEffect(() => {
@@ -53,6 +71,17 @@ export default function ProjectDetail() {
       fetchActivity(selectedTask.id)
     }
   }, [selectedTask])
+  useEffect(() => {
+    const handlePointerDown = (e) => {
+      if (!e.target.closest('[data-status-dropdown="root"]')) {
+        setOpenStatusTaskId(null)
+        setHoveredStatus(null)
+      }
+    }
+
+    document.addEventListener('pointerdown', handlePointerDown)
+    return () => document.removeEventListener('pointerdown', handlePointerDown)
+  }, [])
 
   const fetchAll = async () => {
     try {
@@ -246,9 +275,10 @@ export default function ProjectDetail() {
             <button
               key={f}
               onClick={() => setFilter(f)}
+              style={filter === f ? { background: '#1E1A3F' } : undefined}
               className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
                 filter === f
-                  ? 'bg-primary bg-opacity-15 text-primary border-primary border-opacity-40'
+                  ? 'text-primary border-primary border-opacity-40'
                   : 'border-border text-textsecondary hover:text-textprimary'
               }`}
             >
@@ -283,18 +313,64 @@ export default function ProjectDetail() {
                 <span className={`flex-1 text-sm truncate ${task.status === 'done' ? 'line-through text-textsecondary' : 'text-textprimary'}`}>
                   {task.title}
                 </span>
-                <select
-                  value={task.status}
-                  onChange={(e) => { e.stopPropagation(); handleStatusChange(task.id, e.target.value) }}
-                  onClick={(e) => e.stopPropagation()}
-                  className={`text-xs px-2 py-1 rounded-full border-0 focus:outline-none cursor-pointer ${statusBg[task.status]}`}
-                >
-                  {Object.entries(statusLabels).map(([val, label]) => (
-                    <option key={val} value={val}>{label}</option>
-                  ))}
-                </select>
+                {(() => {
+                  const cfg = statusPill[task.status] || statusPill.todo
+                  const isOpen = openStatusTaskId === task.id
+                  return (
+                    <div className="relative inline-flex" data-status-dropdown="root">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setHoveredStatus(null)
+                          setOpenStatusTaskId(isOpen ? null : task.id)
+                        }}
+                        className={`text-xs px-2 py-1 rounded-full border-0 focus:outline-none cursor-pointer font-medium inline-flex items-center gap-1.5 ${cfg.className}`}
+                        style={cfg.style}
+                      >
+                        <span className={`w-1.5 h-1.5 rounded-full ${statusDot[task.status] || 'bg-textsecondary'}`} />
+                        <span>{statusLabels[task.status] || 'Todo'}</span>
+                        <i className="ti ti-chevron-down text-[10px] opacity-70" aria-hidden="true"></i>
+                      </button>
+
+                      {isOpen && (
+                        <div className="absolute right-0 mt-2 w-44 bg-surface border border-border rounded-xl overflow-hidden z-20">
+                          {Object.entries(statusLabels).map(([val, label]) => {
+                            const isHovered = hoveredStatus === val
+                            const isCurrent = task.status === val
+                            const bg = isHovered ? (statusTint[val] || '#1A1D27') : undefined
+                            return (
+                              <button
+                                key={val}
+                                type="button"
+                                onMouseEnter={() => setHoveredStatus(val)}
+                                onMouseLeave={() => setHoveredStatus(null)}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  handleStatusChange(task.id, val)
+                                  setOpenStatusTaskId(null)
+                                  setHoveredStatus(null)
+                                }}
+                                className={`w-full px-3 py-2 text-xs flex items-center gap-2 text-left transition-colors ${
+                                  isCurrent ? 'font-medium' : ''
+                                }`}
+                                style={bg ? { background: bg } : undefined}
+                              >
+                                <span className={`w-1.5 h-1.5 rounded-full ${statusDot[val] || 'bg-textsecondary'}`} />
+                                <span className={(statusPill[val] || statusPill.todo).className.split(' ')[0]}>
+                                  {label}
+                                </span>
+                                {isCurrent && <i className="ti ti-check text-xs ml-auto text-textsecondary" aria-hidden="true"></i>}
+                              </button>
+                            )
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )
+                })()}
                 {task.assignee_name && (
-                  <div className="w-6 h-6 rounded-full bg-primary bg-opacity-20 flex items-center justify-center flex-shrink-0">
+                  <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(108, 99, 255, 0.2)' }}>
                     <span className="text-primary text-xs">{initials(task.assignee_name)}</span>
                   </div>
                 )}
@@ -324,9 +400,14 @@ export default function ProjectDetail() {
                 </button>
               </div>
               <div className="flex items-center gap-2">
-                <span className={`text-xs px-2 py-0.5 rounded-full ${statusBg[selectedTask.status]}`}>
-                  {statusLabels[selectedTask.status]}
-                </span>
+                {(() => {
+                  const cfg = statusPill[selectedTask.status] || statusPill.todo
+                  return (
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${cfg.className}`} style={cfg.style}>
+                      {statusLabels[selectedTask.status]}
+                    </span>
+                  )
+                })()}
                 <span className="text-textsecondary text-xs capitalize">{selectedTask.priority} priority</span>
               </div>
               {selectedTask.description && (
@@ -349,7 +430,7 @@ export default function ProjectDetail() {
                 ) : (
                   comments.map(c => (
                     <div key={c.id} className="flex gap-2">
-                      <div className="w-6 h-6 rounded-full bg-primary bg-opacity-20 flex items-center justify-center flex-shrink-0">
+                      <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(108, 99, 255, 0.2)' }}>
                         <span className="text-primary text-xs">{initials(c.full_name)}</span>
                       </div>
                       <div className="flex-1 min-w-0">
@@ -401,7 +482,7 @@ export default function ProjectDetail() {
           <div className="space-y-2">
             {members.map(m => (
               <div key={m.id} className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-full bg-primary bg-opacity-20 flex items-center justify-center flex-shrink-0">
+                <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(108, 99, 255, 0.2)' }}>
                   <span className="text-primary text-xs">{initials(m.full_name)}</span>
                 </div>
                 <div className="flex-1 min-w-0">

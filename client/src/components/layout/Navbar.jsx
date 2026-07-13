@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 
 export default function Navbar({ title, subtitle }) {
   const [notifOpen, setNotifOpen] = useState(false)
@@ -18,13 +17,6 @@ export default function Navbar({ title, subtitle }) {
           <i className="ti ti-bell text-base" aria-hidden="true"></i>
           <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full"></span>
         </button>
-        <Link
-          to="/projects"
-          className="flex items-center gap-2 bg-primary text-white text-xs px-3 py-1.5 rounded-lg hover:opacity-90 transition-opacity"
-        >
-          <i className="ti ti-plus text-xs" aria-hidden="true"></i>
-          New project
-        </Link>
       </div>
     </header>
   )

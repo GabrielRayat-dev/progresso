@@ -68,7 +68,7 @@ export default function Register() {
 
           {/* Error */}
           {error && (
-            <div className="flex items-center gap-2 bg-danger bg-opacity-10 border border-danger border-opacity-30 rounded-lg px-4 py-3 mb-4">
+            <div className="flex items-center gap-2 border border-danger border-opacity-30 rounded-lg px-4 py-3 mb-4" style={{ background: '#2A0A0A' }}>
               <i className="ti ti-alert-circle text-danger text-sm" aria-hidden="true"></i>
               <span className="text-danger text-sm">{error}</span>
             </div>
