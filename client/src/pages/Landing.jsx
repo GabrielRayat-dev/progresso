@@ -1,32 +1,94 @@
+import { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import ThemeToggle from '../components/layout/ThemeToggle'
 
 export default function Landing() {
+  const [menuOpen, setMenuOpen] = useState(false)
+  const menuRef = useRef(null)
+
+  // Close the mobile menu on outside click or Escape
+  useEffect(() => {
+    if (!menuOpen) return
+    const onPointer = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false)
+    }
+    const onKey = (e) => {
+      if (e.key === 'Escape') setMenuOpen(false)
+    }
+    document.addEventListener('mousedown', onPointer)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('mousedown', onPointer)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [menuOpen])
+
   return (
     <div className="min-h-screen bg-background text-textprimary">
 
       {/* Navbar */}
-      <nav className="flex items-center justify-between px-8 py-5 border-b border-border max-w-7xl mx-auto">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-            <i className="ti ti-chart-bar text-white text-sm" aria-hidden="true"></i>
+      <div className="sticky top-0 z-50 bg-background border-b border-border">
+        <nav className="flex items-center justify-between px-4 md:px-8 py-4 md:py-5 max-w-7xl mx-auto">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+              <i className="ti ti-chart-bar text-white text-sm" aria-hidden="true"></i>
+            </div>
+            <span className="font-medium text-lg text-textprimary">Progresso</span>
           </div>
-          <span className="font-medium text-lg text-textprimary">Progresso</span>
-        </div>
-        <div className="flex items-center gap-3">
-          <Link
-            to="/login"
-            className="btn btn-ghost"
-          >
-            Sign in
-          </Link>
-          <Link
-            to="/register"
-            className="btn btn-primary"
-          >
-            Get started free
-          </Link>
-        </div>
-      </nav>
+
+          {/* Desktop actions */}
+          <div className="hidden md:flex items-center gap-3">
+            <ThemeToggle />
+            <Link
+              to="/login"
+              className="btn btn-ghost"
+            >
+              Sign in
+            </Link>
+            <Link
+              to="/register"
+              className="btn btn-primary"
+            >
+              Get started free
+            </Link>
+          </div>
+
+          {/* Mobile hamburger menu */}
+          <div className="relative md:hidden" ref={menuRef}>
+            <button
+              onClick={() => setMenuOpen(o => !o)}
+              aria-label="Open menu"
+              aria-expanded={menuOpen}
+              className="w-9 h-9 rounded-lg flex items-center justify-center text-textsecondary hover:text-textprimary hover:bg-surface transition-colors"
+            >
+              <i className={`ti ${menuOpen ? 'ti-x' : 'ti-menu-2'} text-lg`} aria-hidden="true"></i>
+            </button>
+
+            {menuOpen && (
+              <div className="absolute right-0 mt-2 w-56 rounded-xl border border-border bg-surface shadow-lg py-2 z-50">
+                <div className="flex items-center justify-between px-4 py-2 border-b border-border">
+                  <span className="text-textsecondary text-sm">Theme</span>
+                  <ThemeToggle />
+                </div>
+                <Link
+                  to="/login"
+                  onClick={() => setMenuOpen(false)}
+                  className="block px-4 py-2.5 text-sm text-textprimary hover:bg-background transition-colors"
+                >
+                  Sign in
+                </Link>
+                <Link
+                  to="/register"
+                  onClick={() => setMenuOpen(false)}
+                  className="block px-4 py-2.5 text-sm text-primary font-medium hover:bg-background transition-colors"
+                >
+                  Get started free
+                </Link>
+              </div>
+            )}
+          </div>
+        </nav>
+      </div>
 
       {/* Hero */}
       <section className="flex flex-col items-center text-center px-6 pt-20 pb-16 max-w-4xl mx-auto">

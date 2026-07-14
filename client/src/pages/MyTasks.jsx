@@ -1,64 +1,15 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../api/index'
-
-const statusPill = {
-  todo: { className: 'text-textsecondary bg-surface border border-border', style: undefined },
-  in_progress: { className: 'text-warning bg-warning/10', style: undefined },
-  for_review: { className: 'text-primary bg-primary/10', style: undefined },
-  done: { className: 'text-success bg-success/10', style: undefined },
-  blocked: { className: 'text-danger bg-danger/10', style: undefined },
-}
-
-const statusTint = {
-  todo: 'bg-surface',
-  in_progress: 'bg-warning/10',
-  for_review: 'bg-primary/10',
-  done: 'bg-success/10',
-  blocked: 'bg-danger/10',
-}
-
-const statusDot = {
-  todo: 'bg-textsecondary',
-  in_progress: 'bg-warning',
-  for_review: 'bg-primary',
-  done: 'bg-success',
-  blocked: 'bg-danger',
-}
-
-const statusLabels = {
-  todo: 'Todo',
-  in_progress: 'In progress',
-  for_review: 'For review',
-  done: 'Done',
-  blocked: 'Blocked',
-}
-
-const priorityDot = {
-  high: 'bg-danger',
-  medium: 'bg-warning',
-  low: 'bg-success',
-}
+import StatusDropdown from '../components/StatusDropdown'
+import { priorityDot } from '../constants/status'
 
 export default function MyTasks() {
   const [tasks, setTasks] = useState([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('all')
-  const [openStatusTaskId, setOpenStatusTaskId] = useState(null)
-  const [hoveredStatus, setHoveredStatus] = useState(null)
 
   useEffect(() => { fetchTasks() }, [])
-  useEffect(() => {
-    const handlePointerDown = (e) => {
-      if (!e.target.closest('[data-status-dropdown="root"]')) {
-        setOpenStatusTaskId(null)
-        setHoveredStatus(null)
-      }
-    }
-
-    document.addEventListener('pointerdown', handlePointerDown)
-    return () => document.removeEventListener('pointerdown', handlePointerDown)
-  }, [])
 
   const fetchTasks = async () => {
     try {
@@ -178,49 +129,35 @@ export default function MyTasks() {
           </p>
         </div>
       ) : (
-        <div className="bg-surface border border-border rounded-xl overflow-hidden">
-          <div className="overflow-x-auto">
-            <div className="min-w-[700px]">
-          {/* Table header */}
-          <div className="grid grid-cols-12 gap-4 px-4 py-3 border-b border-border">
-            <div className="col-span-5 text-textsecondary text-xs font-medium">Task</div>
-            <div className="col-span-3 text-textsecondary text-xs font-medium">Project</div>
-            <div className="col-span-2 text-textsecondary text-xs font-medium">Due date</div>
-            <div className="col-span-2 text-textsecondary text-xs font-medium">Status</div>
-          </div>
-
-          {/* Task rows */}
-          <div className="divide-y divide-border">
+        <>
+          {/* Mobile: stacked cards (md and below) */}
+          <div className="md:hidden space-y-3">
             {filtered.map(task => (
-              <div
-                key={task.id}
-                className="grid grid-cols-12 gap-4 px-4 py-3 hover:bg-background transition-colors items-center"
-              >
-                {/* Task name */}
-                <div className="col-span-5 flex items-center gap-2 min-w-0">
-                  <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${priorityDot[task.priority] || 'bg-textsecondary'}`}></div>
-                  <span className={`text-sm truncate ${
-                    task.status === 'done'
-                      ? 'line-through text-textsecondary'
-                      : 'text-textprimary'
-                  }`}>
-                    {task.title}
-                  </span>
+              <div key={task.id} className="card">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${priorityDot[task.priority] || 'bg-textsecondary'}`} />
+                    <span className={`text-sm truncate ${
+                      task.status === 'done' ? 'line-through text-textsecondary' : 'text-textprimary'
+                    }`}>
+                      {task.title}
+                    </span>
+                  </div>
+                  <StatusDropdown
+                    status={task.status}
+                    onChange={(val) => handleStatusChange(task, val)}
+                  />
                 </div>
-
-                {/* Project */}
-                <div className="col-span-3 min-w-0">
+                <div className="flex items-center justify-between gap-3 mt-3">
                   <Link
                     to={`/projects/${task.project_id}`}
-                    className="text-primary text-xs hover:underline truncate block"
+                    className="text-primary text-xs hover:underline truncate"
                   >
                     {task.project_name}
                   </Link>
-                  <span className="text-textsecondary text-xs capitalize">{task.project_type}</span>
+                  <span className="text-textsecondary text-xs capitalize flex-shrink-0">{task.project_type}</span>
                 </div>
-
-                {/* Due date */}
-                <div className="col-span-2">
+                <div className="mt-2">
                   {task.due_date ? (
                     <span className={`text-xs ${
                       isOverdue(task) ? 'text-danger' :
@@ -228,77 +165,88 @@ export default function MyTasks() {
                       'text-textsecondary'
                     }`}>
                       {isOverdue(task) && <i className="ti ti-alert-circle text-xs mr-1" aria-hidden="true"></i>}
-                      {new Date(task.due_date).toLocaleDateString('en-PH', { month: 'short', day: 'numeric' })}
+                      Due {new Date(task.due_date).toLocaleDateString('en-PH', { month: 'short', day: 'numeric' })}
                     </span>
                   ) : (
                     <span className="text-textsecondary text-xs">No due date</span>
                   )}
                 </div>
-
-                {/* Status */}
-                <div className="col-span-2">
-                  {(() => {
-                    const cfg = statusPill[task.status] || statusPill.todo
-                    const isOpen = openStatusTaskId === task.id
-                    return (
-                      <div className="relative inline-flex" data-status-dropdown="root">
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            setHoveredStatus(null)
-                            setOpenStatusTaskId(isOpen ? null : task.id)
-                          }}
-                          className={`badge border-0 focus:outline-none cursor-pointer gap-1.5 ${cfg.className}`}
-                          style={cfg.style}
-                        >
-                          <span className={`w-1.5 h-1.5 rounded-full ${statusDot[task.status] || 'bg-textsecondary'}`} />
-                          <span>{statusLabels[task.status] || 'Todo'}</span>
-                          <i className="ti ti-chevron-down text-[10px] opacity-70" aria-hidden="true"></i>
-                        </button>
-
-                        {isOpen && (
-                          <div className="absolute right-0 mt-2 w-44 bg-surface border border-border rounded-xl overflow-hidden z-20">
-                            {Object.entries(statusLabels).map(([val, label]) => {
-                              const isHovered = hoveredStatus === val
-                              const isCurrent = task.status === val
-                              const tintClass = isHovered ? (statusTint[val] || 'bg-surface') : ''
-                              return (
-                                <button
-                                  key={val}
-                                  type="button"
-                                  onMouseEnter={() => setHoveredStatus(val)}
-                                  onMouseLeave={() => setHoveredStatus(null)}
-                                  onClick={(e) => {
-                                    e.stopPropagation()
-                                    handleStatusChange(task, val)
-                                    setOpenStatusTaskId(null)
-                                    setHoveredStatus(null)
-                                  }}
-                                  className={`w-full px-3 py-2 text-xs flex items-center gap-2 text-left transition-colors ${
-                                    isCurrent ? 'font-medium' : ''
-                                  } ${tintClass}`}
-                                >
-                                  <span className={`w-1.5 h-1.5 rounded-full ${statusDot[val] || 'bg-textsecondary'}`} />
-                                  <span className={(statusPill[val] || statusPill.todo).className.split(' ')[0]}>
-                                    {label}
-                                  </span>
-                                  {isCurrent && <i className="ti ti-check text-xs ml-auto text-textsecondary" aria-hidden="true"></i>}
-                                </button>
-                              )
-                            })}
-                          </div>
-                        )}
-                      </div>
-                    )
-                  })()}
-                </div>
               </div>
             ))}
           </div>
+
+          {/* Desktop: table (md and up) */}
+          <div className="hidden md:block bg-surface border border-border rounded-xl overflow-hidden">
+            <div className="overflow-x-auto">
+              <div className="min-w-[700px]">
+                {/* Table header */}
+                <div className="grid grid-cols-12 gap-4 px-4 py-3 border-b border-border">
+                  <div className="col-span-5 text-textsecondary text-xs font-medium">Task</div>
+                  <div className="col-span-3 text-textsecondary text-xs font-medium">Project</div>
+                  <div className="col-span-2 text-textsecondary text-xs font-medium">Due date</div>
+                  <div className="col-span-2 text-textsecondary text-xs font-medium">Status</div>
+                </div>
+
+                {/* Task rows */}
+                <div className="divide-y divide-border">
+                  {filtered.map(task => (
+                    <div
+                      key={task.id}
+                      className="grid grid-cols-12 gap-4 px-4 py-3 hover:bg-background transition-colors items-center"
+                    >
+                      {/* Task name */}
+                      <div className="col-span-5 flex items-center gap-2 min-w-0">
+                        <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${priorityDot[task.priority] || 'bg-textsecondary'}`}></div>
+                        <span className={`text-sm truncate ${
+                          task.status === 'done'
+                            ? 'line-through text-textsecondary'
+                            : 'text-textprimary'
+                        }`}>
+                          {task.title}
+                        </span>
+                      </div>
+
+                      {/* Project */}
+                      <div className="col-span-3 min-w-0">
+                        <Link
+                          to={`/projects/${task.project_id}`}
+                          className="text-primary text-xs hover:underline truncate block"
+                        >
+                          {task.project_name}
+                        </Link>
+                        <span className="text-textsecondary text-xs capitalize">{task.project_type}</span>
+                      </div>
+
+                      {/* Due date */}
+                      <div className="col-span-2">
+                        {task.due_date ? (
+                          <span className={`text-xs ${
+                            isOverdue(task) ? 'text-danger' :
+                            isToday(task) ? 'text-warning' :
+                            'text-textsecondary'
+                          }`}>
+                            {isOverdue(task) && <i className="ti ti-alert-circle text-xs mr-1" aria-hidden="true"></i>}
+                            {new Date(task.due_date).toLocaleDateString('en-PH', { month: 'short', day: 'numeric' })}
+                          </span>
+                        ) : (
+                          <span className="text-textsecondary text-xs">No due date</span>
+                        )}
+                      </div>
+
+                      {/* Status */}
+                      <div className="col-span-2">
+                        <StatusDropdown
+                          status={task.status}
+                          onChange={(val) => handleStatusChange(task, val)}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   )
