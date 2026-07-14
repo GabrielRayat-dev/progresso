@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import api from '../api/index'
 
@@ -17,6 +17,18 @@ export default function Profile() {
   const [savingName, setSavingName] = useState(false)
   const [savingPass, setSavingPass] = useState(false)
   const [uploadingAvatar, setUploadingAvatar] = useState(false)
+  const [memberSince, setMemberSince] = useState(user?.created_at || '')
+
+  // The stored user lacks created_at; fetch the full profile to populate it
+  useEffect(() => {
+    let active = true
+    api.get('/auth/profile')
+      .then((res) => {
+        if (active && res.data?.created_at) setMemberSince(res.data.created_at)
+      })
+      .catch(() => {})
+    return () => { active = false }
+  }, [])
 
   const initials = user?.full_name
     ?.split(' ')
@@ -155,7 +167,7 @@ export default function Profile() {
           <label className="block text-textsecondary text-xs mb-1.5">Member since</label>
           <input
             type="text"
-            value={user?.created_at ? new Date(user.created_at).toLocaleDateString('en-PH', { month: 'long', day: 'numeric', year: 'numeric' }) : ''}
+            value={memberSince ? new Date(memberSince).toLocaleDateString('en-PH', { month: 'long', day: 'numeric', year: 'numeric' }) : ''}
             disabled
             className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-sm text-textsecondary opacity-60 cursor-not-allowed"
           />
