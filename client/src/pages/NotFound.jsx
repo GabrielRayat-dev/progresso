@@ -15,14 +15,14 @@ export default function NotFound() {
         <div className="flex items-center justify-center gap-3">
           <Link
             to="/dashboard"
-            className="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-lg text-sm hover:opacity-90 transition-opacity"
+            className="btn btn-primary"
           >
             <i className="ti ti-layout-dashboard" aria-hidden="true"></i>
             Go to dashboard
           </Link>
           <Link
             to="/"
-            className="flex items-center gap-2 border border-border text-textsecondary px-5 py-2.5 rounded-lg text-sm hover:text-textprimary transition-colors"
+            className="btn btn-outline"
           >
             <i className="ti ti-home" aria-hidden="true"></i>
             Home

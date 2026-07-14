@@ -93,7 +93,7 @@ export default function Profile() {
       </div>
 
       {/* Avatar section */}
-      <div className="bg-surface border border-border rounded-xl p-6 mb-4">
+      <div className="card-lg mb-4">
         <h3 className="text-textprimary text-sm font-medium mb-4">Profile picture</h3>
         <div className="flex items-center gap-5">
           <div className="relative">
@@ -121,7 +121,7 @@ export default function Profile() {
             <button
               onClick={() => fileRef.current.click()}
               disabled={uploadingAvatar}
-              className="flex items-center gap-2 border border-border text-textsecondary text-sm px-4 py-2 rounded-lg hover:text-textprimary hover:border-primary transition-colors disabled:opacity-50"
+              className="btn btn-outline disabled:opacity-50"
             >
               <i className="ti ti-upload text-sm" aria-hidden="true"></i>
               {uploadingAvatar ? 'Uploading...' : 'Upload photo'}
@@ -139,7 +139,7 @@ export default function Profile() {
       </div>
 
       {/* Account info */}
-      <div className="bg-surface border border-border rounded-xl p-6 mb-4">
+      <div className="card-lg mb-4">
         <h3 className="text-textprimary text-sm font-medium mb-4">Account info</h3>
         <div className="mb-4">
           <label className="block text-textsecondary text-xs mb-1.5">Email address</label>
@@ -163,7 +163,7 @@ export default function Profile() {
       </div>
 
       {/* Update name */}
-      <div className="bg-surface border border-border rounded-xl p-6 mb-4">
+      <div className="card-lg mb-4">
         <h3 className="text-textprimary text-sm font-medium mb-4">Update name</h3>
 
         {nameMsg && (
@@ -192,7 +192,7 @@ export default function Profile() {
           <button
             type="submit"
             disabled={savingName}
-            className="flex items-center gap-2 bg-primary text-white text-sm px-5 py-2.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
+            className="btn btn-primary disabled:opacity-50"
           >
             {savingName ? (
               <><i className="ti ti-loader-2 animate-spin" aria-hidden="true"></i>Saving...</>
@@ -204,7 +204,7 @@ export default function Profile() {
       </div>
 
       {/* Change password */}
-      <div className="bg-surface border border-border rounded-xl p-6">
+      <div className="card-lg">
         <h3 className="text-textprimary text-sm font-medium mb-4">Change password</h3>
 
         {passMsg && (
@@ -254,7 +254,7 @@ export default function Profile() {
           <button
             type="submit"
             disabled={savingPass}
-            className="flex items-center gap-2 bg-primary text-white text-sm px-5 py-2.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
+            className="btn btn-primary disabled:opacity-50"
           >
             {savingPass ? (
               <><i className="ti ti-loader-2 animate-spin" aria-hidden="true"></i>Updating...</>

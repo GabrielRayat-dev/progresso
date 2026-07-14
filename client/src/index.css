@@ -13,18 +13,88 @@
   --color-textsecondary: #8B8FA8;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* Reset MUST live inside @layer base — an unlayered * { padding: 0 }
+   overrides @layer components/utilities and strips all Tailwind padding. */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background-color: #0F1117;
+    color: #FFFFFF;
+    font-family: 'Inter', sans-serif;
+  }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #1A1D27; }
+  ::-webkit-scrollbar-thumb { background: #2A2D3E; border-radius: 3px; }
 }
 
-body {
-  background-color: #0F1117;
-  color: #FFFFFF;
-  font-family: 'Inter', sans-serif;
-}
+/* ============================================================
+   Shared component primitives — single source of truth for
+   padding / radius so spacing stays proportional everywhere.
+   Buttons / pills: ~8px 16px (py-2 px-4)
+   Badges: compact inset (px-2.5 py-1)
+   Cards: 20–24px internal padding (p-5 / p-6)
+   ============================================================ */
+@layer components {
+  /* ---- Buttons ---- */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors cursor-pointer select-none;
+  }
+  .btn-primary {
+    @apply bg-primary text-white hover:opacity-90;
+  }
+  .btn-outline {
+    @apply border border-border text-textprimary hover:border-primary hover:bg-background;
+  }
+  .btn-ghost {
+    @apply text-textsecondary hover:text-textprimary hover:bg-background;
+  }
+  .btn-danger-ghost {
+    @apply text-danger hover:bg-background;
+  }
+  .btn-lg {
+    @apply px-6 py-3 text-base;
+  }
+  .btn-block {
+    @apply w-full;
+  }
 
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #1A1D27; }
-::-webkit-scrollbar-thumb { background: #2A2D3E; border-radius: 3px; }
+  /* ---- Pills / filter chips / tabs ---- */
+  .pill-group {
+    @apply flex flex-wrap items-center gap-2;
+  }
+  .pill {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-xs font-medium transition-colors cursor-pointer select-none whitespace-nowrap;
+  }
+  .pill-outline {
+    @apply border border-border text-textsecondary hover:text-textprimary;
+  }
+  .pill-active {
+    @apply text-primary border-primary/40;
+  }
+
+  /* ---- Badges / status tags ---- */
+  .badge {
+    @apply inline-flex items-center justify-center rounded-full px-2.5 py-1 text-xs font-medium whitespace-nowrap;
+  }
+
+  /* ---- Cards / containers ---- */
+  .card {
+    @apply rounded-xl border border-border bg-surface p-5;
+  }
+  .card-lg {
+    @apply rounded-2xl border border-border bg-surface p-6;
+  }
+
+  /* ---- Form inputs (shared inset) ---- */
+  .input {
+    @apply w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-textprimary placeholder-textsecondary transition-colors focus:border-primary focus:outline-none;
+  }
+}

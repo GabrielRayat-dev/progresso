@@ -83,7 +83,7 @@ export default function Projects() {
         </div>
         <button
           onClick={() => setShowModal(true)}
-          className="flex items-center gap-2 bg-primary text-white text-sm px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
+          className="btn btn-primary btn-lg"
         >
           <i className="ti ti-plus" aria-hidden="true"></i>
           New project
@@ -91,17 +91,13 @@ export default function Projects() {
       </div>
 
       {/* Filters */}
-      <div className="flex items-center gap-2 mb-6">
+      <div className="pill-group mb-6">
         {filters.map(f => (
           <button
             key={f}
             onClick={() => setFilter(f)}
             style={filter === f ? { background: '#1E1A3F' } : undefined}
-            className={`text-xs px-4 py-1.5 rounded-full border transition-colors ${
-              filter === f
-                ? 'text-primary border-primary border-opacity-40'
-                : 'border-border text-textsecondary hover:text-textprimary'
-            }`}
+            className={`pill pill-outline ${filter === f ? 'pill-active' : ''}`}
           >
             {f}
           </button>
@@ -110,7 +106,7 @@ export default function Projects() {
 
       {/* Projects grid */}
       {filtered.length === 0 ? (
-        <div className="bg-surface border border-border rounded-xl p-12 text-center">
+        <div className="card p-12 text-center">
           <i className="ti ti-folder-off text-textsecondary text-3xl mb-3 block" aria-hidden="true"></i>
           <h3 className="text-textprimary font-medium mb-2">No projects found</h3>
           <p className="text-textsecondary text-sm mb-4">
@@ -118,7 +114,7 @@ export default function Projects() {
           </p>
           <button
             onClick={() => setShowModal(true)}
-            className="inline-flex items-center gap-2 bg-primary text-white px-5 py-2 rounded-lg text-sm hover:opacity-90 transition-opacity"
+            className="btn btn-primary btn-lg"
           >
             <i className="ti ti-plus" aria-hidden="true"></i>
             Create project
@@ -134,14 +130,14 @@ export default function Projects() {
               <Link
                 key={project.id}
                 to={`/projects/${project.id}`}
-                className="bg-surface border border-border rounded-xl p-5 hover:border-primary transition-colors block"
+                className="card hover:border-primary transition-colors block"
               >
                 <div className="flex items-start justify-between mb-3">
                   <h3 className="text-textprimary font-medium text-sm leading-tight flex-1 pr-3">{project.name}</h3>
                   {(() => {
                     const cfg = typePill[project.type] || { className: 'bg-surface text-textsecondary', style: undefined }
                     return (
-                      <span className={`text-xs px-2 py-0.5 rounded-full flex-shrink-0 ${cfg.className}`} style={cfg.style}>
+                      <span className={`badge flex-shrink-0 ${cfg.className}`} style={cfg.style}>
                         {project.type}
                       </span>
                     )
@@ -197,7 +193,7 @@ export default function Projects() {
       {/* Create Project Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 px-4">
-          <div className="bg-surface border border-border rounded-2xl p-6 w-full max-w-md">
+          <div className="card-lg w-full max-w-md">
             <div className="flex items-center justify-between mb-5">
               <h3 className="text-textprimary font-medium">Create new project</h3>
               <button
@@ -223,7 +219,7 @@ export default function Projects() {
                   value={form.name}
                   onChange={e => setForm({ ...form, name: e.target.value })}
                   placeholder="e.g. Stellar's Dental Clinic"
-                  className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-sm text-textprimary placeholder-textsecondary focus:outline-none focus:border-primary transition-colors"
+                  className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-textprimary placeholder-textsecondary focus:outline-none focus:border-primary transition-colors"
                 />
               </div>
 
@@ -266,14 +262,14 @@ export default function Projects() {
                 <button
                   type="button"
                   onClick={() => { setShowModal(false); setError('') }}
-                  className="flex-1 border border-border text-textsecondary py-2.5 rounded-lg text-sm hover:text-textprimary transition-colors"
+                  className="btn btn-outline flex-1"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={creating}
-                  className="flex-1 bg-primary text-white py-2.5 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="btn btn-primary flex-1 disabled:opacity-50"
                 >
                   {creating ? (
                     <><i className="ti ti-loader-2 animate-spin" aria-hidden="true"></i>Creating...</>

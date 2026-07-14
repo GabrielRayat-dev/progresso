@@ -60,7 +60,7 @@ export default function Register() {
         </div>
 
         {/* Card */}
-        <div className="bg-surface border border-border rounded-2xl p-8">
+        <div className="card-lg">
           <h1 className="text-xl font-medium text-textprimary mb-1">Create your account</h1>
           <p className="text-textsecondary text-sm mb-6">
             Free forever · No credit card required
@@ -86,7 +86,7 @@ export default function Register() {
                 onChange={handleChange}
                 placeholder="Juan Dela Cruz"
                 required
-                className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-sm text-textprimary placeholder-textsecondary focus:outline-none focus:border-primary transition-colors"
+                className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-textprimary placeholder-textsecondary focus:outline-none focus:border-primary transition-colors"
               />
             </div>
 
@@ -101,7 +101,7 @@ export default function Register() {
                 onChange={handleChange}
                 placeholder="you@email.com"
                 required
-                className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-sm text-textprimary placeholder-textsecondary focus:outline-none focus:border-primary transition-colors"
+                className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-textprimary placeholder-textsecondary focus:outline-none focus:border-primary transition-colors"
               />
             </div>
 
@@ -116,7 +116,7 @@ export default function Register() {
                 onChange={handleChange}
                 placeholder="At least 6 characters"
                 required
-                className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-sm text-textprimary placeholder-textsecondary focus:outline-none focus:border-primary transition-colors"
+                className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-textprimary placeholder-textsecondary focus:outline-none focus:border-primary transition-colors"
               />
             </div>
 
@@ -131,14 +131,14 @@ export default function Register() {
                 onChange={handleChange}
                 placeholder="Repeat your password"
                 required
-                className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-sm text-textprimary placeholder-textsecondary focus:outline-none focus:border-primary transition-colors"
+                className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-textprimary placeholder-textsecondary focus:outline-none focus:border-primary transition-colors"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-primary text-white py-2.5 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2 mt-2"
+              className="btn btn-primary btn-block disabled:opacity-50 mt-2"
             >
               {loading ? (
                 <>

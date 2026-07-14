@@ -104,7 +104,7 @@ export default function Dashboard() {
         </div>
         <Link
           to="/projects"
-          className="flex items-center gap-2 bg-primary text-white text-sm px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
+          className="btn btn-primary"
         >
           <i className="ti ti-plus" aria-hidden="true"></i>
           New project
@@ -119,7 +119,7 @@ export default function Dashboard() {
           { label: 'Due today', value: dueTodayTasks, sub: dueTodayTasks > 0 ? 'needs attention' : 'all clear', color: dueTodayTasks > 0 ? 'text-warning' : 'text-success' },
           { label: 'Overdue', value: overdueTasks, sub: overdueTasks > 0 ? 'needs attention' : 'all clear', color: overdueTasks > 0 ? 'text-danger' : 'text-success' },
         ].map((m, i) => (
-          <div key={i} className="bg-surface border border-border rounded-xl p-4">
+          <div key={i} className="card">
             <p className="text-textsecondary text-xs mb-2">{m.label}</p>
             <p className={`text-2xl font-medium ${m.color} mb-1`}>{m.value}</p>
             <p className="text-textsecondary text-xs">{m.sub}</p>
@@ -131,7 +131,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-2 gap-6">
 
         {/* Recent projects */}
-        <div className="bg-surface border border-border rounded-xl p-5">
+        <div className="card">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-textprimary text-sm font-medium">Recent projects</h3>
             <Link to="/projects" className="text-primary text-xs hover:underline">View all</Link>
@@ -162,7 +162,7 @@ export default function Dashboard() {
                       {(() => {
                         const cfg = typePill[project.type] || { className: 'bg-surface text-textsecondary', style: undefined }
                         return (
-                          <span className={`text-xs px-2 py-0.5 rounded-full ${cfg.className}`} style={cfg.style}>
+                          <span className={`badge flex-shrink-0 ${cfg.className}`} style={cfg.style}>
                             {project.type}
                           </span>
                         )
@@ -194,7 +194,7 @@ export default function Dashboard() {
         </div>
 
         {/* My tasks */}
-        <div className="bg-surface border border-border rounded-xl p-5">
+        <div className="card">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-textprimary text-sm font-medium">My tasks</h3>
             <Link to="/tasks" className="text-primary text-xs hover:underline">View all</Link>
@@ -227,7 +227,7 @@ export default function Dashboard() {
                   {(() => {
                     const cfg = statusPill[task.status] || statusPill.todo
                     return (
-                      <span className={`text-xs px-2 py-0.5 rounded-full flex-shrink-0 ${cfg.className}`} style={cfg.style}>
+                      <span className={`badge flex-shrink-0 ${cfg.className}`} style={cfg.style}>
                         {statusLabels[task.status]}
                       </span>
                     )
@@ -242,7 +242,7 @@ export default function Dashboard() {
 
       {/* Empty state if no projects */}
       {projects.length === 0 && tasks.length === 0 && (
-        <div className="mt-6 bg-surface border border-border rounded-xl p-12 text-center">
+        <div className="mt-6 card text-center">
           <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: '#1E1A3F' }}>
             <i className="ti ti-rocket text-primary text-2xl" aria-hidden="true"></i>
           </div>
@@ -252,7 +252,7 @@ export default function Dashboard() {
           </p>
           <Link
             to="/projects"
-            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-lg text-sm hover:opacity-90 transition-opacity"
+            className="btn btn-primary btn-lg"
           >
             <i className="ti ti-plus" aria-hidden="true"></i>
             Create first project

@@ -99,7 +99,7 @@ export default function Calendar() {
             </button>
             <button
               onClick={() => setCurrent(new Date())}
-              className="text-xs px-3 py-1.5 border border-border rounded-lg text-textsecondary hover:text-textprimary transition-colors"
+              className="btn btn-outline"
             >
               Today
             </button>
@@ -198,7 +198,7 @@ export default function Calendar() {
 
         {/* Selected day tasks */}
         {selectedDay && (
-          <div className="mt-4 bg-surface border border-border rounded-xl p-4">
+          <div className="mt-4 card">
             <h4 className="text-textprimary text-sm font-medium mb-3">
               {MONTHS[month]} {selectedDay} — {selectedDayTasks.length} task{selectedDayTasks.length !== 1 ? 's' : ''}
             </h4>
@@ -228,7 +228,7 @@ export default function Calendar() {
       <div className="w-64 flex-shrink-0">
         <h3 className="text-textprimary text-sm font-medium mb-4">Upcoming tasks</h3>
         {upcomingTasks.length === 0 ? (
-          <div className="bg-surface border border-border rounded-xl p-4 text-center">
+          <div className="card text-center">
             <i className="ti ti-calendar-check text-textsecondary text-xl mb-2 block" aria-hidden="true"></i>
             <p className="text-textsecondary text-xs">No upcoming tasks</p>
           </div>
@@ -237,7 +237,7 @@ export default function Calendar() {
             {upcomingTasks.map(t => (
               <div
                 key={t.id}
-                className="bg-surface border border-border rounded-lg p-3 cursor-pointer hover:border-primary transition-colors"
+                className="card cursor-pointer hover:border-primary transition-colors"
                 onClick={() => {
                   const date = new Date(t.due_date)
                   if (date.getMonth() === month && date.getFullYear() === year) {

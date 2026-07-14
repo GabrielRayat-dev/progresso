@@ -42,7 +42,7 @@ export default function Login() {
         </div>
 
         {/* Card */}
-        <div className="bg-surface border border-border rounded-2xl p-8 shadow-lg">
+        <div className="card-lg shadow-lg">
           <h1 className="text-xl font-medium text-textprimary mb-1">Welcome back</h1>
           <p className="text-textsecondary text-sm mb-6">Sign in to your account to continue</p>
 
@@ -64,7 +64,7 @@ export default function Login() {
                 onChange={handleChange}
                 placeholder="you@email.com"
                 required
-                className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-sm text-textprimary placeholder-textsecondary focus:outline-none focus:border-primary transition-colors"
+                className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-textprimary placeholder-textsecondary focus:outline-none focus:border-primary transition-colors"
               />
             </div>
 
@@ -77,14 +77,14 @@ export default function Login() {
                 onChange={handleChange}
                 placeholder="Enter your password"
                 required
-                className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-sm text-textprimary placeholder-textsecondary focus:outline-none focus:border-primary transition-colors"
+                className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-textprimary placeholder-textsecondary focus:outline-none focus:border-primary transition-colors"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-primary text-white py-2.5 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
+              className="btn btn-primary btn-block disabled:opacity-50"
             >
               {loading ? (
                 <>

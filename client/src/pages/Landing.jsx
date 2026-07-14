@@ -15,13 +15,13 @@ export default function Landing() {
         <div className="flex items-center gap-3">
           <Link
             to="/login"
-            className="text-textsecondary hover:text-textprimary text-sm px-4 py-2 rounded-lg transition-colors"
+            className="btn btn-ghost"
           >
             Sign in
           </Link>
           <Link
             to="/register"
-            className="bg-primary text-white text-sm px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
+            className="btn btn-primary"
           >
             Get started free
           </Link>
@@ -30,7 +30,7 @@ export default function Landing() {
 
       {/* Hero */}
       <section className="flex flex-col items-center text-center px-6 pt-20 pb-16 max-w-4xl mx-auto">
-        <div className="inline-flex items-center gap-2 bg-surface border border-border rounded-full px-4 py-1.5 text-xs text-textsecondary mb-8">
+        <div className="pill bg-surface border border-border text-textsecondary mb-8">
           <div className="w-1.5 h-1.5 rounded-full bg-success"></div>
           Built for Filipino students and dev teams
         </div>
@@ -48,14 +48,14 @@ export default function Landing() {
         <div className="flex items-center gap-4">
           <Link
             to="/register"
-            className="bg-primary text-white px-6 py-3 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2"
+            className="btn btn-primary btn-lg"
           >
             <i className="ti ti-rocket" aria-hidden="true"></i>
             Create free account
           </Link>
           <Link
             to="/login"
-            className="border border-border text-textprimary px-6 py-3 rounded-lg text-sm hover:border-primary transition-colors"
+            className="btn btn-outline btn-lg"
           >
             Sign in
           </Link>
@@ -68,7 +68,7 @@ export default function Landing() {
 
       {/* Pain point section */}
       <section className="px-8 py-12 max-w-4xl mx-auto">
-        <div className="bg-surface border border-border rounded-2xl p-8 mb-6">
+        <div className="card-lg mb-6">
           <div className="flex items-start gap-4 mb-6">
             <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#2A0A0A' }}>
               <i className="ti ti-mood-sad text-danger text-lg" aria-hidden="true"></i>
@@ -93,7 +93,7 @@ export default function Landing() {
           </div>
         </div>
 
-        <div className="bg-surface border border-primary border-opacity-40 rounded-2xl p-8">
+        <div className="card-lg border-primary border-opacity-40">
           <div className="flex items-start gap-4 mb-6">
             <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#1E1A3F' }}>
               <i className="ti ti-circle-check text-primary text-lg" aria-hidden="true"></i>
@@ -138,7 +138,7 @@ export default function Landing() {
             { icon: 'ti-chart-bar', color: '#6C63FF', bg: '#1E1A3F', title: 'Analytics', desc: 'Charts for task completion, member progress, and project health.' },
             { icon: 'ti-bell', color: '#E74C3C', bg: '#2A0A0A', title: 'Notifications', desc: 'Get notified when assigned, commented on, or when deadlines are near.' },
           ].map((f, i) => (
-            <div key={i} className="bg-surface border border-border rounded-xl p-5 hover:border-primary transition-colors">
+            <div key={i} className="card hover:border-primary transition-colors">
               <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-4" style={{ background: f.bg }}>
                 <i className={`ti ${f.icon} text-base`} style={{ color: f.color }} aria-hidden="true"></i>
               </div>
@@ -164,7 +164,7 @@ export default function Landing() {
             { label: 'Freelance / Client', icon: 'ti-briefcase', color: '#EF9F27', bg: '#2A1F0A', desc: 'Client deliverables and milestones' },
             { label: 'Personal / Side', icon: 'ti-heart', color: '#2ECC71', bg: '#0A2A1A', desc: 'Personal goals and side projects' },
           ].map((t, i) => (
-            <div key={i} className="bg-surface border border-border rounded-xl p-5 text-center hover:border-primary transition-colors">
+            <div key={i} className="card text-center hover:border-primary transition-colors">
               <div className="w-10 h-10 rounded-lg flex items-center justify-center mx-auto mb-3" style={{ background: t.bg }}>
                 <i className={`ti ${t.icon} text-base`} style={{ color: t.color }} aria-hidden="true"></i>
               </div>
@@ -177,7 +177,7 @@ export default function Landing() {
 
       {/* CTA */}
       <section className="px-8 py-12 max-w-4xl mx-auto text-center">
-        <div className="bg-surface border border-border rounded-2xl max-w-2xl mx-auto p-12">
+        <div className="card-lg max-w-2xl mx-auto">
           <h2 className="text-2xl font-medium text-textprimary mb-3">
             Ready to move forward?
           </h2>
@@ -186,7 +186,7 @@ export default function Landing() {
           </p>
           <Link
             to="/register"
-            className="inline-flex items-center gap-2 bg-primary text-white px-8 py-3 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity"
+            className="btn btn-primary btn-lg"
           >
             <i className="ti ti-rocket" aria-hidden="true"></i>
             Get started — it's free

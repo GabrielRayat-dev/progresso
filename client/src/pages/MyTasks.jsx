@@ -130,7 +130,7 @@ export default function MyTasks() {
           { label: 'Due today', value: todayCount, color: todayCount > 0 ? 'text-warning' : 'text-success' },
           { label: 'Overdue', value: overdueCount, color: overdueCount > 0 ? 'text-danger' : 'text-success' },
         ].map((s, i) => (
-          <div key={i} className="bg-surface border border-border rounded-xl p-4">
+          <div key={i} className="card">
             <p className="text-textsecondary text-xs mb-2">{s.label}</p>
             <p className={`text-2xl font-medium ${s.color}`}>{s.value}</p>
           </div>
@@ -138,7 +138,7 @@ export default function MyTasks() {
       </div>
 
       {/* Filters */}
-      <div className="flex items-center gap-2 mb-6 flex-wrap">
+      <div className="pill-group mb-6">
         {[
           { key: 'all', label: 'All' },
           { key: 'today', label: `Due today ${todayCount > 0 ? `(${todayCount})` : ''}` },
@@ -152,12 +152,12 @@ export default function MyTasks() {
             key={f.key}
             onClick={() => setFilter(f.key)}
             style={filter === f.key ? { background: '#1E1A3F' } : undefined}
-            className={`text-xs px-4 py-1.5 rounded-full border transition-colors ${
+            className={`pill pill-outline ${
               filter === f.key
-                ? 'text-primary border-primary border-opacity-40'
+                ? 'pill-active'
                 : f.key === 'overdue' && overdueCount > 0
-                ? 'border-danger border-opacity-40 text-danger'
-                : 'border-border text-textsecondary hover:text-textprimary'
+                ? 'text-danger border-danger/40'
+                : ''
             }`}
           >
             {f.label}
@@ -167,7 +167,7 @@ export default function MyTasks() {
 
       {/* Tasks */}
       {filtered.length === 0 ? (
-        <div className="bg-surface border border-border rounded-xl p-12 text-center">
+        <div className="card text-center">
           <i className="ti ti-checkbox text-textsecondary text-3xl mb-3 block" aria-hidden="true"></i>
           <h3 className="text-textprimary font-medium mb-2">
             {filter === 'all' ? 'No tasks yet' : `No ${filter.replace('_', ' ')} tasks`}
@@ -248,7 +248,7 @@ export default function MyTasks() {
                             setHoveredStatus(null)
                             setOpenStatusTaskId(isOpen ? null : task.id)
                           }}
-                          className={`text-xs px-2 py-1 rounded-full border-0 focus:outline-none cursor-pointer font-medium inline-flex items-center gap-1.5 ${cfg.className}`}
+                          className={`badge border-0 focus:outline-none cursor-pointer gap-1.5 ${cfg.className}`}
                           style={cfg.style}
                         >
                           <span className={`w-1.5 h-1.5 rounded-full ${statusDot[task.status] || 'bg-textsecondary'}`} />

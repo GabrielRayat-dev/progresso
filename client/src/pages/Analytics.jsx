@@ -145,7 +145,7 @@ export default function Analytics() {
           { label: 'Tasks done', value: doneTasks, color: 'text-success', icon: 'ti-checkbox' },
           { label: 'Blocked tasks', value: blockedTasks, color: blockedTasks > 0 ? 'text-danger' : 'text-success', icon: 'ti-ban' },
         ].map((m, i) => (
-          <div key={i} className="bg-surface border border-border rounded-xl p-4">
+          <div key={i} className="card">
             <div className="flex items-center gap-2 mb-2">
               <i className={`ti ${m.icon} text-textsecondary text-sm`} aria-hidden="true"></i>
               <p className="text-textsecondary text-xs">{m.label}</p>
@@ -159,7 +159,7 @@ export default function Analytics() {
       <div className="grid grid-cols-2 gap-6 mb-6">
 
         {/* Doughnut */}
-        <div className="bg-surface border border-border rounded-xl p-5">
+        <div className="card">
           <h3 className="text-textprimary text-sm font-medium mb-4">Task status breakdown</h3>
           {totalTasks === 0 ? (
             <div className="text-center py-8">
@@ -192,7 +192,7 @@ export default function Analytics() {
         </div>
 
         {/* Project progress bar */}
-        <div className="bg-surface border border-border rounded-xl p-5">
+        <div className="card">
           <h3 className="text-textprimary text-sm font-medium mb-4">Project progress</h3>
           {projects.length === 0 ? (
             <div className="text-center py-8">

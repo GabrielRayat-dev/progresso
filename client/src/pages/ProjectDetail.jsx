@@ -228,14 +228,14 @@ export default function ProjectDetail() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setShowInvite(true)}
-              className="flex items-center gap-2 border border-border text-textsecondary text-sm px-3 py-1.5 rounded-lg hover:text-textprimary transition-colors"
+              className="btn btn-outline"
             >
               <i className="ti ti-user-plus text-sm" aria-hidden="true"></i>
               Invite
             </button>
             <button
               onClick={() => setShowTaskModal(true)}
-              className="flex items-center gap-2 bg-primary text-white text-sm px-3 py-1.5 rounded-lg hover:opacity-90 transition-opacity"
+              className="btn btn-primary"
             >
               <i className="ti ti-plus text-sm" aria-hidden="true"></i>
               Add task
@@ -251,7 +251,7 @@ export default function ProjectDetail() {
             { label: 'In progress', value: tasks.filter(t => t.status === 'in_progress').length, color: 'text-warning' },
             { label: 'Blocked', value: tasks.filter(t => t.status === 'blocked').length, color: 'text-danger' },
           ].map((s, i) => (
-            <div key={i} className="bg-surface border border-border rounded-lg p-3 text-center">
+            <div key={i} className="card text-center">
               <p className={`text-lg font-medium ${s.color}`}>{s.value}</p>
               <p className="text-textsecondary text-xs">{s.label}</p>
             </div>
@@ -259,7 +259,7 @@ export default function ProjectDetail() {
         </div>
 
         {/* Progress */}
-        <div className="bg-surface border border-border rounded-lg p-3 mb-4">
+        <div className="card mb-4">
           <div className="flex items-center justify-between mb-2">
             <span className="text-textsecondary text-xs">Overall progress</span>
             <span className="text-primary text-xs font-medium">{percent}%</span>
@@ -270,16 +270,16 @@ export default function ProjectDetail() {
         </div>
 
         {/* Filter tabs */}
-        <div className="flex items-center gap-2 mb-4">
+        <div className="pill-group mb-4">
           {['all', 'todo', 'in_progress', 'for_review', 'done', 'blocked'].map(f => (
             <button
               key={f}
               onClick={() => setFilter(f)}
               style={filter === f ? { background: '#1E1A3F' } : undefined}
-              className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
+              className={`pill pill-outline ${
                 filter === f
-                  ? 'text-primary border-primary border-opacity-40'
-                  : 'border-border text-textsecondary hover:text-textprimary'
+                  ? 'pill-active'
+                  : ''
               }`}
             >
               {f === 'all' ? 'All' : statusLabels[f]}
@@ -290,7 +290,7 @@ export default function ProjectDetail() {
         {/* Task list */}
         <div className="space-y-2">
           {filteredTasks.length === 0 ? (
-            <div className="bg-surface border border-border rounded-xl p-8 text-center">
+            <div className="card text-center">
               <i className="ti ti-checkbox text-textsecondary text-2xl mb-2 block" aria-hidden="true"></i>
               <p className="text-textsecondary text-sm">No tasks yet</p>
               <button
@@ -325,7 +325,7 @@ export default function ProjectDetail() {
                           setHoveredStatus(null)
                           setOpenStatusTaskId(isOpen ? null : task.id)
                         }}
-                        className={`text-xs px-2 py-1 rounded-full border-0 focus:outline-none cursor-pointer font-medium inline-flex items-center gap-1.5 ${cfg.className}`}
+                        className={`badge border-0 focus:outline-none cursor-pointer gap-1.5 ${cfg.className}`}
                         style={cfg.style}
                       >
                         <span className={`w-1.5 h-1.5 rounded-full ${statusDot[task.status] || 'bg-textsecondary'}`} />
@@ -403,7 +403,7 @@ export default function ProjectDetail() {
                 {(() => {
                   const cfg = statusPill[selectedTask.status] || statusPill.todo
                   return (
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${cfg.className}`} style={cfg.style}>
+                    <span className={`badge flex-shrink-0 ${cfg.className}`} style={cfg.style}>
                       {statusLabels[selectedTask.status]}
                     </span>
                   )
@@ -454,7 +454,7 @@ export default function ProjectDetail() {
                 />
                 <button
                   type="submit"
-                  className="bg-primary text-white px-3 py-2 rounded-lg hover:opacity-90 transition-opacity"
+                  className="btn btn-primary"
                 >
                   <i className="ti ti-send text-xs" aria-hidden="true"></i>
                 </button>
@@ -462,14 +462,14 @@ export default function ProjectDetail() {
             </div>
           </div>
         ) : (
-          <div className="bg-surface border border-border rounded-xl p-4 text-center">
+          <div className="card text-center">
             <i className="ti ti-click text-textsecondary text-xl mb-2 block" aria-hidden="true"></i>
             <p className="text-textsecondary text-xs">Click a task to see details and comments</p>
           </div>
         )}
 
         {/* Members */}
-        <div className="bg-surface border border-border rounded-xl p-4">
+        <div className="card">
           <div className="flex items-center justify-between mb-3">
             <p className="text-textprimary text-sm font-medium">Team</p>
             <button
@@ -499,7 +499,7 @@ export default function ProjectDetail() {
 
         {/* Deadline */}
         {project.deadline && (
-          <div className="bg-surface border border-border rounded-xl p-4">
+          <div className="card">
             <p className="text-textsecondary text-xs mb-1">Project deadline</p>
             <p className="text-textprimary text-sm font-medium">
               {new Date(project.deadline).toLocaleDateString('en-PH', { month: 'long', day: 'numeric', year: 'numeric' })}
@@ -514,7 +514,7 @@ export default function ProjectDetail() {
       {/* Create Task Modal */}
       {showTaskModal && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 px-4">
-          <div className="bg-surface border border-border rounded-2xl p-6 w-full max-w-md">
+          <div className="card-lg w-full max-w-md">
             <div className="flex items-center justify-between mb-5">
               <h3 className="text-textprimary font-medium">Add new task</h3>
               <button onClick={() => setShowTaskModal(false)} className="text-textsecondary hover:text-textprimary">
@@ -582,14 +582,14 @@ export default function ProjectDetail() {
                 <button
                   type="button"
                   onClick={() => setShowTaskModal(false)}
-                  className="flex-1 border border-border text-textsecondary py-2.5 rounded-lg text-sm hover:text-textprimary transition-colors"
+                  className="btn btn-outline flex-1"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={creating}
-                  className="flex-1 bg-primary text-white py-2.5 rounded-lg text-sm font-medium hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="btn btn-primary flex-1 disabled:opacity-50"
                 >
                   {creating ? (
                     <><i className="ti ti-loader-2 animate-spin" aria-hidden="true"></i>Adding...</>
@@ -606,7 +606,7 @@ export default function ProjectDetail() {
       {/* Invite Modal */}
       {showInvite && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 px-4">
-          <div className="bg-surface border border-border rounded-2xl p-6 w-full max-w-sm">
+          <div className="card-lg w-full max-w-sm">
             <div className="flex items-center justify-between mb-5">
               <h3 className="text-textprimary font-medium">Invite teammate</h3>
               <button onClick={() => setShowInvite(false)} className="text-textsecondary hover:text-textprimary">
@@ -628,14 +628,14 @@ export default function ProjectDetail() {
                 <button
                   type="button"
                   onClick={() => setShowInvite(false)}
-                  className="flex-1 border border-border text-textsecondary py-2.5 rounded-lg text-sm hover:text-textprimary transition-colors"
+                  className="btn btn-outline flex-1"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={inviting}
-                  className="flex-1 bg-primary text-white py-2.5 rounded-lg text-sm font-medium hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="btn btn-primary flex-1 disabled:opacity-50"
                 >
                   {inviting ? (
                     <><i className="ti ti-loader-2 animate-spin" aria-hidden="true"></i>Sending...</>

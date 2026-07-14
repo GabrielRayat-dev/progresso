@@ -27,7 +27,7 @@ export default function Sidebar() {
     .slice(0, 2)
 
   return (
-    <aside className="w-56 h-screen bg-surface border-r border-border flex flex-col flex-shrink-0">
+    <aside className="w-56 h-screen bg-surface border-r border-border flex flex-col flex-shrink-0 px-3 py-3 space-y-3">
 
       {/* Logo */}
       <div className="flex items-center gap-2 px-4 py-5 border-b border-border">
@@ -38,7 +38,7 @@ export default function Sidebar() {
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 py-4 space-y-1 overflow-y-auto">
+      <nav className="flex-1 py-4 space-y-2 overflow-y-auto">
         {navItems.map((item) => {
           const isActive = location.pathname === item.path
           return (
