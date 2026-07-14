@@ -138,7 +138,7 @@ export default function Analytics() {
       </div>
 
       {/* Metrics */}
-      <div className="grid grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6">
         {[
           { label: 'Completion rate', value: `${completionRate}%`, color: 'text-success', icon: 'ti-circle-check' },
           { label: 'On time rate', value: `${onTimeRate}%`, color: 'text-primary', icon: 'ti-clock' },
@@ -156,7 +156,7 @@ export default function Analytics() {
       </div>
 
       {/* Charts row */}
-      <div className="grid grid-cols-2 gap-6 mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
 
         {/* Doughnut */}
         <div className="card">
@@ -166,7 +166,7 @@ export default function Analytics() {
               <p className="text-textsecondary text-sm">No tasks yet</p>
             </div>
           ) : (
-            <div className="flex items-center gap-6">
+            <div className="flex flex-col sm:flex-row items-center gap-6">
               <div className="w-40 h-40 flex-shrink-0">
                 <Doughnut data={doughnutData} options={doughnutOptions} />
               </div>
@@ -214,6 +214,8 @@ export default function Analytics() {
             <p className="text-textsecondary text-sm">No projects yet</p>
           </div>
         ) : (
+          <div className="overflow-x-auto">
+            <div className="min-w-[700px]">
           <div className="divide-y divide-border">
             {/* Table header */}
             <div className="grid grid-cols-12 gap-4 px-5 py-3 bg-background">
@@ -255,6 +257,8 @@ export default function Analytics() {
                 </div>
               )
             })}
+          </div>
+            </div>
           </div>
         )}
       </div>

@@ -4,18 +4,18 @@ import api from '../api/index'
 
 const statusPill = {
   todo: { className: 'text-textsecondary bg-surface border border-border', style: undefined },
-  in_progress: { className: 'text-warning', style: { background: '#2A1F0A' } },
-  for_review: { className: 'text-primary', style: { background: '#1E1A3F' } },
-  done: { className: 'text-success', style: { background: '#0A2A1A' } },
-  blocked: { className: 'text-danger', style: { background: '#2A0A0A' } },
+  in_progress: { className: 'text-warning bg-warning/10', style: undefined },
+  for_review: { className: 'text-primary bg-primary/10', style: undefined },
+  done: { className: 'text-success bg-success/10', style: undefined },
+  blocked: { className: 'text-danger bg-danger/10', style: undefined },
 }
 
 const statusTint = {
-  todo: '#1A1D27',
-  in_progress: '#2A1F0A',
-  for_review: '#1E1A3F',
-  done: '#0A2A1A',
-  blocked: '#2A0A0A',
+  todo: 'bg-surface',
+  in_progress: 'bg-warning/10',
+  for_review: 'bg-primary/10',
+  done: 'bg-success/10',
+  blocked: 'bg-danger/10',
 }
 
 const statusDot = {
@@ -123,7 +123,7 @@ export default function MyTasks() {
       </div>
 
       {/* Quick stats */}
-      <div className="grid grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6">
         {[
           { label: 'Total tasks', value: tasks.length, color: 'text-textprimary' },
           { label: 'Done', value: doneCount, color: 'text-success' },
@@ -151,10 +151,9 @@ export default function MyTasks() {
           <button
             key={f.key}
             onClick={() => setFilter(f.key)}
-            style={filter === f.key ? { background: '#1E1A3F' } : undefined}
             className={`pill pill-outline ${
               filter === f.key
-                ? 'pill-active'
+                ? 'pill-active bg-primary/10'
                 : f.key === 'overdue' && overdueCount > 0
                 ? 'text-danger border-danger/40'
                 : ''
@@ -180,6 +179,8 @@ export default function MyTasks() {
         </div>
       ) : (
         <div className="bg-surface border border-border rounded-xl overflow-hidden">
+          <div className="overflow-x-auto">
+            <div className="min-w-[700px]">
           {/* Table header */}
           <div className="grid grid-cols-12 gap-4 px-4 py-3 border-b border-border">
             <div className="col-span-5 text-textsecondary text-xs font-medium">Task</div>
@@ -261,7 +262,7 @@ export default function MyTasks() {
                             {Object.entries(statusLabels).map(([val, label]) => {
                               const isHovered = hoveredStatus === val
                               const isCurrent = task.status === val
-                              const bg = isHovered ? (statusTint[val] || '#1A1D27') : undefined
+                              const tintClass = isHovered ? (statusTint[val] || 'bg-surface') : ''
                               return (
                                 <button
                                   key={val}
@@ -276,8 +277,7 @@ export default function MyTasks() {
                                   }}
                                   className={`w-full px-3 py-2 text-xs flex items-center gap-2 text-left transition-colors ${
                                     isCurrent ? 'font-medium' : ''
-                                  }`}
-                                  style={bg ? { background: bg } : undefined}
+                                  } ${tintClass}`}
                                 >
                                   <span className={`w-1.5 h-1.5 rounded-full ${statusDot[val] || 'bg-textsecondary'}`} />
                                   <span className={(statusPill[val] || statusPill.todo).className.split(' ')[0]}>
@@ -295,6 +295,8 @@ export default function MyTasks() {
                 </div>
               </div>
             ))}
+          </div>
+            </div>
           </div>
         </div>
       )}

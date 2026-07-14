@@ -1,6 +1,21 @@
 @import "tailwindcss";
 
+/* Light mode is the base; dark mode overrides these tokens under `.dark`.
+   Toggling `.dark` on <html> flips the whole theme at once. */
 @theme {
+  --color-background: #F4F5F9;
+  --color-surface: #FFFFFF;
+  --color-border: #E4E7EF;
+  --color-primary: #6C63FF;
+  --color-secondary: #4ECDC4;
+  --color-success: #2ECC71;
+  --color-warning: #F39C12;
+  --color-danger: #E74C3C;
+  --color-textprimary: #161922;
+  --color-textsecondary: #5B6172;
+}
+
+.dark {
   --color-background: #0F1117;
   --color-surface: #1A1D27;
   --color-border: #2A2D3E;
@@ -25,14 +40,14 @@
   }
 
   body {
-    background-color: #0F1117;
-    color: #FFFFFF;
+    background-color: var(--color-background);
+    color: var(--color-textprimary);
     font-family: 'Inter', sans-serif;
   }
 
   ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: #1A1D27; }
-  ::-webkit-scrollbar-thumb { background: #2A2D3E; border-radius: 3px; }
+  ::-webkit-scrollbar-track { background: var(--color-surface); }
+  ::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
 }
 
 /* ============================================================

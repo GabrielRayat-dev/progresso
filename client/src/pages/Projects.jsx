@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom'
 import api from '../api/index'
 
 const typePill = {
-  thesis: { className: 'text-primary', style: { background: '#1E1A3F' } },
-  school: { className: 'text-secondary', style: { background: '#0A2A2A' } },
-  freelance: { className: 'text-warning', style: { background: '#2A1F0A' } },
-  personal: { className: 'text-success', style: { background: '#0A2A1A' } },
+  thesis: { className: 'text-primary bg-primary/10', style: undefined },
+  school: { className: 'text-secondary bg-secondary/10', style: undefined },
+  freelance: { className: 'text-warning bg-warning/10', style: undefined },
+  personal: { className: 'text-success bg-success/10', style: undefined },
 }
 
 const filters = ['All', 'Thesis', 'School', 'Freelance', 'Personal']
@@ -74,7 +74,7 @@ export default function Projects() {
   return (
     <div>
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
           <h2 className="text-xl font-medium text-textprimary">Projects</h2>
           <p className="text-textsecondary text-sm mt-1">
@@ -96,8 +96,13 @@ export default function Projects() {
           <button
             key={f}
             onClick={() => setFilter(f)}
-            style={filter === f ? { background: '#1E1A3F' } : undefined}
-            className={`pill pill-outline ${filter === f ? 'pill-active' : ''}`}
+            className={`pill pill-outline ${
+              filter === f
+                ? 'pill-active bg-primary/10'
+                : f === 'overdue' && overdueCount > 0
+                ? 'text-danger border-danger/40'
+                : ''
+            }`}
           >
             {f}
           </button>
@@ -121,7 +126,7 @@ export default function Projects() {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {filtered.map(project => {
             const percent = getPercent(project)
             const total = parseInt(project.total_tasks) || 0
@@ -205,7 +210,7 @@ export default function Projects() {
             </div>
 
             {error && (
-              <div className="flex items-center gap-2 border border-danger border-opacity-30 rounded-lg px-4 py-3 mb-4" style={{ background: '#2A0A0A' }}>
+              <div className="flex items-center gap-2 border border-danger border-opacity-30 rounded-lg px-4 py-3 mb-4 bg-danger/10">
                 <i className="ti ti-alert-circle text-danger text-sm" aria-hidden="true"></i>
                 <span className="text-danger text-sm">{error}</span>
               </div>

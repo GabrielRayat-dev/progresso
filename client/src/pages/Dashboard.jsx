@@ -21,17 +21,17 @@ const statusLabels = {
 
 const statusPill = {
   todo: { className: 'bg-surface text-textsecondary', style: undefined },
-  in_progress: { className: 'text-warning', style: { background: '#2A1F0A' } },
-  for_review: { className: 'text-primary', style: { background: '#1E1A3F' } },
-  done: { className: 'text-success', style: { background: '#0A2A1A' } },
-  blocked: { className: 'text-danger', style: { background: '#2A0A0A' } },
+  in_progress: { className: 'text-warning bg-warning/10', style: undefined },
+  for_review: { className: 'text-primary bg-primary/10', style: undefined },
+  done: { className: 'text-success bg-success/10', style: undefined },
+  blocked: { className: 'text-danger bg-danger/10', style: undefined },
 }
 
 const typePill = {
-  thesis: { className: 'text-primary', style: { background: '#1E1A3F' } },
-  school: { className: 'text-secondary', style: { background: '#0A2A2A' } },
-  freelance: { className: 'text-warning', style: { background: '#2A1F0A' } },
-  personal: { className: 'text-success', style: { background: '#0A2A1A' } },
+  thesis: { className: 'text-primary bg-primary/10', style: undefined },
+  school: { className: 'text-secondary bg-secondary/10', style: undefined },
+  freelance: { className: 'text-warning bg-warning/10', style: undefined },
+  personal: { className: 'text-success bg-success/10', style: undefined },
 }
 
 export default function Dashboard() {
@@ -91,7 +91,7 @@ export default function Dashboard() {
   return (
     <div>
       {/* Header */}
-      <div className="flex items-start justify-between mb-6">
+      <div className="flex flex-wrap items-start justify-between gap-3 mb-6">
         <div>
           <h2 className="text-xl font-medium text-textprimary">
             {greeting()}, {user?.full_name?.split(' ')[0]} 👋
@@ -112,7 +112,7 @@ export default function Dashboard() {
       </div>
 
       {/* Metrics */}
-      <div className="grid grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6">
         {[
           { label: 'Total projects', value: projects.length, sub: `${projects.filter(p => p.status === 'active').length} active`, color: 'text-primary' },
           { label: 'Tasks done', value: doneTasks, sub: `of ${totalTasks} total`, color: 'text-success' },
@@ -128,7 +128,7 @@ export default function Dashboard() {
       </div>
 
       {/* Main grid */}
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
         {/* Recent projects */}
         <div className="card">
@@ -243,7 +243,7 @@ export default function Dashboard() {
       {/* Empty state if no projects */}
       {projects.length === 0 && tasks.length === 0 && (
         <div className="mt-6 card text-center">
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: '#1E1A3F' }}>
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-primary/10">
             <i className="ti ti-rocket text-primary text-2xl" aria-hidden="true"></i>
           </div>
           <h3 className="text-textprimary font-medium mb-2">Welcome to Progresso!</h3>

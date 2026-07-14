@@ -45,7 +45,7 @@ export default function Landing() {
           and activity logs in one place. No more "anong progress mo?" in the group chat.
         </p>
 
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row gap-3">
           <Link
             to="/register"
             className="btn btn-primary btn-lg"
@@ -70,7 +70,7 @@ export default function Landing() {
       <section className="px-8 py-12 max-w-4xl mx-auto">
         <div className="card-lg mb-6">
           <div className="flex items-start gap-4 mb-6">
-            <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#2A0A0A' }}>
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 bg-danger/10">
               <i className="ti ti-mood-sad text-danger text-lg" aria-hidden="true"></i>
             </div>
             <div>
@@ -95,7 +95,7 @@ export default function Landing() {
 
         <div className="card-lg border-primary border-opacity-40">
           <div className="flex items-start gap-4 mb-6">
-            <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#1E1A3F' }}>
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 bg-primary/10">
               <i className="ti ti-circle-check text-primary text-lg" aria-hidden="true"></i>
             </div>
             <div>
@@ -129,18 +129,18 @@ export default function Landing() {
         <p className="text-textsecondary text-center text-sm mb-10">
           Built specifically for students and small dev teams — not corporate giants.
         </p>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[
-            { icon: 'ti-folder', color: '#6C63FF', bg: '#1E1A3F', title: 'Project types', desc: 'Tag projects as Thesis, School, Freelance, or Personal. Filter and organize by type.' },
-            { icon: 'ti-users', color: '#4ECDC4', bg: '#0A2A2A', title: 'Team roles', desc: 'Leader, Member, and Viewer roles per project. Invite teammates by email.' },
-            { icon: 'ti-activity', color: '#2ECC71', bg: '#0A2A1A', title: 'Activity logs', desc: 'Every action logged automatically. See who changed what and when.' },
-            { icon: 'ti-message', color: '#F39C12', bg: '#2A1F0A', title: 'Task comments', desc: 'Leave comments directly on tasks. No more hunting for updates in group chats.' },
-            { icon: 'ti-chart-bar', color: '#6C63FF', bg: '#1E1A3F', title: 'Analytics', desc: 'Charts for task completion, member progress, and project health.' },
-            { icon: 'ti-bell', color: '#E74C3C', bg: '#2A0A0A', title: 'Notifications', desc: 'Get notified when assigned, commented on, or when deadlines are near.' },
+            { icon: 'ti-folder', color: '#6C63FF', bg: 'bg-primary/10', title: 'Project types', desc: 'Tag projects as Thesis, School, Freelance, or Personal. Filter and organize by type.' },
+            { icon: 'ti-users', color: '#4ECDC4', bg: 'bg-secondary/10', title: 'Team roles', desc: 'Leader, Member, and Viewer roles per project. Invite teammates by email.' },
+            { icon: 'ti-activity', color: '#2ECC71', bg: 'bg-success/10', title: 'Activity logs', desc: 'Every action logged automatically. See who changed what and when.' },
+            { icon: 'ti-message', color: '#F39C12', bg: 'bg-warning/10', title: 'Task comments', desc: 'Leave comments directly on tasks. No more hunting for updates in group chats.' },
+            { icon: 'ti-chart-bar', color: '#6C63FF', bg: 'bg-primary/10', title: 'Analytics', desc: 'Charts for task completion, member progress, and project health.' },
+            { icon: 'ti-bell', color: '#E74C3C', bg: 'bg-danger/10', title: 'Notifications', desc: 'Get notified when assigned, commented on, or when deadlines are near.' },
           ].map((f, i) => (
             <div key={i} className="card hover:border-primary transition-colors">
-              <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-4" style={{ background: f.bg }}>
-                <i className={`ti ${f.icon} text-base`} style={{ color: f.color }} aria-hidden="true"></i>
+              <div className={`w-9 h-9 rounded-lg flex items-center justify-center mb-4 ${f.bg}`} style={{ color: f.color }}>
+                <i className={`ti ${f.icon} text-base`} aria-hidden="true"></i>
               </div>
               <h4 className="text-textprimary font-medium text-sm mb-2">{f.title}</h4>
               <p className="text-textsecondary text-xs leading-relaxed">{f.desc}</p>
@@ -157,16 +157,16 @@ export default function Landing() {
         <p className="text-textsecondary text-center text-sm mb-10">
           From thesis to freelance work — Progresso has you covered.
         </p>
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {[
-            { label: 'Thesis / Capstone', icon: 'ti-school', color: '#6C63FF', bg: '#1E1A3F', desc: 'Track chapters, defenses, and research tasks' },
-            { label: 'School Subject', icon: 'ti-book', color: '#4ECDC4', bg: '#0A2A2A', desc: 'Group activities and requirements' },
-            { label: 'Freelance / Client', icon: 'ti-briefcase', color: '#EF9F27', bg: '#2A1F0A', desc: 'Client deliverables and milestones' },
-            { label: 'Personal / Side', icon: 'ti-heart', color: '#2ECC71', bg: '#0A2A1A', desc: 'Personal goals and side projects' },
+            { label: 'Thesis / Capstone', icon: 'ti-school', color: '#6C63FF', bg: 'bg-primary/10', desc: 'Track chapters, defenses, and research tasks' },
+            { label: 'School Subject', icon: 'ti-book', color: '#4ECDC4', bg: 'bg-secondary/10', desc: 'Group activities and requirements' },
+            { label: 'Freelance / Client', icon: 'ti-briefcase', color: '#EF9F27', bg: 'bg-warning/10', desc: 'Client deliverables and milestones' },
+            { label: 'Personal / Side', icon: 'ti-heart', color: '#2ECC71', bg: 'bg-success/10', desc: 'Personal goals and side projects' },
           ].map((t, i) => (
             <div key={i} className="card text-center hover:border-primary transition-colors">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center mx-auto mb-3" style={{ background: t.bg }}>
-                <i className={`ti ${t.icon} text-base`} style={{ color: t.color }} aria-hidden="true"></i>
+              <div className={`w-10 h-10 rounded-lg flex items-center justify-center mx-auto mb-3 ${t.bg}`} style={{ color: t.color }}>
+                <i className={`ti ${t.icon} text-base`} aria-hidden="true"></i>
               </div>
               <div className="text-xs font-medium mb-1" style={{ color: t.color }}>{t.label}</div>
               <div className="text-xs text-textsecondary">{t.desc}</div>

@@ -79,7 +79,7 @@ export default function Calendar() {
   )
 
   return (
-    <div className="flex gap-6">
+    <div className="flex flex-col lg:flex-row gap-6">
 
       {/* Calendar */}
       <div className="flex-1 min-w-0">
@@ -127,7 +127,7 @@ export default function Calendar() {
           <div className="grid grid-cols-7">
             {/* Empty cells before first day */}
             {Array.from({ length: firstDay }).map((_, i) => (
-              <div key={`empty-${i}`} className="min-h-20 border-b border-r border-border p-2 bg-background opacity-40" />
+              <div key={`empty-${i}`} className="min-h-16 md:min-h-20 border-b border-r border-border p-2 bg-background opacity-40" />
             ))}
 
             {/* Day cells */}
@@ -142,16 +142,9 @@ export default function Calendar() {
                 <div
                   key={day}
                   onClick={() => setSelectedDay(isSelected ? null : day)}
-                  style={
-                    isSelected
-                      ? { background: '#1E1A3F' }
-                      : todayCell
-                      ? { background: 'rgba(108, 99, 255, 0.08)' }
-                      : undefined
-                  }
-                  className={`min-h-20 border-b border-r border-border p-2 cursor-pointer transition-colors ${
-                    isSelected ? '' :
-                    todayCell ? '' :
+                  className={`min-h-16 md:min-h-20 border-b border-r border-border p-2 cursor-pointer transition-colors ${
+                    isSelected ? 'bg-primary/10' :
+                    todayCell ? 'bg-primary/10' :
                     pastDay ? 'bg-background opacity-60' :
                     'hover:bg-background'
                   }`}
@@ -167,18 +160,10 @@ export default function Calendar() {
                     {dayTasks.slice(0, 2).map(t => (
                       <div
                         key={t.id}
-                        style={{
-                          background:
-                            t.status === 'done'
-                              ? '#0A2A1A'
-                              : t.status === 'blocked'
-                              ? '#2A0A0A'
-                              : '#1E1A3F',
-                        }}
                         className={`text-xs px-1 py-0.5 rounded truncate ${
-                          t.status === 'done' ? 'text-success' :
-                          t.status === 'blocked' ? 'text-danger' :
-                          'text-primary'
+                          t.status === 'done' ? 'text-success bg-success/10' :
+                          t.status === 'blocked' ? 'text-danger bg-danger/10' :
+                          'text-primary bg-primary/10'
                         }`}
                       >
                         {t.title}
@@ -225,7 +210,7 @@ export default function Calendar() {
       </div>
 
       {/* Sidebar — upcoming tasks */}
-      <div className="w-64 flex-shrink-0">
+      <div className="w-full lg:w-64 flex-shrink-0">
         <h3 className="text-textprimary text-sm font-medium mb-4">Upcoming tasks</h3>
         {upcomingTasks.length === 0 ? (
           <div className="card text-center">

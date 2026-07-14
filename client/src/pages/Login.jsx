@@ -48,7 +48,7 @@ export default function Login() {
 
           {/* Error */}
           {error && (
-            <div className="flex items-center gap-2 border border-danger border-opacity-30 rounded-lg px-4 py-3 mb-4" style={{ background: '#2A0A0A' }}>
+            <div className="flex items-center gap-2 border border-danger border-opacity-30 rounded-lg px-4 py-3 mb-4 bg-danger/10">
               <i className="ti ti-alert-circle text-danger text-sm" aria-hidden="true"></i>
               <span className="text-danger text-sm">{error}</span>
             </div>

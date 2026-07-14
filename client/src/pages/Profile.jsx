@@ -110,8 +110,7 @@ export default function Profile() {
         <div className="flex items-center gap-5">
           <div className="relative">
             <div
-              className="w-16 h-16 rounded-full flex items-center justify-center overflow-hidden"
-              style={{ background: 'rgba(108, 99, 255, 0.2)' }}
+              className="w-16 h-16 rounded-full flex items-center justify-center overflow-hidden bg-primary/20"
             >
               {user?.avatar_url ? (
                 <img
@@ -179,13 +178,13 @@ export default function Profile() {
         <h3 className="text-textprimary text-sm font-medium mb-4">Update name</h3>
 
         {nameMsg && (
-          <div className="flex items-center gap-2 border border-success border-opacity-30 rounded-lg px-4 py-3 mb-4" style={{ background: '#0A2A1A' }}>
+          <div className="flex items-center gap-2 border border-success border-opacity-30 rounded-lg px-4 py-3 mb-4 bg-success/10">
             <i className="ti ti-circle-check text-success text-sm" aria-hidden="true"></i>
             <span className="text-success text-sm">{nameMsg}</span>
           </div>
         )}
         {nameError && (
-          <div className="flex items-center gap-2 border border-danger border-opacity-30 rounded-lg px-4 py-3 mb-4" style={{ background: '#2A0A0A' }}>
+          <div className="flex items-center gap-2 border border-danger border-opacity-30 rounded-lg px-4 py-3 mb-4 bg-danger/10">
             <i className="ti ti-alert-circle text-danger text-sm" aria-hidden="true"></i>
             <span className="text-danger text-sm">{nameError}</span>
           </div>
@@ -220,13 +219,13 @@ export default function Profile() {
         <h3 className="text-textprimary text-sm font-medium mb-4">Change password</h3>
 
         {passMsg && (
-          <div className="flex items-center gap-2 border border-success border-opacity-30 rounded-lg px-4 py-3 mb-4" style={{ background: '#0A2A1A' }}>
+          <div className="flex items-center gap-2 border border-success border-opacity-30 rounded-lg px-4 py-3 mb-4 bg-success/10">
             <i className="ti ti-circle-check text-success text-sm" aria-hidden="true"></i>
             <span className="text-success text-sm">{passMsg}</span>
           </div>
         )}
         {passError && (
-          <div className="flex items-center gap-2 border border-danger border-opacity-30 rounded-lg px-4 py-3 mb-4" style={{ background: '#2A0A0A' }}>
+          <div className="flex items-center gap-2 border border-danger border-opacity-30 rounded-lg px-4 py-3 mb-4 bg-danger/10">
             <i className="ti ti-alert-circle text-danger text-sm" aria-hidden="true"></i>
             <span className="text-danger text-sm">{passError}</span>
           </div>

@@ -5,10 +5,10 @@ import api from '../api/index'
 
 const statusPill = {
   todo: { className: 'bg-surface text-textsecondary border border-border', style: undefined },
-  in_progress: { className: 'text-warning', style: { background: '#2A1F0A' } },
-  for_review: { className: 'text-primary', style: { background: '#1E1A3F' } },
-  done: { className: 'text-success', style: { background: '#0A2A1A' } },
-  blocked: { className: 'text-danger', style: { background: '#2A0A0A' } },
+  in_progress: { className: 'text-warning bg-warning/10', style: undefined },
+  for_review: { className: 'text-primary bg-primary/10', style: undefined },
+  done: { className: 'text-success bg-success/10', style: undefined },
+  blocked: { className: 'text-danger bg-danger/10', style: undefined },
 }
 
 const statusLabels = {
@@ -20,11 +20,11 @@ const statusLabels = {
 }
 
 const statusTint = {
-  todo: '#1A1D27',
-  in_progress: '#2A1F0A',
-  for_review: '#1E1A3F',
-  done: '#0A2A1A',
-  blocked: '#2A0A0A',
+  todo: 'bg-surface',
+  in_progress: 'bg-warning/10',
+  for_review: 'bg-primary/10',
+  done: 'bg-success/10',
+  blocked: 'bg-danger/10',
 }
 
 const statusDot = {
@@ -205,7 +205,7 @@ export default function ProjectDetail() {
   )
 
   return (
-    <div className="flex gap-6 h-full">
+    <div className="flex flex-col lg:flex-row gap-6">
 
       {/* Left — Tasks */}
       <div className="flex-1 min-w-0">
@@ -218,7 +218,7 @@ export default function ProjectDetail() {
         </div>
 
         {/* Project header */}
-        <div className="flex items-start justify-between mb-4">
+        <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
           <div>
             <h2 className="text-xl font-medium text-textprimary">{project.name}</h2>
             {project.description && (
@@ -244,7 +244,7 @@ export default function ProjectDetail() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-4 gap-3 mb-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
           {[
             { label: 'Total', value: totalTasks, color: 'text-textprimary' },
             { label: 'Done', value: doneTasks, color: 'text-success' },
@@ -275,10 +275,9 @@ export default function ProjectDetail() {
             <button
               key={f}
               onClick={() => setFilter(f)}
-              style={filter === f ? { background: '#1E1A3F' } : undefined}
               className={`pill pill-outline ${
                 filter === f
-                  ? 'pill-active'
+                  ? 'pill-active bg-primary/10'
                   : ''
               }`}
             >
@@ -338,7 +337,7 @@ export default function ProjectDetail() {
                           {Object.entries(statusLabels).map(([val, label]) => {
                             const isHovered = hoveredStatus === val
                             const isCurrent = task.status === val
-                            const bg = isHovered ? (statusTint[val] || '#1A1D27') : undefined
+                            const tintClass = isHovered ? (statusTint[val] || 'bg-surface') : ''
                             return (
                               <button
                                 key={val}
@@ -353,8 +352,7 @@ export default function ProjectDetail() {
                                 }}
                                 className={`w-full px-3 py-2 text-xs flex items-center gap-2 text-left transition-colors ${
                                   isCurrent ? 'font-medium' : ''
-                                }`}
-                                style={bg ? { background: bg } : undefined}
+                                } ${tintClass}`}
                               >
                                 <span className={`w-1.5 h-1.5 rounded-full ${statusDot[val] || 'bg-textsecondary'}`} />
                                 <span className={(statusPill[val] || statusPill.todo).className.split(' ')[0]}>
@@ -370,7 +368,7 @@ export default function ProjectDetail() {
                   )
                 })()}
                 {task.assignee_name && (
-                  <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(108, 99, 255, 0.2)' }}>
+                  <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 bg-primary/20">
                     <span className="text-primary text-xs">{initials(task.assignee_name)}</span>
                   </div>
                 )}
@@ -387,7 +385,7 @@ export default function ProjectDetail() {
       </div>
 
       {/* Right — Task detail / Members */}
-      <div className="w-72 flex-shrink-0 space-y-4">
+      <div className="w-full lg:w-72 flex-shrink-0 space-y-4">
 
         {/* Task detail panel */}
         {selectedTask ? (
@@ -430,7 +428,7 @@ export default function ProjectDetail() {
                 ) : (
                   comments.map(c => (
                     <div key={c.id} className="flex gap-2">
-                      <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(108, 99, 255, 0.2)' }}>
+                      <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 bg-primary/20">
                         <span className="text-primary text-xs">{initials(c.full_name)}</span>
                       </div>
                       <div className="flex-1 min-w-0">
@@ -482,7 +480,7 @@ export default function ProjectDetail() {
           <div className="space-y-2">
             {members.map(m => (
               <div key={m.id} className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(108, 99, 255, 0.2)' }}>
+                <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 bg-primary/20">
                   <span className="text-primary text-xs">{initials(m.full_name)}</span>
                 </div>
                 <div className="flex-1 min-w-0">

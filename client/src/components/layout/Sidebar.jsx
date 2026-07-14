@@ -27,7 +27,7 @@ export default function Sidebar() {
     .slice(0, 2)
 
   return (
-    <aside className="w-56 h-screen bg-surface border-r border-border flex flex-col flex-shrink-0 px-3 py-3 space-y-3">
+    <aside className="hidden md:flex w-56 h-screen bg-surface border-r border-border flex-col flex-shrink-0 px-3 py-3 space-y-3">
 
       {/* Logo */}
       <div className="flex items-center gap-2 px-4 py-5 border-b border-border">
@@ -45,10 +45,9 @@ export default function Sidebar() {
             <Link
               key={item.path}
               to={item.path}
-              style={isActive ? { background: '#1E1A3F' } : undefined}
               className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-colors ${
                 isActive
-                  ? 'text-primary font-medium'
+                  ? 'text-primary font-medium bg-primary/10'
                   : 'text-textsecondary hover:text-textprimary hover:bg-background'
               }`}
             >
@@ -63,10 +62,9 @@ export default function Sidebar() {
       <div className="px-4 py-4 border-t border-border space-y-1">
         <Link
           to="/profile"
-          style={location.pathname === '/profile' ? { background: '#1E1A3F' } : undefined}
           className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm transition-colors ${
             location.pathname === '/profile'
-              ? 'text-primary font-medium'
+              ? 'text-primary font-medium bg-primary/10'
               : 'text-textsecondary hover:text-textprimary hover:bg-background'
           }`}
         >
@@ -86,12 +84,12 @@ export default function Sidebar() {
       <div className="px-4 py-4 border-t border-border">
         <Link
           to="/profile"
-          style={location.pathname === '/profile' ? { background: '#1E1A3F' } : undefined}
-          className="flex items-center gap-3 hover:opacity-80 transition-opacity rounded-lg px-2 py-1.5"
+          className={`flex items-center gap-3 hover:opacity-80 transition-opacity rounded-lg px-2 py-1.5 ${
+            location.pathname === '/profile' ? 'bg-primary/10' : ''
+          }`}
         >
           <div
-            className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden"
-            style={{ background: 'rgba(108, 99, 255, 0.2)' }}
+            className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden bg-primary/20"
           >
             {user?.avatar_url ? (
               <img src={user.avatar_url} alt={user.full_name} className="w-8 h-8 rounded-full object-cover" />
