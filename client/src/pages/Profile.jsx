@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import api from '../api/index'
+import { COLOR_THEMES, getColorTheme, setColorTheme, isDarkMode, setDarkMode } from '../theme'
 
 export default function Profile() {
   const { user, login } = useAuth()
@@ -18,6 +19,20 @@ export default function Profile() {
   const [savingPass, setSavingPass] = useState(false)
   const [uploadingAvatar, setUploadingAvatar] = useState(false)
   const [memberSince, setMemberSince] = useState(user?.created_at || '')
+
+  // Theme: light/dark mode + accent color theme
+  const [dark, setDarkModeState] = useState(isDarkMode)
+  const [colorTheme, setColorThemeState] = useState(getColorTheme)
+
+  const toggleMode = () => {
+    const next = !dark
+    setDarkModeState(next)
+    setDarkMode(next)
+  }
+
+  const chooseColorTheme = (id) => {
+    setColorThemeState(setColorTheme(id))
+  }
 
   // The stored user lacks created_at; fetch the full profile to populate it
   useEffect(() => {
@@ -215,7 +230,7 @@ export default function Profile() {
       </div>
 
       {/* Change password */}
-      <div className="card-lg">
+      <div className="card-lg mb-4">
         <h3 className="text-textprimary text-sm font-medium mb-4">Change password</h3>
 
         {passMsg && (
@@ -274,6 +289,60 @@ export default function Profile() {
             )}
           </button>
         </form>
+      </div>
+
+      {/* Appearance */}
+      <div className="card-lg">
+        <h3 className="text-textprimary text-sm font-medium mb-4">Appearance</h3>
+
+        {/* Light / dark mode */}
+        <div className="flex items-center justify-between py-2">
+          <div className="flex items-center gap-3">
+            <i className={`ti ${dark ? 'ti-moon' : 'ti-sun'} text-base text-textsecondary`} aria-hidden="true"></i>
+            <div>
+              <p className="text-textprimary text-sm">{dark ? 'Dark mode' : 'Light mode'}</p>
+              <p className="text-textsecondary text-xs">Switch between light and dark themes</p>
+            </div>
+          </div>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={dark}
+            aria-label="Toggle dark mode"
+            onClick={toggleMode}
+            className={`relative inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full transition-colors ${dark ? 'bg-primary' : 'bg-border'}`}
+          >
+            <span
+              className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${dark ? 'translate-x-5' : 'translate-x-1'}`}
+            />
+          </button>
+        </div>
+
+        <div className="h-px bg-border my-3" />
+
+        {/* Accent color theme */}
+        <div className="py-2">
+          <p className="text-textprimary text-sm mb-1">Accent color</p>
+          <p className="text-textsecondary text-xs mb-3">Choose the highlight color used across the app</p>
+          <div className="flex items-center gap-3">
+            {COLOR_THEMES.map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => chooseColorTheme(t.id)}
+                aria-label={t.label}
+                aria-pressed={colorTheme === t.id}
+                title={t.label}
+                className={`relative w-8 h-8 rounded-full transition ${colorTheme === t.id ? 'ring-2 ring-offset-2 ring-primary ring-offset-surface' : 'ring-1 ring-border hover:ring-textsecondary'}`}
+                style={{ backgroundColor: t.value }}
+              >
+                {colorTheme === t.id && (
+                  <i className="ti ti-check text-white text-sm absolute inset-0 flex items-center justify-center" aria-hidden="true"></i>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   )

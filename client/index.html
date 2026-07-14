@@ -12,6 +12,10 @@
           if (localStorage.getItem('theme') !== 'light') {
             document.documentElement.classList.add('dark')
           }
+          var ct = localStorage.getItem('colorTheme')
+          if (ct === 'blue' || ct === 'purple' || ct === 'orange') {
+            document.documentElement.classList.add('theme-' + ct)
+          }
         } catch (e) {}
       })();
     </script>

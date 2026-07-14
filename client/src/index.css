@@ -6,7 +6,7 @@
   --color-background: #F4F5F9;
   --color-surface: #FFFFFF;
   --color-border: #E4E7EF;
-  --color-primary: #6C63FF;
+  --color-primary: #16A34A;
   --color-secondary: #4ECDC4;
   --color-success: #2ECC71;
   --color-warning: #F39C12;
@@ -19,7 +19,6 @@
   --color-background: #0F1117;
   --color-surface: #1A1D27;
   --color-border: #2A2D3E;
-  --color-primary: #6C63FF;
   --color-secondary: #4ECDC4;
   --color-success: #2ECC71;
   --color-warning: #F39C12;
@@ -27,6 +26,13 @@
   --color-textprimary: #FFFFFF;
   --color-textsecondary: #8B8FA8;
 }
+
+/* Color themes — override the accent (--color-primary) in BOTH light and dark.
+   Green is the base default (no class needed); the others apply a class to <html>.
+   Selectors use :root.theme-* (higher specificity) so they win over .dark. */
+:root.theme-blue { --color-primary: #3B82F6; }
+:root.theme-purple { --color-primary: #8B5CF6; }
+:root.theme-orange { --color-primary: #F97316; }
 
 /* Reset MUST live inside @layer base — an unlayered * { padding: 0 }
    overrides @layer components/utilities and strips all Tailwind padding. */
