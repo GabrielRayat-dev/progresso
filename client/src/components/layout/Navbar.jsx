@@ -1,14 +1,20 @@
 import { useState, useRef, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
-import NotificationBell from './NotificationBell'
-import ThemeToggle from './ThemeToggle'
+import { isDarkMode, setDarkMode } from '../../theme'
+import HeaderNavigation from './HeaderNavigation'
 
 export default function Navbar({ title, subtitle }) {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef(null)
+  const [dark, setDark] = useState(isDarkMode())
+  const toggleTheme = () => {
+    const next = !dark
+    setDark(next)
+    setDarkMode(next)
+  }
 
   const initials = user?.full_name
     ?.split(' ')
@@ -46,8 +52,7 @@ export default function Navbar({ title, subtitle }) {
         {subtitle && <p className="text-textsecondary text-xs truncate">{subtitle}</p>}
       </div>
       <div className="flex items-center gap-2">
-        <ThemeToggle />
-        <NotificationBell />
+        <HeaderNavigation isDarkMode={dark} toggleTheme={toggleTheme} />
 
         {/* Avatar dropdown — opens Settings / Sign out on tap (mobile + desktop) */}
         <div className="relative" ref={menuRef}>

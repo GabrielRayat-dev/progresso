@@ -31,7 +31,7 @@ export default function Sidebar() {
 
       {/* Logo */}
       <div className="flex items-center gap-2 px-2 py-4 border-b-[3px] border-border">
-        <div className="w-8 h-8 border-[3px] border-border bg-primary flex items-center justify-center flex-shrink-0 shadow-retro">
+        <div className="w-8 h-8 border-[3px] border-border bg-primary flex items-center justify-center flex-shrink-0 shadow-retro rounded-lg">
           <i className="ti ti-chart-bar text-black text-xs" aria-hidden="true"></i>
         </div>
         <span className="font-pixel text-black text-[11px] uppercase tracking-wide">Progresso</span>
@@ -45,7 +45,7 @@ export default function Sidebar() {
             <Link
               key={item.path}
               to={item.path}
-              className={`flex items-center gap-3 px-4 py-2.5 font-pixel text-xs uppercase tracking-wide border-[3px] border-border shadow-retro transition-transform ${
+              className={`flex items-center gap-3 px-4 py-2.5 font-pixel text-xs uppercase tracking-wide border-[3px] border-border shadow-retro rounded-lg transition-transform ${
                 isActive
                   ? 'bg-primary text-black'
                   : 'bg-surface text-textprimary hover:bg-black hover:text-white'
@@ -62,7 +62,7 @@ export default function Sidebar() {
       <div className="px-2 py-4 border-t-[3px] border-border space-y-2">
         <Link
           to="/profile"
-          className={`flex items-center gap-3 px-4 py-2.5 font-pixel text-xs uppercase tracking-wide border-[3px] border-border shadow-retro transition-transform ${
+          className={`flex items-center gap-3 px-4 py-2.5 font-pixel text-xs uppercase tracking-wide border-[3px] border-border shadow-retro rounded-lg transition-transform ${
             location.pathname === '/profile'
               ? 'bg-primary text-black'
               : 'bg-surface text-textprimary hover:bg-black hover:text-white'
@@ -73,7 +73,7 @@ export default function Sidebar() {
         </Link>
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-2.5 font-pixel text-xs uppercase tracking-wide text-danger border-[3px] border-border bg-surface shadow-retro transition-transform hover:bg-danger hover:text-white active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
+          className="w-full flex items-center gap-3 px-4 py-2.5 font-pixel text-xs uppercase tracking-wide text-danger border-[3px] border-border bg-surface shadow-retro rounded-lg transition-transform hover:bg-danger hover:text-white active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
         >
           <i className="ti ti-logout text-base flex-shrink-0" aria-hidden="true"></i>
           <span>Sign out</span>
@@ -84,12 +84,12 @@ export default function Sidebar() {
       <div className="px-2 py-4 border-t-[3px] border-border">
         <Link
           to="/profile"
-          className={`flex items-center gap-3 hover:bg-surface transition-colors border-[3px] border-border bg-surface px-2 py-1.5 shadow-retro ${
+          className={`flex items-center gap-3 hover:bg-surface transition-colors border-[3px] border-border bg-surface px-2 py-1.5 shadow-retro rounded-lg ${
             location.pathname === '/profile' ? 'bg-primary' : ''
           }`}
         >
           <div
-            className="w-8 h-8 border-[3px] border-border bg-primary flex items-center justify-center flex-shrink-0 overflow-hidden"
+            className="w-8 h-8 border-[3px] border-border bg-primary flex items-center justify-center flex-shrink-0 overflow-hidden rounded-lg"
           >
             {user?.avatar_url ? (
               <img src={user.avatar_url} alt={user.full_name} className="w-8 h-8 object-cover" />
