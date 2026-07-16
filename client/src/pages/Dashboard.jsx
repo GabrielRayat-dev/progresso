@@ -210,7 +210,7 @@ export default function Dashboard() {
       {/* Empty state if no projects */}
       {projects.length === 0 && tasks.length === 0 && (
         <div className="mt-6 card text-center">
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-primary/10">
+          <div className="w-14 h-14 border-[3px] border-border shadow-retro flex items-center justify-center mx-auto mb-4 bg-primary/10">
             <i className="ti ti-rocket text-primary text-2xl" aria-hidden="true"></i>
           </div>
           <h3 className="text-textprimary font-medium mb-2">Welcome to Progresso!</h3>

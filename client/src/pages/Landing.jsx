@@ -30,7 +30,7 @@ export default function Landing() {
       <div className="sticky top-0 z-50 bg-background border-b border-border">
         <nav className="flex items-center justify-between px-4 md:px-8 py-4 md:py-5 max-w-7xl mx-auto">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+            <div className="w-8 h-8 border-[3px] border-border shadow-retro bg-primary flex items-center justify-center">
               <i className="ti ti-chart-bar text-white text-sm" aria-hidden="true"></i>
             </div>
             <span className="font-medium text-lg text-textprimary">Progresso</span>
@@ -59,13 +59,13 @@ export default function Landing() {
               onClick={() => setMenuOpen(o => !o)}
               aria-label="Open menu"
               aria-expanded={menuOpen}
-              className="w-9 h-9 rounded-lg flex items-center justify-center text-textsecondary hover:text-textprimary hover:bg-surface transition-colors"
+              className="w-9 h-9 border-[3px] border-border shadow-retro flex items-center justify-center text-textsecondary hover:bg-black hover:text-white active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-transform"
             >
               <i className={`ti ${menuOpen ? 'ti-x' : 'ti-menu-2'} text-lg`} aria-hidden="true"></i>
             </button>
 
             {menuOpen && (
-              <div className="absolute right-0 mt-2 w-56 rounded-xl border border-border bg-surface shadow-lg py-2 z-50">
+              <div className="absolute right-0 mt-2 w-56 border-[3px] border-border bg-surface shadow-retro py-2 z-50">
                 <div className="flex items-center justify-between px-4 py-2 border-b border-border">
                   <span className="text-textsecondary text-sm">Theme</span>
                   <ThemeToggle />
@@ -92,7 +92,7 @@ export default function Landing() {
 
       {/* Hero */}
       <section className="flex flex-col items-center text-center px-6 pt-20 pb-16 max-w-4xl mx-auto">
-        <div className="pill bg-surface border border-border text-textsecondary mb-8">
+        <div className="pill mb-8">
           <div className="w-1.5 h-1.5 rounded-full bg-success"></div>
           Built for Filipino students and dev teams
         </div>
@@ -132,7 +132,7 @@ export default function Landing() {
       <section className="px-8 py-12 max-w-4xl mx-auto">
         <div className="card-lg mb-6">
           <div className="flex items-start gap-4 mb-6">
-            <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 bg-danger/10">
+            <div className="w-10 h-10 border-[3px] border-border shadow-retro flex items-center justify-center flex-shrink-0 bg-danger/10">
               <i className="ti ti-mood-sad text-danger text-lg" aria-hidden="true"></i>
             </div>
             <div>
@@ -147,7 +147,7 @@ export default function Landing() {
               '"Bakit blocked yung task ko? Sino ang dapat mag-finish ng API?"',
               '"Sino nag-update ng deadline? Hindi ko nakita sa chat."',
             ].map((msg, i) => (
-              <div key={i} className="flex items-center gap-3 bg-background rounded-lg px-4 py-3">
+              <div key={i} className="flex items-center gap-3 bg-surface border-[3px] border-border shadow-retro px-4 py-3">
                 <i className="ti ti-message-circle text-textsecondary text-sm flex-shrink-0" aria-hidden="true"></i>
                 <span className="text-textsecondary text-sm italic">{msg}</span>
               </div>
@@ -155,9 +155,9 @@ export default function Landing() {
           </div>
         </div>
 
-        <div className="card-lg border-primary border-opacity-40">
+        <div className="card-lg border-primary">
           <div className="flex items-start gap-4 mb-6">
-            <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 bg-primary/10">
+            <div className="w-10 h-10 border-[3px] border-border shadow-retro flex items-center justify-center flex-shrink-0 bg-primary/10">
               <i className="ti ti-circle-check text-primary text-lg" aria-hidden="true"></i>
             </div>
             <div>
@@ -174,7 +174,7 @@ export default function Landing() {
               { icon: 'ti-chart-bar', text: 'Analytics dashboard per project' },
               { icon: 'ti-clock', text: 'Last updated timestamp on every task' },
             ].map((item, i) => (
-              <div key={i} className="flex items-center gap-3 bg-background rounded-lg px-4 py-3">
+              <div key={i} className="flex items-center gap-3 bg-surface border-[3px] border-border shadow-retro px-4 py-3">
                 <i className={`ti ${item.icon} text-primary text-sm flex-shrink-0`} aria-hidden="true"></i>
                 <span className="text-textsecondary text-sm">{item.text}</span>
               </div>
@@ -201,7 +201,7 @@ export default function Landing() {
             { icon: 'ti-bell', color: '#E74C3C', bg: 'bg-danger/10', title: 'Notifications', desc: 'Get notified when assigned, commented on, or when deadlines are near.' },
           ].map((f, i) => (
             <div key={i} className="card hover:border-primary transition-colors">
-              <div className={`w-9 h-9 rounded-lg flex items-center justify-center mb-4 ${f.bg}`} style={{ color: f.color }}>
+              <div className={`w-9 h-9 border-[3px] border-border shadow-retro flex items-center justify-center mb-4 ${f.bg}`} style={{ color: f.color }}>
                 <i className={`ti ${f.icon} text-base`} aria-hidden="true"></i>
               </div>
               <h4 className="text-textprimary font-medium text-sm mb-2">{f.title}</h4>
@@ -227,7 +227,7 @@ export default function Landing() {
             { label: 'Personal / Side', icon: 'ti-heart', color: '#2ECC71', bg: 'bg-success/10', desc: 'Personal goals and side projects' },
           ].map((t, i) => (
             <div key={i} className="card text-center hover:border-primary transition-colors">
-              <div className={`w-10 h-10 rounded-lg flex items-center justify-center mx-auto mb-3 ${t.bg}`} style={{ color: t.color }}>
+              <div className={`w-10 h-10 border-[3px] border-border shadow-retro flex items-center justify-center mx-auto mb-3 ${t.bg}`} style={{ color: t.color }}>
                 <i className={`ti ${t.icon} text-base`} aria-hidden="true"></i>
               </div>
               <div className="text-xs font-medium mb-1" style={{ color: t.color }}>{t.label}</div>
@@ -263,7 +263,7 @@ export default function Landing() {
       <footer className="border-t border-border px-8 py-6">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded bg-primary flex items-center justify-center">
+            <div className="w-6 h-6 border-[3px] border-border shadow-retro bg-primary flex items-center justify-center">
               <i className="ti ti-chart-bar text-white text-xs" aria-hidden="true"></i>
             </div>
             <span className="text-sm font-medium text-textprimary">Progresso</span>
