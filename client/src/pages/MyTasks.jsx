@@ -176,7 +176,7 @@ export default function MyTasks() {
           </div>
 
           {/* Desktop: table (md and up) */}
-          <div className="hidden md:block bg-surface border-[3px] border-border shadow-retro overflow-hidden">
+          <div className="hidden md:block pixel-card-retro overflow-hidden">
             <div className="overflow-x-auto">
               <div className="min-w-[700px]">
                 {/* Table header */}

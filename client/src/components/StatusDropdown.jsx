@@ -1,45 +1,52 @@
 import { useState, useRef, useEffect, useLayoutEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { statusPill, statusTint, statusDot, statusLabels } from '../constants/status'
-
-// Walk up from the trigger to find the nearest scroll/clip container so the
-// menu can flip upward before it gets cut off by overflow-hidden / scroll areas.
-function findClipContainer(el) {
-  let node = el.parentElement
-  while (node) {
-    const s = getComputedStyle(node)
-    if (/(auto|hidden|scroll|clip)/.test(s.overflow + s.overflowY)) return node
-    node = node.parentElement
-  }
-  return null
-}
 
 export default function StatusDropdown({ status, onChange }) {
   const [open, setOpen] = useState(false)
   const [hovered, setHovered] = useState(null)
-  const [dir, setDir] = useState('down')
   const btnRef = useRef(null)
   const menuRef = useRef(null)
+  const [pos, setPos] = useState(null)
 
   const close = () => {
     setOpen(false)
     setHovered(null)
   }
 
-  // Flip upward when opening near the bottom of the clipping container
-  // (so the menu isn't clipped or hidden behind the bottom of the table/card).
+  // Position the portaled menu next to the trigger (right-aligned), flipping
+  // above when there isn't room below. Recompute on scroll/resize so it tracks
+  // the trigger even inside scrolling containers. Portaling escapes any
+  // ancestor clip-path (cards now notch their corners and would otherwise
+  // clip an overflowing menu).
+  const place = () => {
+    const b = btnRef.current
+    if (!b) return
+    const r = b.getBoundingClientRect()
+    const menuW = 176
+    const left = Math.max(8, Math.min(r.right - menuW, window.innerWidth - menuW - 8))
+    const estH = menuRef.current?.offsetHeight || 220
+    const placement = window.innerHeight - r.bottom < estH + 8 && r.top > estH + 8 ? 'up' : 'down'
+    const top = placement === 'up' ? r.top - estH - 8 : r.bottom + 8
+    setPos({ top, left })
+  }
+
   useLayoutEffect(() => {
-    if (!open || !menuRef.current || !btnRef.current) return
-    const clip = findClipContainer(btnRef.current)
-    const menuRect = menuRef.current.getBoundingClientRect()
-    const bound = clip ? clip.getBoundingClientRect().bottom : window.innerHeight
-    setDir(menuRect.bottom > bound - 4 ? 'up' : 'down')
+    if (!open) return
+    place()
+    window.addEventListener('scroll', place, true)
+    window.addEventListener('resize', place)
+    return () => {
+      window.removeEventListener('scroll', place, true)
+      window.removeEventListener('resize', place)
+    }
   }, [open])
 
   // Close on outside click or Escape
   useEffect(() => {
     if (!open) return
     const onPointer = (e) => {
-      if (!e.target.closest('[data-status-dropdown="root"]')) close()
+      if (!e.target.closest('[data-status-dropdown]')) close()
     }
     const onKey = (e) => {
       if (e.key === 'Escape') close()
@@ -61,7 +68,6 @@ export default function StatusDropdown({ status, onChange }) {
         onClick={(e) => {
           e.stopPropagation()
           setOpen((o) => !o)
-          if (!open) setDir('down')
         }}
         className={`badge focus:outline-none cursor-pointer gap-1.5 ${cfg.className}`}
         style={cfg.style}
@@ -71,12 +77,19 @@ export default function StatusDropdown({ status, onChange }) {
         <i className="ti ti-chevron-down text-[10px] opacity-70" aria-hidden="true"></i>
       </button>
 
-      {open && (
+      {open && createPortal(
         <div
           ref={menuRef}
-          className={`absolute right-0 w-44 bg-surface border-[3px] border-border shadow-retro overflow-hidden z-20 ${
-            dir === 'up' ? 'bottom-full mb-2' : 'top-full mt-2'
-          }`}
+          data-status-dropdown="menu"
+          style={{
+            position: 'fixed',
+            top: pos?.top ?? 0,
+            left: pos?.left ?? 0,
+            visibility: pos ? 'visible' : 'hidden',
+            width: 176,
+            zIndex: 50,
+          }}
+          className="pixel-card-retro overflow-hidden"
         >
           {Object.entries(statusLabels).map(([val, label]) => {
             const isHovered = hovered === val
@@ -105,7 +118,8 @@ export default function StatusDropdown({ status, onChange }) {
               </button>
             )
           })}
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   )

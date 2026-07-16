@@ -56,7 +56,7 @@ export default function Navbar({ title, subtitle }) {
             aria-haspopup="menu"
             aria-expanded={menuOpen}
             aria-label="Account menu"
-            className="w-8 h-8 border-[3px] border-border bg-primary flex items-center justify-center overflow-hidden flex-shrink-0 shadow-retro hover:bg-black transition-colors"
+            className="w-8 h-8 border-[3px] border-border bg-primary flex items-center justify-center overflow-hidden flex-shrink-0 shadow-retro hover:bg-black transition-colors pixel-corners-sm"
           >
             {user?.avatar_url ? (
               <img src={user.avatar_url} alt={user.full_name} className="w-8 h-8 object-cover" />
@@ -68,7 +68,7 @@ export default function Navbar({ title, subtitle }) {
           {menuOpen && (
             <div
               role="menu"
-              className="absolute right-0 mt-2 w-52 card shadow-retro py-1 z-50"
+              className="absolute right-0 mt-2 w-52 card py-1 z-50"
             >
               <div className="px-4 py-2.5 border-b-[3px] border-border min-w-0">
                 <p className="text-textprimary text-xs font-medium truncate">{user?.full_name}</p>

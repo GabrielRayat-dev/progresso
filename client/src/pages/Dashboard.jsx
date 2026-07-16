@@ -133,7 +133,7 @@ export default function Dashboard() {
                   <Link
                     key={project.id}
                     to={`/projects/${project.id}`}
-                    className="block bg-surface border-[3px] border-border shadow-retro p-3 hover:border-primary transition-colors"
+                    className="block bg-surface border-[3px] border-border shadow-retro p-3 hover:border-primary transition-colors rounded-lg"
                   >
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-textprimary text-sm font-medium truncate">{project.name}</span>
@@ -182,7 +182,7 @@ export default function Dashboard() {
               {tasks.slice(0, 6).map(task => (
                 <div
                   key={task.id}
-                  className="flex items-center gap-3 bg-surface border-[3px] border-border shadow-retro px-3 py-2.5"
+                  className="flex items-center gap-3 bg-surface border-[3px] border-border shadow-retro px-3 py-2.5 rounded-lg"
                 >
                   <div className={`w-2.5 h-2.5 flex-shrink-0 ${statusDot[task.status] || 'bg-textsecondary'}`}></div>
                   <div className="flex-1 min-w-0">

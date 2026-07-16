@@ -65,7 +65,7 @@ export default function Landing() {
             </button>
 
             {menuOpen && (
-              <div className="absolute right-0 mt-2 w-56 border-[3px] border-border bg-surface shadow-retro py-2 z-50">
+              <div className="absolute right-0 mt-2 w-56 pixel-card-retro py-2 z-50">
                 <div className="flex items-center justify-between px-4 py-2 border-b border-border">
                   <span className="text-textsecondary text-sm">Theme</span>
                   <ThemeToggle />

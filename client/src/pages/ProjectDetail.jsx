@@ -295,7 +295,7 @@ export default function ProjectDetail() {
                       </button>
 
                       {isOpen && (
-                        <div className="absolute right-0 mt-2 w-44 bg-surface border-[3px] border-border shadow-retro overflow-hidden z-20">
+                        <div className="absolute right-0 mt-2 w-44 pixel-card-retro overflow-hidden z-20">
                           {Object.entries(statusLabels).map(([val, label]) => {
                             const isHovered = hoveredStatus === val
                             const isCurrent = task.status === val
@@ -349,7 +349,7 @@ export default function ProjectDetail() {
 
         {/* Task detail panel */}
         {selectedTask ? (
-          <div className="bg-surface border-[3px] border-border shadow-retro overflow-hidden">
+          <div className="pixel-card-retro overflow-hidden">
             <div className="p-4 border-b-[3px] border-border">
               <div className="flex items-start justify-between gap-2 mb-2">
                 <h4 className="text-textprimary text-sm font-medium">{selectedTask.title}</h4>

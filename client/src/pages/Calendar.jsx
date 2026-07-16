@@ -113,7 +113,7 @@ export default function Calendar() {
         </div>
 
         {/* Calendar grid */}
-        <div className="bg-surface border-[3px] border-border shadow-retro overflow-hidden">
+        <div className="pixel-card-retro overflow-hidden">
           {/* Day headers */}
           <div className="grid grid-cols-7 border-b-[3px] border-border">
             {DAYS.map(d => (

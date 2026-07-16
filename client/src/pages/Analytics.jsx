@@ -212,7 +212,7 @@ export default function Analytics() {
       </div>
 
       {/* Project breakdown table */}
-      <div className="bg-surface border-[3px] border-border shadow-retro overflow-hidden">
+      <div className="pixel-card-retro overflow-hidden">
         <div className="px-5 py-4 border-b-[3px] border-border">
           <h3 className="font-pixel text-sm uppercase tracking-wide text-textprimary">Project breakdown</h3>
         </div>

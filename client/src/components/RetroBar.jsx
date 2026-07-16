@@ -1,16 +1,26 @@
 // RetroBar — chunky stepped "health bar" progress indicator.
 // The fill uses a repeating gradient to fake segmented steps, and the
-// percentage is overlaid in the pixel display font. Color is passed in
-// (defaults to the accent) so callers can map it to status/completion.
+// percentage is overlaid in the pixel display font. Fill color auto-maps to a
+// completion tier (red → yellow → accent) unless an explicit `color` is passed.
 
-export default function RetroBar({ value = 0, color = 'var(--color-primary)', className = '' }) {
+export default function RetroBar({ value = 0, color, className = '' }) {
   const pct = Math.max(0, Math.min(100, Math.round(value)))
 
-  const segment = `repeating-linear-gradient(90deg, ${color} 0, ${color} 10px, rgba(0,0,0,0.18) 10px, rgba(0,0,0,0.18) 12px)`
+  // Auto color by completion tier (overridable via the `color` prop):
+  //   0–33%  low    → danger red
+  //   34–74% medium → warning yellow/orange
+  //   75–100 high   → active theme accent
+  const tierColor =
+    pct <= 33 ? 'var(--color-danger)' :
+    pct <= 74 ? 'var(--color-warning)' :
+    'var(--color-primary)'
+  const fillColor = color || tierColor
+
+  const segment = `repeating-linear-gradient(90deg, ${fillColor} 0, ${fillColor} 10px, rgba(0,0,0,0.18) 10px, rgba(0,0,0,0.18) 12px)`
 
   return (
     <div
-      className={`relative h-5 w-full border-[3px] border-border bg-surface overflow-hidden ${className}`}
+      className={`relative h-5 w-full border-[3px] border-border bg-surface overflow-hidden pixel-corners-sm ${className}`}
       role="progressbar"
       aria-valuenow={pct}
       aria-valuemin={0}
