@@ -234,13 +234,13 @@ export default function Profile() {
         <h3 className="font-pixel text-xs uppercase tracking-wide text-textprimary mb-4">Change password</h3>
 
         {passMsg && (
-          <div className="flex items-center gap-2 border border-success border-opacity-30 rounded-lg px-4 py-3 mb-4 bg-success/10">
+          <div className="flex items-center gap-2 border-[3px] border-success bg-success/10 px-4 py-3 mb-4">
             <i className="ti ti-circle-check text-success text-sm" aria-hidden="true"></i>
             <span className="text-success text-sm">{passMsg}</span>
           </div>
         )}
         {passError && (
-          <div className="flex items-center gap-2 border border-danger border-opacity-30 rounded-lg px-4 py-3 mb-4 bg-danger/10">
+          <div className="flex items-center gap-2 border-[3px] border-danger bg-danger/10 px-4 py-3 mb-4">
             <i className="ti ti-alert-circle text-danger text-sm" aria-hidden="true"></i>
             <span className="text-danger text-sm">{passError}</span>
           </div>
@@ -293,7 +293,7 @@ export default function Profile() {
 
       {/* Appearance */}
       <div className="card-lg">
-        <h3 className="text-textprimary text-sm font-medium mb-4">Appearance</h3>
+        <h3 className="font-pixel text-xs uppercase tracking-wide text-textprimary mb-4">Appearance</h3>
 
         {/* Light / dark mode */}
         <div className="flex items-center justify-between py-2">
@@ -310,10 +310,10 @@ export default function Profile() {
             aria-checked={dark}
             aria-label="Toggle dark mode"
             onClick={toggleMode}
-            className={`relative inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full transition-colors ${dark ? 'bg-primary' : 'bg-border'}`}
+            className={`relative inline-flex h-7 w-12 flex-shrink-0 items-center border-[3px] border-border shadow-retro transition-colors ${dark ? 'bg-primary' : 'bg-border'}`}
           >
             <span
-              className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${dark ? 'translate-x-5' : 'translate-x-1'}`}
+              className={`inline-block h-4 w-4 transform bg-white border-[3px] border-border transition-transform ${dark ? 'translate-x-6' : 'translate-x-0.5'}`}
             />
           </button>
         </div>
@@ -333,11 +333,11 @@ export default function Profile() {
                 aria-label={t.label}
                 aria-pressed={colorTheme === t.id}
                 title={t.label}
-                className={`relative w-8 h-8 rounded-full transition ${colorTheme === t.id ? 'ring-2 ring-offset-2 ring-primary ring-offset-surface' : 'ring-1 ring-border hover:ring-textsecondary'}`}
+                className={`relative w-9 h-9 border-[3px] border-border shadow-retro transition-transform hover:bg-black/10 active:translate-x-[4px] active:translate-y-[4px] active:shadow-none ${colorTheme === t.id ? 'ring-2 ring-offset-2 ring-primary ring-offset-surface' : ''}`}
                 style={{ backgroundColor: t.value }}
               >
                 {colorTheme === t.id && (
-                  <i className="ti ti-check text-white text-sm absolute inset-0 flex items-center justify-center" aria-hidden="true"></i>
+                  <i className="ti ti-check text-white text-sm absolute inset-0 flex items-center justify-center drop-shadow-[0_1px_0_rgba(0,0,0,0.6)]" aria-hidden="true"></i>
                 )}
               </button>
             ))}
