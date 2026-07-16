@@ -10,6 +10,7 @@ import {
   BarElement,
 } from 'chart.js'
 import api from '../api/index'
+import RetroBar from '../components/RetroBar'
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement)
 
@@ -57,13 +58,17 @@ export default function Analytics() {
     ? Math.round(((totalTasks - overdueCount) / totalTasks) * 100)
     : 100
 
-  // Doughnut chart data
+  // Doughnut chart data — solid retro status hexes
+  const STATUS_HEX = {
+    done: '#22C55E', in_progress: '#F59E0B', for_review: '#3B82F6', blocked: '#EF4444', todo: '#9CA3AF',
+  }
   const doughnutData = {
     labels: ['Done', 'In progress', 'For review', 'Blocked', 'Todo'],
     datasets: [{
       data: [doneTasks, inProgressTasks, reviewTasks, blockedTasks, todoTasks],
-      backgroundColor: ['#2ECC71', '#F39C12', '#6C63FF', '#E74C3C', '#8B8FA8'],
-      borderWidth: 0,
+      backgroundColor: [STATUS_HEX.done, STATUS_HEX.in_progress, STATUS_HEX.for_review, STATUS_HEX.blocked, STATUS_HEX.todo],
+      borderWidth: 3,
+      borderColor: '#000000',
     }]
   }
 
@@ -76,7 +81,7 @@ export default function Analytics() {
     cutout: '70%',
   }
 
-  // Bar chart — project progress
+  // Bar chart — project progress (square retro bars in the accent)
   const barData = {
     labels: projects.map(p => p.name.length > 15 ? p.name.slice(0, 15) + '...' : p.name),
     datasets: [{
@@ -86,8 +91,10 @@ export default function Analytics() {
         const done = parseInt(p.done_tasks) || 0
         return total > 0 ? Math.round((done / total) * 100) : 0
       }),
-      backgroundColor: '#6C63FF',
-      borderRadius: 6,
+      backgroundColor: 'var(--color-primary)',
+      borderColor: 'var(--color-border)',
+      borderWidth: 3,
+      borderRadius: 0,
     }]
   }
 
@@ -97,12 +104,12 @@ export default function Analytics() {
     },
     scales: {
       x: {
-        grid: { color: '#2A2D3E' },
-        ticks: { color: '#8B8FA8', font: { size: 11 } }
+        grid: { color: 'var(--color-border)' },
+        ticks: { color: 'var(--color-textsecondary)', font: { size: 11 } }
       },
       y: {
-        grid: { color: '#2A2D3E' },
-        ticks: { color: '#8B8FA8', font: { size: 11 } },
+        grid: { color: 'var(--color-border)' },
+        ticks: { color: 'var(--color-textsecondary)', font: { size: 11 } },
         max: 100,
       }
     }
@@ -122,13 +129,13 @@ export default function Analytics() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-medium text-textprimary">Analytics</h2>
+          <h2 className="font-pixel text-base uppercase tracking-wide text-textprimary">Analytics</h2>
           <p className="text-textsecondary text-sm mt-1">Track your progress and performance</p>
         </div>
         <select
           value={selectedProject}
           onChange={e => setSelectedProject(e.target.value)}
-          className="bg-surface border border-border rounded-lg px-4 py-2 text-sm text-textprimary focus:outline-none focus:border-primary"
+          className="input"
         >
           <option value="all">All projects</option>
           {projects.map(p => (
@@ -150,7 +157,7 @@ export default function Analytics() {
               <i className={`ti ${m.icon} text-textsecondary text-sm`} aria-hidden="true"></i>
               <p className="text-textsecondary text-xs">{m.label}</p>
             </div>
-            <p className={`text-2xl font-medium ${m.color}`}>{m.value}</p>
+            <p className={`font-display text-2xl ${m.color}`}>{m.value}</p>
           </div>
         ))}
       </div>
@@ -172,18 +179,18 @@ export default function Analytics() {
               </div>
               <div className="flex flex-col gap-2 flex-1">
                 {[
-                  { label: 'Done', value: doneTasks, color: '#2ECC71' },
-                  { label: 'In progress', value: inProgressTasks, color: '#F39C12' },
-                  { label: 'For review', value: reviewTasks, color: '#6C63FF' },
-                  { label: 'Blocked', value: blockedTasks, color: '#E74C3C' },
-                  { label: 'Todo', value: todoTasks, color: '#8B8FA8' },
+                  { label: 'Done', value: doneTasks, color: STATUS_HEX.done },
+                  { label: 'In progress', value: inProgressTasks, color: STATUS_HEX.in_progress },
+                  { label: 'For review', value: reviewTasks, color: STATUS_HEX.for_review },
+                  { label: 'Blocked', value: blockedTasks, color: STATUS_HEX.blocked },
+                  { label: 'Todo', value: todoTasks, color: STATUS_HEX.todo },
                 ].map((item, i) => (
                   <div key={i} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full" style={{ background: item.color }}></div>
+                      <div className="w-2.5 h-2.5 border-[3px] border-border" style={{ background: item.color }}></div>
                       <span className="text-textsecondary text-xs">{item.label}</span>
                     </div>
-                    <span className="text-textprimary text-xs font-medium">{item.value}</span>
+                    <span className="font-display text-textprimary text-xs">{item.value}</span>
                   </div>
                 ))}
               </div>
@@ -205,9 +212,9 @@ export default function Analytics() {
       </div>
 
       {/* Project breakdown table */}
-      <div className="bg-surface border border-border rounded-xl overflow-hidden">
-        <div className="px-5 py-4 border-b border-border">
-          <h3 className="text-textprimary text-sm font-medium">Project breakdown</h3>
+      <div className="bg-surface border-[3px] border-border shadow-retro overflow-hidden">
+        <div className="px-5 py-4 border-b-[3px] border-border">
+          <h3 className="font-pixel text-sm uppercase tracking-wide text-textprimary">Project breakdown</h3>
         </div>
         {projects.length === 0 ? (
           <div className="text-center py-8">
@@ -216,7 +223,7 @@ export default function Analytics() {
         ) : (
           <div className="overflow-x-auto">
             <div className="min-w-[700px]">
-          <div className="divide-y divide-border">
+          <div className="divide-y-[3px] divide-border">
             {/* Table header */}
             <div className="grid grid-cols-12 gap-4 px-5 py-3 bg-background">
               <div className="col-span-4 text-textsecondary text-xs font-medium">Project</div>
@@ -230,7 +237,7 @@ export default function Analytics() {
               const done = parseInt(p.done_tasks) || 0
               const pct = total > 0 ? Math.round((done / total) * 100) : 0
               return (
-                <div key={p.id} className="grid grid-cols-12 gap-4 px-5 py-3 items-center hover:bg-background transition-colors">
+                <div key={p.id} className="grid grid-cols-12 gap-4 px-5 py-3 items-center hover:bg-black hover:text-white transition-colors">
                   <div className="col-span-4">
                     <p className="text-textprimary text-sm truncate">{p.name}</p>
                   </div>
@@ -242,15 +249,15 @@ export default function Analytics() {
                   </div>
                   <div className="col-span-2">
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 h-1.5 bg-border rounded-full overflow-hidden">
-                        <div className="h-full bg-primary rounded-full" style={{ width: `${pct}%` }}></div>
+                      <div className="flex-1">
+                        <RetroBar value={pct} />
                       </div>
                       <span className="text-textsecondary text-xs">{pct}%</span>
                     </div>
                   </div>
                   <div className="col-span-2">
                     <div className="flex items-center gap-1">
-                      <div className={`w-1.5 h-1.5 rounded-full ${p.status === 'active' ? 'bg-success' : 'bg-textsecondary'}`}></div>
+                      <div className={`w-2.5 h-2.5 ${p.status === 'active' ? 'bg-success' : 'bg-textsecondary'}`}></div>
                       <span className="text-textsecondary text-xs capitalize">{p.status}</span>
                     </div>
                   </div>

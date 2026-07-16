@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../api/index'
+import RetroBar from '../components/RetroBar'
 
 const typePill = {
-  thesis: { className: 'text-primary bg-primary/10', style: undefined },
-  school: { className: 'text-secondary bg-secondary/10', style: undefined },
-  freelance: { className: 'text-warning bg-warning/10', style: undefined },
-  personal: { className: 'text-success bg-success/10', style: undefined },
+  thesis: { className: 'bg-primary text-black border-[3px] border-border', style: undefined },
+  school: { className: 'bg-secondary text-black border-[3px] border-border', style: undefined },
+  freelance: { className: 'bg-warning text-black border-[3px] border-border', style: undefined },
+  personal: { className: 'bg-success text-black border-[3px] border-border', style: undefined },
 }
 
 const filters = ['All', 'Thesis', 'School', 'Freelance', 'Personal']
@@ -76,7 +77,7 @@ export default function Projects() {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
-          <h2 className="text-xl font-medium text-textprimary">Projects</h2>
+          <h2 className="font-pixel text-base uppercase tracking-wide text-textprimary">Projects</h2>
           <p className="text-textsecondary text-sm mt-1">
             {projects.length} project{projects.length !== 1 ? 's' : ''} · {projects.filter(p => p.status === 'active').length} active
           </p>
@@ -98,9 +99,7 @@ export default function Projects() {
             onClick={() => setFilter(f)}
             className={`pill pill-outline ${
               filter === f
-                ? 'pill-active bg-primary/10'
-                : f === 'overdue' && overdueCount > 0
-                ? 'text-danger border-danger/40'
+                ? 'pill-active'
                 : ''
             }`}
           >
@@ -140,7 +139,7 @@ export default function Projects() {
                 <div className="flex items-start justify-between mb-3">
                   <h3 className="text-textprimary font-medium text-sm leading-tight flex-1 pr-3">{project.name}</h3>
                   {(() => {
-                    const cfg = typePill[project.type] || { className: 'bg-surface text-textsecondary', style: undefined }
+                    const cfg = typePill[project.type] || { className: 'bg-surface text-textsecondary border-[3px] border-border', style: undefined }
                     return (
                       <span className={`badge flex-shrink-0 ${cfg.className}`} style={cfg.style}>
                         {project.type}
@@ -156,30 +155,26 @@ export default function Projects() {
                 {/* Task chips */}
                 <div className="flex items-center gap-2 mb-3">
                   <span className="flex items-center gap-1 text-xs text-success">
-                    <span className="w-1.5 h-1.5 rounded-full bg-success"></span>
+                    <span className="w-2 h-2 bg-success"></span>
                     {done} done
                   </span>
                   <span className="flex items-center gap-1 text-xs text-warning">
-                    <span className="w-1.5 h-1.5 rounded-full bg-warning"></span>
+                    <span className="w-2 h-2 bg-warning"></span>
                     {total - done} remaining
                   </span>
                 </div>
 
                 {/* Progress */}
                 <div className="flex items-center gap-2 mb-3">
-                  <div className="flex-1 h-1.5 bg-border rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-primary rounded-full transition-all"
-                      style={{ width: `${percent}%` }}
-                    ></div>
+                  <div className="flex-1">
+                    <RetroBar value={percent} />
                   </div>
-                  <span className="text-textsecondary text-xs">{percent}%</span>
                 </div>
 
                 {/* Footer */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1">
-                    <span className={`w-1.5 h-1.5 rounded-full ${project.status === 'active' ? 'bg-success' : 'bg-textsecondary'}`}></span>
+                    <span className={`w-2 h-2 ${project.status === 'active' ? 'bg-success' : 'bg-textsecondary'}`}></span>
                     <span className="text-textsecondary text-xs capitalize">{project.status}</span>
                   </div>
                   {project.deadline && (
@@ -197,20 +192,20 @@ export default function Projects() {
 
       {/* Create Project Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 px-4">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4">
           <div className="card-lg w-full max-w-md">
             <div className="flex items-center justify-between mb-5">
-              <h3 className="text-textprimary font-medium">Create new project</h3>
+              <h3 className="font-pixel text-sm uppercase tracking-wide text-textprimary">Create new project</h3>
               <button
                 onClick={() => { setShowModal(false); setError('') }}
-                className="text-textsecondary hover:text-textprimary transition-colors"
+                className="text-textsecondary hover:text-danger transition-colors border-[3px] border-transparent hover:border-border p-1"
               >
                 <i className="ti ti-x" aria-hidden="true"></i>
               </button>
             </div>
 
             {error && (
-              <div className="flex items-center gap-2 border border-danger border-opacity-30 rounded-lg px-4 py-3 mb-4 bg-danger/10">
+              <div className="flex items-center gap-2 border-[3px] border-danger bg-danger/10 px-4 py-3 mb-4">
                 <i className="ti ti-alert-circle text-danger text-sm" aria-hidden="true"></i>
                 <span className="text-danger text-sm">{error}</span>
               </div>
@@ -224,7 +219,7 @@ export default function Projects() {
                   value={form.name}
                   onChange={e => setForm({ ...form, name: e.target.value })}
                   placeholder="e.g. Stellar's Dental Clinic"
-                  className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-textprimary placeholder-textsecondary focus:outline-none focus:border-primary transition-colors"
+                  className="input"
                 />
               </div>
 
@@ -235,7 +230,7 @@ export default function Projects() {
                   onChange={e => setForm({ ...form, description: e.target.value })}
                   placeholder="What is this project about?"
                   rows={3}
-                  className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-sm text-textprimary placeholder-textsecondary focus:outline-none focus:border-primary transition-colors resize-none"
+                  className="input resize-none"
                 />
               </div>
 
@@ -244,7 +239,7 @@ export default function Projects() {
                 <select
                   value={form.type}
                   onChange={e => setForm({ ...form, type: e.target.value })}
-                  className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-sm text-textprimary focus:outline-none focus:border-primary transition-colors"
+                  className="input"
                 >
                   <option value="thesis">Thesis / Capstone</option>
                   <option value="school">School Subject / Activity</option>
@@ -259,7 +254,7 @@ export default function Projects() {
                   type="date"
                   value={form.deadline}
                   onChange={e => setForm({ ...form, deadline: e.target.value })}
-                  className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-sm text-textprimary focus:outline-none focus:border-primary transition-colors"
+                  className="input"
                 />
               </div>
 

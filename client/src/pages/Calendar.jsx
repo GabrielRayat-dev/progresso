@@ -85,7 +85,7 @@ export default function Calendar() {
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-xl font-medium text-textprimary">Calendar</h2>
+            <h2 className="font-pixel text-base uppercase tracking-wide text-textprimary">Calendar</h2>
             <p className="text-textsecondary text-sm mt-1">
               {MONTHS[month]} {year}
             </p>
@@ -93,7 +93,7 @@ export default function Calendar() {
           <div className="flex items-center gap-2">
             <button
               onClick={prevMonth}
-              className="w-8 h-8 rounded-lg border border-border flex items-center justify-center text-textsecondary hover:text-textprimary hover:bg-surface transition-colors"
+              className="w-8 h-8 border-[3px] border-border bg-surface flex items-center justify-center text-textprimary shadow-retro transition-transform hover:bg-black hover:text-white active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
             >
               <i className="ti ti-chevron-left text-sm" aria-hidden="true"></i>
             </button>
@@ -105,7 +105,7 @@ export default function Calendar() {
             </button>
             <button
               onClick={nextMonth}
-              className="w-8 h-8 rounded-lg border border-border flex items-center justify-center text-textsecondary hover:text-textprimary hover:bg-surface transition-colors"
+              className="w-8 h-8 border-[3px] border-border bg-surface flex items-center justify-center text-textprimary shadow-retro transition-transform hover:bg-black hover:text-white active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
             >
               <i className="ti ti-chevron-right text-sm" aria-hidden="true"></i>
             </button>
@@ -113,9 +113,9 @@ export default function Calendar() {
         </div>
 
         {/* Calendar grid */}
-        <div className="bg-surface border border-border rounded-xl overflow-hidden">
+        <div className="bg-surface border-[3px] border-border shadow-retro overflow-hidden">
           {/* Day headers */}
-          <div className="grid grid-cols-7 border-b border-border">
+          <div className="grid grid-cols-7 border-b-[3px] border-border">
             {DAYS.map(d => (
               <div key={d} className="py-3 text-center text-textsecondary text-xs font-medium">
                 {d}
@@ -127,7 +127,7 @@ export default function Calendar() {
           <div className="grid grid-cols-7">
             {/* Empty cells before first day */}
             {Array.from({ length: firstDay }).map((_, i) => (
-              <div key={`empty-${i}`} className="min-h-16 md:min-h-20 border-b border-r border-border p-2 bg-background opacity-40" />
+              <div key={`empty-${i}`} className="min-h-16 md:min-h-20 border-b-[3px] border-r-[3px] border-border p-2 bg-background opacity-40" />
             ))}
 
             {/* Day cells */}
@@ -142,16 +142,16 @@ export default function Calendar() {
                 <div
                   key={day}
                   onClick={() => setSelectedDay(isSelected ? null : day)}
-                  className={`min-h-16 md:min-h-20 border-b border-r border-border p-2 cursor-pointer transition-colors ${
+                  className={`min-h-16 md:min-h-20 border-b-[3px] border-r-[3px] border-border p-2 cursor-pointer transition-colors ${
                     isSelected ? 'bg-primary/10' :
                     todayCell ? 'bg-primary/10' :
                     pastDay ? 'bg-background opacity-60' :
                     'hover:bg-background'
                   }`}
                 >
-                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium mb-1 ${
+                  <div className={`w-6 h-6 border-[3px] border-border flex items-center justify-center text-xs font-medium mb-1 ${
                     todayCell
-                      ? 'bg-primary text-white'
+                      ? 'bg-primary text-black'
                       : 'text-textprimary'
                   }`}>
                     {day}
@@ -160,10 +160,10 @@ export default function Calendar() {
                     {dayTasks.slice(0, 2).map(t => (
                       <div
                         key={t.id}
-                        className={`text-xs px-1 py-0.5 rounded truncate ${
-                          t.status === 'done' ? 'text-success bg-success/10' :
-                          t.status === 'blocked' ? 'text-danger bg-danger/10' :
-                          'text-primary bg-primary/10'
+                        className={`text-xs px-1 py-0.5 truncate border-[3px] border-border ${
+                          t.status === 'done' ? 'text-black bg-success' :
+                          t.status === 'blocked' ? 'text-white bg-danger' :
+                          'text-black bg-primary'
                         }`}
                       >
                         {t.title}
@@ -184,7 +184,7 @@ export default function Calendar() {
         {/* Selected day tasks */}
         {selectedDay && (
           <div className="mt-4 card">
-            <h4 className="text-textprimary text-sm font-medium mb-3">
+            <h4 className="font-pixel text-xs uppercase tracking-wide text-textprimary mb-3">
               {MONTHS[month]} {selectedDay} — {selectedDayTasks.length} task{selectedDayTasks.length !== 1 ? 's' : ''}
             </h4>
             {selectedDayTasks.length === 0 ? (
@@ -192,8 +192,8 @@ export default function Calendar() {
             ) : (
               <div className="space-y-2">
                 {selectedDayTasks.map(t => (
-                  <div key={t.id} className="flex items-center gap-3 bg-background rounded-lg px-3 py-2.5">
-                    <div className={`w-1.5 h-1.5 rounded-full ${statusColor[t.status]}`}></div>
+                  <div key={t.id} className="flex items-center gap-3 bg-surface border-[3px] border-border shadow-retro px-3 py-2.5">
+                    <div className={`w-2.5 h-2.5 ${statusColor[t.status]}`}></div>
                     <span className="text-textprimary text-sm flex-1">{t.title}</span>
                     <Link
                       to={`/projects/${t.project_id}`}
@@ -211,14 +211,14 @@ export default function Calendar() {
 
       {/* Sidebar — upcoming tasks */}
       <div className="w-full lg:w-64 flex-shrink-0">
-        <h3 className="text-textprimary text-sm font-medium mb-4">Upcoming tasks</h3>
+        <h3 className="font-pixel text-xs uppercase tracking-wide text-textprimary mb-4">Upcoming tasks</h3>
         {upcomingTasks.length === 0 ? (
           <div className="card text-center">
             <i className="ti ti-calendar-check text-textsecondary text-xl mb-2 block" aria-hidden="true"></i>
             <p className="text-textsecondary text-xs">No upcoming tasks</p>
           </div>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-3">
             {upcomingTasks.map(t => (
               <div
                 key={t.id}

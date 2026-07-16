@@ -63,7 +63,7 @@ export default function StatusDropdown({ status, onChange }) {
           setOpen((o) => !o)
           if (!open) setDir('down')
         }}
-        className={`badge border-0 focus:outline-none cursor-pointer gap-1.5 ${cfg.className}`}
+        className={`badge focus:outline-none cursor-pointer gap-1.5 ${cfg.className}`}
         style={cfg.style}
       >
         <span className={`w-1.5 h-1.5 rounded-full ${statusDot[status] || 'bg-textsecondary'}`} />
@@ -74,7 +74,7 @@ export default function StatusDropdown({ status, onChange }) {
       {open && (
         <div
           ref={menuRef}
-          className={`absolute right-0 w-44 bg-surface border border-border rounded-xl overflow-hidden z-20 ${
+          className={`absolute right-0 w-44 bg-surface border-[3px] border-border shadow-retro overflow-hidden z-20 ${
             dir === 'up' ? 'bottom-full mb-2' : 'top-full mt-2'
           }`}
         >
@@ -93,15 +93,15 @@ export default function StatusDropdown({ status, onChange }) {
                   onChange(val)
                   close()
                 }}
-                className={`w-full px-3 py-2 text-xs flex items-center gap-2 text-left transition-colors ${
+                className={`w-full px-3 py-2 text-xs flex items-center gap-2 text-left transition-colors border-b-[3px] border-border last:border-0 ${
                   isCurrent ? 'font-medium' : ''
                 } ${tintClass}`}
               >
-                <span className={`w-1.5 h-1.5 rounded-full ${statusDot[val] || 'bg-textsecondary'}`} />
-                <span className={(statusPill[val] || statusPill.todo).className.split(' ')[0]}>
+                <span className={`w-1.5 h-1.5 ${statusDot[val] || 'bg-textsecondary'}`} />
+                <span className="text-black">
                   {label}
                 </span>
-                {isCurrent && <i className="ti ti-check text-xs ml-auto text-textsecondary" aria-hidden="true"></i>}
+                {isCurrent && <i className="ti ti-check text-xs ml-auto text-black" aria-hidden="true"></i>}
               </button>
             )
           })}

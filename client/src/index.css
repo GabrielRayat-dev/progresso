@@ -1,30 +1,44 @@
 @import "tailwindcss";
 
 /* Light mode is the base; dark mode overrides these tokens under `.dark`.
-   Toggling `.dark` on <html> flips the whole theme at once. */
+   Toggling `.dark` on <html> flips the whole theme at once.
+
+   RETRO PIXEL-Art RPG reskin:
+   - Warm off-white canvas + crisp black edge in light.
+   - Matte dark slate + warm cream edge in dark (so borders stay crisp).
+   - Hard, non-blurry offset shadow driven by --color-shadow.
+   - Three font roles: pixel (headings/buttons/badges), display
+     (stat numbers/logo), mono (body/metadata). */
 @theme {
-  --color-background: #F4F5F9;
-  --color-surface: #FFFFFF;
-  --color-border: #E4E7EF;
+  --color-background: #F0EFEA;
+  --color-surface: #F8F7F4;
+  --color-border: #000000;
   --color-primary: #16A34A;
   --color-secondary: #4ECDC4;
-  --color-success: #2ECC71;
-  --color-warning: #F39C12;
-  --color-danger: #E74C3C;
+  --color-success: #22C55E;
+  --color-warning: #F59E0B;
+  --color-danger: #EF4444;
   --color-textprimary: #161922;
   --color-textsecondary: #5B6172;
+
+  --color-shadow: #000000;
+
+  --font-pixel: "Silkscreen", ui-monospace, monospace;
+  --font-display: "Press Start 2P", ui-monospace, monospace;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
 }
 
 .dark {
-  --color-background: #0F1117;
-  --color-surface: #1A1D27;
-  --color-border: #2A2D3E;
+  --color-background: #15171E;
+  --color-surface: #252836;
+  --color-border: #EDE9DD;
   --color-secondary: #4ECDC4;
-  --color-success: #2ECC71;
-  --color-warning: #F39C12;
-  --color-danger: #E74C3C;
-  --color-textprimary: #FFFFFF;
-  --color-textsecondary: #8B8FA8;
+  --color-success: #22C55E;
+  --color-warning: #F59E0B;
+  --color-danger: #EF4444;
+  --color-textprimary: #F0EFEA;
+  --color-textsecondary: #9A9CAB;
+  --color-shadow: #000000;
 }
 
 /* Color themes — override the accent (--color-primary) in BOTH light and dark.
@@ -48,74 +62,65 @@
   body {
     background-color: var(--color-background);
     color: var(--color-textprimary);
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-mono);
   }
 
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--color-surface); }
-  ::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb { background: var(--color-border); }
+}
+
+/* Hard retro offset shadow — used everywhere instead of soft shadows.
+   Shadow color flips with the theme so the drop always reads. */
+@utility shadow-retro {
+  box-shadow: 4px 4px 0 0 var(--color-shadow);
 }
 
 /* ============================================================
    Shared component primitives — single source of truth for
-   padding / radius so spacing stays proportional everywhere.
-   Buttons / pills: ~8px 16px (py-2 px-4)
-   Badges: compact inset (px-2.5 py-1)
-   Cards: 20–24px internal padding (p-5 / p-6)
+   borders (thick token edge), hard shadows, and the pixel
+   font on interactive labels. Corners are sharp (no radius)
+   for the blocky retro look.
    ============================================================ */
 @layer components {
-  /* ---- Buttons ---- */
+  /* ---- Buttons (depress into their shadow on press) ---- */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors cursor-pointer select-none;
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 font-pixel text-xs uppercase tracking-wide
+           border-[3px] border-border bg-surface text-textprimary shadow-retro
+           transition-transform cursor-pointer select-none;
   }
-  .btn-primary {
-    @apply bg-primary text-white hover:opacity-90;
+  .btn:active {
+    @apply translate-x-[4px] translate-y-[4px] shadow-none;
   }
-  .btn-outline {
-    @apply border border-border text-textprimary hover:border-primary hover:bg-background;
-  }
-  .btn-ghost {
-    @apply text-textsecondary hover:text-textprimary hover:bg-background;
-  }
-  .btn-danger-ghost {
-    @apply text-danger hover:bg-background;
-  }
-  .btn-lg {
-    @apply px-6 py-3 text-base;
-  }
-  .btn-block {
-    @apply w-full;
-  }
+  .btn-primary { @apply bg-primary text-black border-border; }
+  .btn-outline { @apply bg-surface text-textprimary border-border hover:bg-black hover:text-white; }
+  .btn-ghost { @apply text-textsecondary border-[3px] border-transparent hover:border-border hover:bg-surface; }
+  .btn-danger-ghost { @apply text-danger border-[3px] border-transparent hover:border-danger hover:bg-danger/10; }
+  .btn-lg { @apply px-6 py-3 text-sm; }
+  .btn-block { @apply w-full; }
 
   /* ---- Pills / filter chips / tabs ---- */
-  .pill-group {
-    @apply flex flex-wrap items-center gap-2;
-  }
+  .pill-group { @apply flex flex-wrap items-center gap-2; }
   .pill {
-    @apply inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-xs font-medium transition-colors cursor-pointer select-none whitespace-nowrap;
+    @apply inline-flex items-center justify-center gap-2 px-3 py-1.5 font-pixel text-[10px] uppercase
+           border-[3px] border-border bg-surface text-textprimary cursor-pointer select-none whitespace-nowrap;
   }
-  .pill-outline {
-    @apply border border-border text-textsecondary hover:text-textprimary;
-  }
-  .pill-active {
-    @apply text-primary border-primary/40;
-  }
+  .pill-outline { @apply border-[3px] border-border bg-surface text-textsecondary; }
+  .pill-active { @apply text-black border-border bg-primary; }
 
-  /* ---- Badges / status tags ---- */
+  /* ---- Badges / status tags (frame only; color from status config) ---- */
   .badge {
-    @apply inline-flex items-center justify-center rounded-full px-2.5 py-1 text-xs font-medium whitespace-nowrap;
+    @apply inline-flex items-center justify-center px-2 py-1 font-pixel text-[10px] uppercase whitespace-nowrap;
   }
 
   /* ---- Cards / containers ---- */
-  .card {
-    @apply rounded-xl border border-border bg-surface p-5;
-  }
-  .card-lg {
-    @apply rounded-2xl border border-border bg-surface p-6;
-  }
+  .card { @apply border-[3px] border-border bg-surface p-5 shadow-retro; }
+  .card-lg { @apply border-[3px] border-border bg-surface p-6 shadow-retro; }
 
   /* ---- Form inputs (shared inset) ---- */
   .input {
-    @apply w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm text-textprimary placeholder-textsecondary transition-colors focus:border-primary focus:outline-none;
+    @apply w-full border-[3px] border-border bg-surface px-4 py-2.5 font-mono text-sm
+           text-textprimary placeholder:text-textsecondary/60 transition-colors
+           focus:border-primary focus:outline-none;
   }
 }

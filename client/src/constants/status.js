@@ -1,28 +1,35 @@
 // Shared status / priority presentation tokens, used by the task table,
 // the mobile task cards, and the StatusDropdown component.
+//
+// Retro reskin: each status is now a SOLID block (matches the
+// Grey/Orange/Blue/Green/Red status map) with a thick token edge
+// (black in light, cream in dark). Drop these className strings straight
+// onto a `.badge` element.
 
 export const statusPill = {
-  todo: { className: 'text-textsecondary bg-surface border border-border', style: undefined },
-  in_progress: { className: 'text-warning bg-warning/10', style: undefined },
-  for_review: { className: 'text-primary bg-primary/10', style: undefined },
-  done: { className: 'text-success bg-success/10', style: undefined },
-  blocked: { className: 'text-danger bg-danger/10', style: undefined },
+  todo:        { className: 'bg-[#9CA3AF] text-black border-[3px] border-border', style: undefined },
+  in_progress: { className: 'bg-[#F59E0B] text-black border-[3px] border-border', style: undefined },
+  for_review:  { className: 'bg-[#3B82F6] text-white border-[3px] border-border', style: undefined },
+  done:        { className: 'bg-[#22C55E] text-black border-[3px] border-border', style: undefined },
+  blocked:     { className: 'bg-[#EF4444] text-white border-[3px] border-border', style: undefined },
 }
 
+// Solid fills used as menu-row / chip backgrounds on hover.
 export const statusTint = {
-  todo: 'bg-surface',
-  in_progress: 'bg-warning/10',
-  for_review: 'bg-primary/10',
-  done: 'bg-success/10',
-  blocked: 'bg-danger/10',
+  todo: 'bg-[#9CA3AF]',
+  in_progress: 'bg-[#F59E0B]',
+  for_review: 'bg-[#3B82F6]',
+  done: 'bg-[#22C55E]',
+  blocked: 'bg-[#EF4444]',
 }
 
+// Small status dots (kept solid, matching the blocks).
 export const statusDot = {
-  todo: 'bg-textsecondary',
-  in_progress: 'bg-warning',
-  for_review: 'bg-primary',
-  done: 'bg-success',
-  blocked: 'bg-danger',
+  todo: 'bg-[#9CA3AF]',
+  in_progress: 'bg-[#F59E0B]',
+  for_review: 'bg-[#3B82F6]',
+  done: 'bg-[#22C55E]',
+  blocked: 'bg-[#EF4444]',
 }
 
 export const statusLabels = {
@@ -34,7 +41,7 @@ export const statusLabels = {
 }
 
 export const priorityDot = {
-  high: 'bg-danger',
-  medium: 'bg-warning',
-  low: 'bg-success',
+  high: 'bg-[#EF4444]',
+  medium: 'bg-[#F59E0B]',
+  low: 'bg-[#22C55E]',
 }

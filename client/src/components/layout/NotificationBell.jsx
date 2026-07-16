@@ -78,21 +78,21 @@ export default function NotificationBell() {
     <div className="relative" ref={ref}>
       <button
         onClick={toggle}
-        className="relative w-8 h-8 rounded-lg flex items-center justify-center text-textsecondary hover:text-textprimary hover:bg-background transition-colors"
+        className="relative w-8 h-8 border-[3px] border-border bg-surface flex items-center justify-center text-textprimary shadow-retro transition-transform hover:bg-black hover:text-white active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
         aria-label="Notifications"
       >
         <i className="ti ti-bell text-base" aria-hidden="true"></i>
         {unread > 0 && (
-          <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full bg-primary text-white text-[10px] font-medium flex items-center justify-center">
+          <span className="absolute -top-2 -right-2 min-w-[18px] h-[18px] px-1 bg-primary text-black text-[10px] font-pixel border-[2px] border-border flex items-center justify-center">
             {unread > 99 ? '99+' : unread}
           </span>
         )}
       </button>
 
       {open && (
-        <div className="absolute right-0 top-10 w-80 bg-surface border border-border rounded-xl shadow-lg overflow-hidden z-50">
-          <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-            <span className="text-sm font-medium text-textprimary">Notifications</span>
+        <div className="absolute right-0 top-10 w-80 bg-surface border-[3px] border-border shadow-retro overflow-hidden z-50">
+          <div className="px-4 py-3 border-b-[3px] border-border flex items-center justify-between">
+            <span className="font-pixel text-xs uppercase text-textprimary">Notifications</span>
             {unread > 0 && (
               <span className="text-[11px] text-primary">{unread} new</span>
             )}
@@ -111,11 +111,11 @@ export default function NotificationBell() {
               items.map((n) => (
                 <div
                   key={n.id}
-                  className={`flex items-start gap-3 px-4 py-3 border-b border-border last:border-0 transition-colors ${
-                    n.is_read ? '' : 'bg-primary/5'
+                  className={`flex items-start gap-3 px-4 py-3 border-b-[3px] border-border last:border-0 transition-colors ${
+                    n.is_read ? '' : 'bg-primary/10'
                   }`}
                 >
-                  <div className="w-7 h-7 rounded-lg bg-background flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-7 h-7 border-[3px] border-border bg-surface flex items-center justify-center flex-shrink-0 mt-0.5">
                     <i
                       className={`ti ${TYPE_ICON[n.type] || 'ti-bell'} text-sm text-textsecondary`}
                       aria-hidden="true"
@@ -128,7 +128,7 @@ export default function NotificationBell() {
                     </p>
                   </div>
                   {!n.is_read && (
-                    <span className="w-2 h-2 rounded-full bg-primary mt-1.5 flex-shrink-0"></span>
+                    <span className="w-2 h-2 bg-primary mt-1.5 flex-shrink-0"></span>
                   )}
                 </div>
               ))

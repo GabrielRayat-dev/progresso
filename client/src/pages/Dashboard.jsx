@@ -2,36 +2,14 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import api from '../api/index'
-
-const statusColors = {
-  todo: 'text-textsecondary',
-  in_progress: 'text-warning',
-  for_review: 'text-primary',
-  done: 'text-success',
-  blocked: 'text-danger',
-}
-
-const statusLabels = {
-  todo: 'Todo',
-  in_progress: 'In progress',
-  for_review: 'For review',
-  done: 'Done',
-  blocked: 'Blocked',
-}
-
-const statusPill = {
-  todo: { className: 'bg-surface text-textsecondary', style: undefined },
-  in_progress: { className: 'text-warning bg-warning/10', style: undefined },
-  for_review: { className: 'text-primary bg-primary/10', style: undefined },
-  done: { className: 'text-success bg-success/10', style: undefined },
-  blocked: { className: 'text-danger bg-danger/10', style: undefined },
-}
+import RetroBar from '../components/RetroBar'
+import { statusPill, statusLabels, statusDot } from '../constants/status'
 
 const typePill = {
-  thesis: { className: 'text-primary bg-primary/10', style: undefined },
-  school: { className: 'text-secondary bg-secondary/10', style: undefined },
-  freelance: { className: 'text-warning bg-warning/10', style: undefined },
-  personal: { className: 'text-success bg-success/10', style: undefined },
+  thesis: { className: 'bg-primary text-black border-[3px] border-border', style: undefined },
+  school: { className: 'bg-secondary text-black border-[3px] border-border', style: undefined },
+  freelance: { className: 'bg-warning text-black border-[3px] border-border', style: undefined },
+  personal: { className: 'bg-success text-black border-[3px] border-border', style: undefined },
 }
 
 export default function Dashboard() {
@@ -93,7 +71,7 @@ export default function Dashboard() {
       {/* Header */}
       <div className="flex flex-wrap items-start justify-between gap-3 mb-6">
         <div>
-          <h2 className="text-xl font-medium text-textprimary">
+          <h2 className="font-pixel text-base uppercase tracking-wide text-textprimary">
             {greeting()}, {user?.full_name?.split(' ')[0]} 👋
           </h2>
           <p className="text-textsecondary text-sm mt-1">
@@ -121,7 +99,7 @@ export default function Dashboard() {
         ].map((m, i) => (
           <div key={i} className="card">
             <p className="text-textsecondary text-xs mb-2">{m.label}</p>
-            <p className={`text-2xl font-medium ${m.color} mb-1`}>{m.value}</p>
+            <p className={`font-display text-2xl ${m.color} mb-1`}>{m.value}</p>
             <p className="text-textsecondary text-xs">{m.sub}</p>
           </div>
         ))}
@@ -155,12 +133,12 @@ export default function Dashboard() {
                   <Link
                     key={project.id}
                     to={`/projects/${project.id}`}
-                    className="block bg-background rounded-lg p-3 hover:border-primary border border-border transition-colors"
+                    className="block bg-surface border-[3px] border-border shadow-retro p-3 hover:border-primary transition-colors"
                   >
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-textprimary text-sm font-medium truncate">{project.name}</span>
                       {(() => {
-                        const cfg = typePill[project.type] || { className: 'bg-surface text-textsecondary', style: undefined }
+                        const cfg = typePill[project.type] || { className: 'bg-surface text-textsecondary border-[3px] border-border', style: undefined }
                         return (
                           <span className={`badge flex-shrink-0 ${cfg.className}`} style={cfg.style}>
                             {project.type}
@@ -169,13 +147,7 @@ export default function Dashboard() {
                       })()}
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 h-1.5 bg-border rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-primary rounded-full"
-                          style={{ width: `${percent}%` }}
-                        ></div>
-                      </div>
-                      <span className="text-textsecondary text-xs">{percent}%</span>
+                      <RetroBar value={percent} />
                     </div>
                     <div className="flex items-center justify-between mt-2">
                       <span className="text-textsecondary text-xs">{done} of {total} tasks done</span>
@@ -210,14 +182,9 @@ export default function Dashboard() {
               {tasks.slice(0, 6).map(task => (
                 <div
                   key={task.id}
-                  className="flex items-center gap-3 bg-background rounded-lg px-3 py-2.5 border border-border"
+                  className="flex items-center gap-3 bg-surface border-[3px] border-border shadow-retro px-3 py-2.5"
                 >
-                  <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
-                    task.status === 'done' ? 'bg-success' :
-                    task.status === 'in_progress' ? 'bg-warning' :
-                    task.status === 'blocked' ? 'bg-danger' :
-                    task.status === 'for_review' ? 'bg-primary' : 'bg-textsecondary'
-                  }`}></div>
+                  <div className={`w-2.5 h-2.5 flex-shrink-0 ${statusDot[task.status] || 'bg-textsecondary'}`}></div>
                   <div className="flex-1 min-w-0">
                     <p className={`text-xs truncate ${task.status === 'done' ? 'line-through text-textsecondary' : 'text-textprimary'}`}>
                       {task.title}

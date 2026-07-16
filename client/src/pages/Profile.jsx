@@ -115,17 +115,17 @@ export default function Profile() {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="mb-6">
-        <h2 className="text-xl font-medium text-textprimary">Profile</h2>
+        <h2 className="font-pixel text-base uppercase tracking-wide text-textprimary">Profile</h2>
         <p className="text-textsecondary text-sm mt-1">Manage your account settings</p>
       </div>
 
       {/* Avatar section */}
       <div className="card-lg mb-4">
-        <h3 className="text-textprimary text-sm font-medium mb-4">Profile picture</h3>
+        <h3 className="font-pixel text-xs uppercase tracking-wide text-textprimary mb-4">Profile picture</h3>
         <div className="flex items-center gap-5">
           <div className="relative">
             <div
-              className="w-16 h-16 rounded-full flex items-center justify-center overflow-hidden bg-primary/20"
+              className="w-16 h-16 border-[3px] border-border bg-primary flex items-center justify-center overflow-hidden shadow-retro"
             >
               {user?.avatar_url ? (
                 <img
@@ -134,11 +134,11 @@ export default function Profile() {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <span className="text-primary text-xl font-medium">{initials}</span>
+                <span className="text-black text-xl font-pixel">{initials}</span>
               )}
             </div>
             {uploadingAvatar && (
-              <div className="absolute inset-0 rounded-full bg-black bg-opacity-50 flex items-center justify-center">
+              <div className="absolute inset-0 border-[3px] border-border bg-black/50 flex items-center justify-center">
                 <i className="ti ti-loader-2 animate-spin text-white" aria-hidden="true"></i>
               </div>
             )}
@@ -166,14 +166,14 @@ export default function Profile() {
 
       {/* Account info */}
       <div className="card-lg mb-4">
-        <h3 className="text-textprimary text-sm font-medium mb-4">Account info</h3>
+        <h3 className="font-pixel text-xs uppercase tracking-wide text-textprimary mb-4">Account info</h3>
         <div className="mb-4">
           <label className="block text-textsecondary text-xs mb-1.5">Email address</label>
           <input
             type="email"
             value={user?.email || ''}
             disabled
-            className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-sm text-textsecondary opacity-60 cursor-not-allowed"
+            className="input opacity-60 cursor-not-allowed"
           />
           <p className="text-textsecondary text-xs mt-1">Email cannot be changed.</p>
         </div>
@@ -183,23 +183,23 @@ export default function Profile() {
             type="text"
             value={memberSince ? new Date(memberSince).toLocaleDateString('en-PH', { month: 'long', day: 'numeric', year: 'numeric' }) : ''}
             disabled
-            className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-sm text-textsecondary opacity-60 cursor-not-allowed"
+            className="input opacity-60 cursor-not-allowed"
           />
         </div>
       </div>
 
       {/* Update name */}
       <div className="card-lg mb-4">
-        <h3 className="text-textprimary text-sm font-medium mb-4">Update name</h3>
+        <h3 className="font-pixel text-xs uppercase tracking-wide text-textprimary mb-4">Update name</h3>
 
         {nameMsg && (
-          <div className="flex items-center gap-2 border border-success border-opacity-30 rounded-lg px-4 py-3 mb-4 bg-success/10">
+          <div className="flex items-center gap-2 border-[3px] border-success bg-success/10 px-4 py-3 mb-4">
             <i className="ti ti-circle-check text-success text-sm" aria-hidden="true"></i>
             <span className="text-success text-sm">{nameMsg}</span>
           </div>
         )}
         {nameError && (
-          <div className="flex items-center gap-2 border border-danger border-opacity-30 rounded-lg px-4 py-3 mb-4 bg-danger/10">
+          <div className="flex items-center gap-2 border-[3px] border-danger bg-danger/10 px-4 py-3 mb-4">
             <i className="ti ti-alert-circle text-danger text-sm" aria-hidden="true"></i>
             <span className="text-danger text-sm">{nameError}</span>
           </div>
@@ -212,7 +212,7 @@ export default function Profile() {
               type="text"
               value={nameForm.full_name}
               onChange={e => setNameForm({ full_name: e.target.value })}
-              className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-sm text-textprimary focus:outline-none focus:border-primary transition-colors"
+              className="input"
             />
           </div>
           <button
@@ -231,7 +231,7 @@ export default function Profile() {
 
       {/* Change password */}
       <div className="card-lg mb-4">
-        <h3 className="text-textprimary text-sm font-medium mb-4">Change password</h3>
+        <h3 className="font-pixel text-xs uppercase tracking-wide text-textprimary mb-4">Change password</h3>
 
         {passMsg && (
           <div className="flex items-center gap-2 border border-success border-opacity-30 rounded-lg px-4 py-3 mb-4 bg-success/10">
@@ -254,7 +254,7 @@ export default function Profile() {
               value={passForm.current_password}
               onChange={e => setPassForm({ ...passForm, current_password: e.target.value })}
               placeholder="Enter current password"
-              className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-sm text-textprimary placeholder-textsecondary focus:outline-none focus:border-primary transition-colors"
+              className="input"
             />
           </div>
           <div>
@@ -264,7 +264,7 @@ export default function Profile() {
               value={passForm.new_password}
               onChange={e => setPassForm({ ...passForm, new_password: e.target.value })}
               placeholder="At least 6 characters"
-              className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-sm text-textprimary placeholder-textsecondary focus:outline-none focus:border-primary transition-colors"
+              className="input"
             />
           </div>
           <div>
@@ -274,7 +274,7 @@ export default function Profile() {
               value={passForm.confirm_password}
               onChange={e => setPassForm({ ...passForm, confirm_password: e.target.value })}
               placeholder="Repeat new password"
-              className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-sm text-textprimary placeholder-textsecondary focus:outline-none focus:border-primary transition-colors"
+              className="input"
             />
           </div>
           <button

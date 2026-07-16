@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../api/index'
 import StatusDropdown from '../components/StatusDropdown'
-import { priorityDot } from '../constants/status'
+import { priorityDot, statusPill, statusLabels } from '../constants/status'
 
 export default function MyTasks() {
   const [tasks, setTasks] = useState([])
@@ -66,7 +66,7 @@ export default function MyTasks() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-medium text-textprimary">My tasks</h2>
+          <h2 className="font-pixel text-base uppercase tracking-wide text-textprimary">My tasks</h2>
           <p className="text-textsecondary text-sm mt-1">
             {tasks.length} tasks across all projects
           </p>
@@ -83,7 +83,7 @@ export default function MyTasks() {
         ].map((s, i) => (
           <div key={i} className="card">
             <p className="text-textsecondary text-xs mb-2">{s.label}</p>
-            <p className={`text-2xl font-medium ${s.color}`}>{s.value}</p>
+            <p className={`font-display text-2xl ${s.color}`}>{s.value}</p>
           </div>
         ))}
       </div>
@@ -104,9 +104,9 @@ export default function MyTasks() {
             onClick={() => setFilter(f.key)}
             className={`pill pill-outline ${
               filter === f.key
-                ? 'pill-active bg-primary/10'
+                ? 'pill-active'
                 : f.key === 'overdue' && overdueCount > 0
-                ? 'text-danger border-danger/40'
+                ? 'text-danger'
                 : ''
             }`}
           >
@@ -136,7 +136,7 @@ export default function MyTasks() {
               <div key={task.id} className="card">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-2 min-w-0">
-                    <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${priorityDot[task.priority] || 'bg-textsecondary'}`} />
+                    <div className={`w-2.5 h-2.5 flex-shrink-0 ${priorityDot[task.priority] || 'bg-textsecondary'}`} />
                     <span className={`text-sm truncate ${
                       task.status === 'done' ? 'line-through text-textsecondary' : 'text-textprimary'
                     }`}>
@@ -176,11 +176,11 @@ export default function MyTasks() {
           </div>
 
           {/* Desktop: table (md and up) */}
-          <div className="hidden md:block bg-surface border border-border rounded-xl overflow-hidden">
+          <div className="hidden md:block bg-surface border-[3px] border-border shadow-retro overflow-hidden">
             <div className="overflow-x-auto">
               <div className="min-w-[700px]">
                 {/* Table header */}
-                <div className="grid grid-cols-12 gap-4 px-4 py-3 border-b border-border">
+                <div className="grid grid-cols-12 gap-4 px-4 py-3 border-b-[3px] border-border">
                   <div className="col-span-5 text-textsecondary text-xs font-medium">Task</div>
                   <div className="col-span-3 text-textsecondary text-xs font-medium">Project</div>
                   <div className="col-span-2 text-textsecondary text-xs font-medium">Due date</div>
@@ -188,15 +188,15 @@ export default function MyTasks() {
                 </div>
 
                 {/* Task rows */}
-                <div className="divide-y divide-border">
+                <div className="divide-y-[3px] divide-border">
                   {filtered.map(task => (
                     <div
                       key={task.id}
-                      className="grid grid-cols-12 gap-4 px-4 py-3 hover:bg-background transition-colors items-center"
+                      className="grid grid-cols-12 gap-4 px-4 py-3 hover:bg-black hover:text-white transition-colors items-center"
                     >
                       {/* Task name */}
                       <div className="col-span-5 flex items-center gap-2 min-w-0">
-                        <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${priorityDot[task.priority] || 'bg-textsecondary'}`}></div>
+                        <div className={`w-2.5 h-2.5 flex-shrink-0 ${priorityDot[task.priority] || 'bg-textsecondary'}`}></div>
                         <span className={`text-sm truncate ${
                           task.status === 'done'
                             ? 'line-through text-textsecondary'

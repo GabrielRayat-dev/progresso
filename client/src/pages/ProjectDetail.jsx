@@ -2,44 +2,8 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import api from '../api/index'
-
-const statusPill = {
-  todo: { className: 'bg-surface text-textsecondary border border-border', style: undefined },
-  in_progress: { className: 'text-warning bg-warning/10', style: undefined },
-  for_review: { className: 'text-primary bg-primary/10', style: undefined },
-  done: { className: 'text-success bg-success/10', style: undefined },
-  blocked: { className: 'text-danger bg-danger/10', style: undefined },
-}
-
-const statusLabels = {
-  todo: 'Todo',
-  in_progress: 'In progress',
-  for_review: 'For review',
-  done: 'Done',
-  blocked: 'Blocked',
-}
-
-const statusTint = {
-  todo: 'bg-surface',
-  in_progress: 'bg-warning/10',
-  for_review: 'bg-primary/10',
-  done: 'bg-success/10',
-  blocked: 'bg-danger/10',
-}
-
-const statusDot = {
-  todo: 'bg-textsecondary',
-  in_progress: 'bg-warning',
-  for_review: 'bg-primary',
-  done: 'bg-success',
-  blocked: 'bg-danger',
-}
-
-const priorityDot = {
-  high: 'bg-danger',
-  medium: 'bg-warning',
-  low: 'bg-success',
-}
+import RetroBar from '../components/RetroBar'
+import { statusPill, statusLabels, statusTint, statusDot, priorityDot } from '../constants/status'
 
 export default function ProjectDetail() {
   const { id } = useParams()
@@ -220,7 +184,7 @@ export default function ProjectDetail() {
         {/* Project header */}
         <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
           <div>
-            <h2 className="text-xl font-medium text-textprimary">{project.name}</h2>
+            <h2 className="font-pixel text-base uppercase tracking-wide text-textprimary">{project.name}</h2>
             {project.description && (
               <p className="text-textsecondary text-sm mt-1">{project.description}</p>
             )}
@@ -252,7 +216,7 @@ export default function ProjectDetail() {
             { label: 'Blocked', value: tasks.filter(t => t.status === 'blocked').length, color: 'text-danger' },
           ].map((s, i) => (
             <div key={i} className="card text-center">
-              <p className={`text-lg font-medium ${s.color}`}>{s.value}</p>
+              <p className={`font-display text-lg ${s.color}`}>{s.value}</p>
               <p className="text-textsecondary text-xs">{s.label}</p>
             </div>
           ))}
@@ -262,11 +226,9 @@ export default function ProjectDetail() {
         <div className="card mb-4">
           <div className="flex items-center justify-between mb-2">
             <span className="text-textsecondary text-xs">Overall progress</span>
-            <span className="text-primary text-xs font-medium">{percent}%</span>
+            <span className="text-black font-pixel text-xs">{percent}%</span>
           </div>
-          <div className="h-2 bg-border rounded-full overflow-hidden">
-            <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${percent}%` }}></div>
-          </div>
+          <RetroBar value={percent} />
         </div>
 
         {/* Filter tabs */}
@@ -277,7 +239,7 @@ export default function ProjectDetail() {
               onClick={() => setFilter(f)}
               className={`pill pill-outline ${
                 filter === f
-                  ? 'pill-active bg-primary/10'
+                  ? 'pill-active'
                   : ''
               }`}
             >
@@ -287,7 +249,7 @@ export default function ProjectDetail() {
         </div>
 
         {/* Task list */}
-        <div className="space-y-2">
+        <div className="space-y-3">
           {filteredTasks.length === 0 ? (
             <div className="card text-center">
               <i className="ti ti-checkbox text-textsecondary text-2xl mb-2 block" aria-hidden="true"></i>
@@ -304,11 +266,11 @@ export default function ProjectDetail() {
               <div
                 key={task.id}
                 onClick={() => setSelectedTask(task)}
-                className={`flex items-center gap-3 bg-surface border rounded-lg px-4 py-3 cursor-pointer transition-colors hover:border-primary ${
+                className={`flex items-center gap-3 bg-surface border-[3px] border-border shadow-retro px-4 py-3 cursor-pointer transition-colors hover:border-primary ${
                   selectedTask?.id === task.id ? 'border-primary' : 'border-border'
                 }`}
               >
-                <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${priorityDot[task.priority] || 'bg-textsecondary'}`}></div>
+                <div className={`w-2.5 h-2.5 flex-shrink-0 ${priorityDot[task.priority] || 'bg-textsecondary'}`}></div>
                 <span className={`flex-1 text-sm truncate ${task.status === 'done' ? 'line-through text-textsecondary' : 'text-textprimary'}`}>
                   {task.title}
                 </span>
@@ -324,16 +286,16 @@ export default function ProjectDetail() {
                           setHoveredStatus(null)
                           setOpenStatusTaskId(isOpen ? null : task.id)
                         }}
-                        className={`badge border-0 focus:outline-none cursor-pointer gap-1.5 ${cfg.className}`}
+                        className={`badge focus:outline-none cursor-pointer gap-1.5 ${cfg.className}`}
                         style={cfg.style}
                       >
-                        <span className={`w-1.5 h-1.5 rounded-full ${statusDot[task.status] || 'bg-textsecondary'}`} />
+                        <span className={`w-2.5 h-2.5 ${statusDot[task.status] || 'bg-textsecondary'}`} />
                         <span>{statusLabels[task.status] || 'Todo'}</span>
                         <i className="ti ti-chevron-down text-[10px] opacity-70" aria-hidden="true"></i>
                       </button>
 
                       {isOpen && (
-                        <div className="absolute right-0 mt-2 w-44 bg-surface border border-border rounded-xl overflow-hidden z-20">
+                        <div className="absolute right-0 mt-2 w-44 bg-surface border-[3px] border-border shadow-retro overflow-hidden z-20">
                           {Object.entries(statusLabels).map(([val, label]) => {
                             const isHovered = hoveredStatus === val
                             const isCurrent = task.status === val
@@ -350,15 +312,13 @@ export default function ProjectDetail() {
                                   setOpenStatusTaskId(null)
                                   setHoveredStatus(null)
                                 }}
-                                className={`w-full px-3 py-2 text-xs flex items-center gap-2 text-left transition-colors ${
+                                className={`w-full px-3 py-2 text-xs flex items-center gap-2 text-left transition-colors border-b-[3px] border-border last:border-0 ${
                                   isCurrent ? 'font-medium' : ''
                                 } ${tintClass}`}
                               >
-                                <span className={`w-1.5 h-1.5 rounded-full ${statusDot[val] || 'bg-textsecondary'}`} />
-                                <span className={(statusPill[val] || statusPill.todo).className.split(' ')[0]}>
-                                  {label}
-                                </span>
-                                {isCurrent && <i className="ti ti-check text-xs ml-auto text-textsecondary" aria-hidden="true"></i>}
+                                <span className={`w-2.5 h-2.5 ${statusDot[val] || 'bg-textsecondary'}`} />
+                                <span className="text-black">{label}</span>
+                                {isCurrent && <i className="ti ti-check text-xs ml-auto text-black" aria-hidden="true"></i>}
                               </button>
                             )
                           })}
@@ -368,8 +328,8 @@ export default function ProjectDetail() {
                   )
                 })()}
                 {task.assignee_name && (
-                  <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 bg-primary/20">
-                    <span className="text-primary text-xs">{initials(task.assignee_name)}</span>
+                  <div className="w-6 h-6 border-[3px] border-border bg-primary flex items-center justify-center flex-shrink-0">
+                    <span className="text-black text-[10px] font-pixel">{initials(task.assignee_name)}</span>
                   </div>
                 )}
                 {task.comment_count > 0 && (
@@ -389,11 +349,11 @@ export default function ProjectDetail() {
 
         {/* Task detail panel */}
         {selectedTask ? (
-          <div className="bg-surface border border-border rounded-xl overflow-hidden">
-            <div className="p-4 border-b border-border">
+          <div className="bg-surface border-[3px] border-border shadow-retro overflow-hidden">
+            <div className="p-4 border-b-[3px] border-border">
               <div className="flex items-start justify-between gap-2 mb-2">
                 <h4 className="text-textprimary text-sm font-medium">{selectedTask.title}</h4>
-                <button onClick={() => setSelectedTask(null)} className="text-textsecondary hover:text-textprimary flex-shrink-0">
+                <button onClick={() => setSelectedTask(null)} className="text-textsecondary hover:text-danger border-[3px] border-transparent hover:border-border p-1 flex-shrink-0">
                   <i className="ti ti-x text-sm" aria-hidden="true"></i>
                 </button>
               </div>
@@ -428,8 +388,8 @@ export default function ProjectDetail() {
                 ) : (
                   comments.map(c => (
                     <div key={c.id} className="flex gap-2">
-                      <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 bg-primary/20">
-                        <span className="text-primary text-xs">{initials(c.full_name)}</span>
+                      <div className="w-6 h-6 border-[3px] border-border bg-primary flex items-center justify-center flex-shrink-0">
+                        <span className="text-black text-[10px] font-pixel">{initials(c.full_name)}</span>
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
@@ -448,7 +408,7 @@ export default function ProjectDetail() {
                   value={comment}
                   onChange={e => setComment(e.target.value)}
                   placeholder="Add a comment..."
-                  className="flex-1 bg-background border border-border rounded-lg px-3 py-2 text-xs text-textprimary placeholder-textsecondary focus:outline-none focus:border-primary transition-colors"
+                  className="input text-xs py-2"
                 />
                 <button
                   type="submit"
@@ -480,8 +440,8 @@ export default function ProjectDetail() {
           <div className="space-y-2">
             {members.map(m => (
               <div key={m.id} className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 bg-primary/20">
-                  <span className="text-primary text-xs">{initials(m.full_name)}</span>
+                <div className="w-7 h-7 border-[3px] border-border bg-primary flex items-center justify-center flex-shrink-0">
+                  <span className="text-black text-[10px] font-pixel">{initials(m.full_name)}</span>
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-textprimary text-xs font-medium truncate">{m.full_name}</p>
@@ -511,11 +471,11 @@ export default function ProjectDetail() {
 
       {/* Create Task Modal */}
       {showTaskModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 px-4">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4">
           <div className="card-lg w-full max-w-md">
             <div className="flex items-center justify-between mb-5">
-              <h3 className="text-textprimary font-medium">Add new task</h3>
-              <button onClick={() => setShowTaskModal(false)} className="text-textsecondary hover:text-textprimary">
+              <h3 className="font-pixel text-sm uppercase tracking-wide text-textprimary">Add new task</h3>
+              <button onClick={() => setShowTaskModal(false)} className="text-textsecondary hover:text-danger border-[3px] border-transparent hover:border-border p-1">
                 <i className="ti ti-x" aria-hidden="true"></i>
               </button>
             </div>
@@ -527,7 +487,7 @@ export default function ProjectDetail() {
                   value={taskForm.title}
                   onChange={e => setTaskForm({ ...taskForm, title: e.target.value })}
                   placeholder="What needs to be done?"
-                  className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-sm text-textprimary placeholder-textsecondary focus:outline-none focus:border-primary transition-colors"
+                  className="input"
                 />
               </div>
               <div>
@@ -537,7 +497,7 @@ export default function ProjectDetail() {
                   onChange={e => setTaskForm({ ...taskForm, description: e.target.value })}
                   placeholder="Add more details..."
                   rows={2}
-                  className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-sm text-textprimary placeholder-textsecondary focus:outline-none focus:border-primary transition-colors resize-none"
+                  className="input resize-none"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
@@ -546,7 +506,7 @@ export default function ProjectDetail() {
                   <select
                     value={taskForm.priority}
                     onChange={e => setTaskForm({ ...taskForm, priority: e.target.value })}
-                    className="w-full bg-background border border-border rounded-lg px-3 py-2.5 text-sm text-textprimary focus:outline-none focus:border-primary"
+                    className="input"
                   >
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
@@ -559,7 +519,7 @@ export default function ProjectDetail() {
                     type="date"
                     value={taskForm.due_date}
                     onChange={e => setTaskForm({ ...taskForm, due_date: e.target.value })}
-                    className="w-full bg-background border border-border rounded-lg px-3 py-2.5 text-sm text-textprimary focus:outline-none focus:border-primary"
+                    className="input"
                   />
                 </div>
               </div>
@@ -568,7 +528,7 @@ export default function ProjectDetail() {
                 <select
                   value={taskForm.assigned_to}
                   onChange={e => setTaskForm({ ...taskForm, assigned_to: e.target.value })}
-                  className="w-full bg-background border border-border rounded-lg px-3 py-2.5 text-sm text-textprimary focus:outline-none focus:border-primary"
+                  className="input"
                 >
                   <option value="">Unassigned</option>
                   {members.map(m => (
@@ -603,11 +563,11 @@ export default function ProjectDetail() {
 
       {/* Invite Modal */}
       {showInvite && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 px-4">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4">
           <div className="card-lg w-full max-w-sm">
             <div className="flex items-center justify-between mb-5">
-              <h3 className="text-textprimary font-medium">Invite teammate</h3>
-              <button onClick={() => setShowInvite(false)} className="text-textsecondary hover:text-textprimary">
+              <h3 className="font-pixel text-sm uppercase tracking-wide text-textprimary">Invite teammate</h3>
+              <button onClick={() => setShowInvite(false)} className="text-textsecondary hover:text-danger border-[3px] border-transparent hover:border-border p-1">
                 <i className="ti ti-x" aria-hidden="true"></i>
               </button>
             </div>
@@ -619,7 +579,7 @@ export default function ProjectDetail() {
                   value={inviteEmail}
                   onChange={e => setInviteEmail(e.target.value)}
                   placeholder="teammate@email.com"
-                  className="w-full bg-background border border-border rounded-lg px-4 py-2.5 text-sm text-textprimary placeholder-textsecondary focus:outline-none focus:border-primary transition-colors"
+                  className="input"
                 />
               </div>
               <div className="flex gap-3">
