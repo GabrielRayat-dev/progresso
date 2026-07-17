@@ -266,7 +266,7 @@ export default function ProjectDetail() {
               <div
                 key={task.id}
                 onClick={() => setSelectedTask(task)}
-                className={`flex items-center gap-3 bg-surface border-[3px] border-border shadow-retro px-4 py-3 cursor-pointer transition-colors hover:border-primary ${
+                className={`flex items-center gap-3 bg-background border-[3px] border-border shadow-retro rounded-lg px-4 py-3 cursor-pointer transition-colors hover:border-primary ${
                   selectedTask?.id === task.id ? 'border-primary' : 'border-border'
                 }`}
               >

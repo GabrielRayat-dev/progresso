@@ -19,8 +19,17 @@ export default function Analytics() {
   const [tasks, setTasks] = useState([])
   const [loading, setLoading] = useState(true)
   const [selectedProject, setSelectedProject] = useState('all')
+  // Bumps whenever the <html> theme classes change (dark mode / accent), so the
+  // charts re-resolve their CSS-token colors and repaint without a manual refresh.
+  const [themeVersion, setThemeVersion] = useState(0)
 
   useEffect(() => { fetchData() }, [])
+
+  useEffect(() => {
+    const obs = new MutationObserver(() => setThemeVersion(v => v + 1))
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+    return () => obs.disconnect()
+  }, [])
 
   const fetchData = async () => {
     try {
@@ -62,13 +71,27 @@ export default function Analytics() {
   const STATUS_HEX = {
     done: '#22C55E', in_progress: '#F59E0B', for_review: '#3B82F6', blocked: '#EF4444', todo: '#9CA3AF',
   }
+  // Charts draw to a <canvas>, which cannot resolve CSS custom properties
+  // (`var(--color-*)`), so they fall back to Chart.js's dark defaults. Resolve
+  // the theme tokens to real hex here. `themeVersion` changes on theme toggle,
+  // so these recompute and the charts repaint in the correct mode.
+  const s = getComputedStyle(document.documentElement)
+  const cssVar = (name, fallback) => s.getPropertyValue(name).trim() || fallback
+  const borderColor = cssVar('--color-border', '#000000')
+  const textSecondary = cssVar('--color-textsecondary', '#5B6172')
+  const textPrimary = cssVar('--color-textprimary', '#161922')
+  const surfaceColor = cssVar('--color-surface', '#F8F7F4')
+  const pixelFont = cssVar('--font-pixel', "'Silkscreen', ui-monospace, monospace")
+  // Subtle, theme-aware grid lines (same token as axis text, faded).
+  const gridColor = textSecondary + '33'
+
   const doughnutData = {
     labels: ['Done', 'In progress', 'For review', 'Blocked', 'Todo'],
     datasets: [{
       data: [doneTasks, inProgressTasks, reviewTasks, blockedTasks, todoTasks],
       backgroundColor: [STATUS_HEX.done, STATUS_HEX.in_progress, STATUS_HEX.for_review, STATUS_HEX.blocked, STATUS_HEX.todo],
       borderWidth: 3,
-      borderColor: '#000000',
+      borderColor,
     }]
   }
 
@@ -81,7 +104,7 @@ export default function Analytics() {
     cutout: '70%',
   }
 
-  // Bar chart — project progress (square retro bars in the accent)
+  // Bar chart — project progress, colorized by completion tier (red → orange → green).
   const barData = {
     labels: projects.map(p => p.name.length > 15 ? p.name.slice(0, 15) + '...' : p.name),
     datasets: [{
@@ -91,28 +114,44 @@ export default function Analytics() {
         const done = parseInt(p.done_tasks) || 0
         return total > 0 ? Math.round((done / total) * 100) : 0
       }),
-      backgroundColor: 'var(--color-primary)',
-      borderColor: 'var(--color-border)',
+      backgroundColor: (ctx) => {
+        const v = ctx.raw ?? 0
+        return v <= 33 ? '#EF4444' : v <= 74 ? '#F59E0B' : '#22C55E'
+      },
+      borderColor,
       borderWidth: 3,
-      borderRadius: 0,
+      borderRadius: 4,
     }]
   }
 
   const barOptions = {
+    font: { family: pixelFont, size: 10 },
     plugins: {
-      legend: { display: false }
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: surfaceColor,
+        titleColor: textPrimary,
+        bodyColor: textSecondary,
+        borderColor,
+        borderWidth: 2,
+        titleFont: { family: pixelFont, size: 10 },
+        bodyFont: { family: pixelFont, size: 10 },
+        padding: 8,
+      },
     },
     scales: {
       x: {
-        grid: { color: 'var(--color-border)' },
-        ticks: { color: 'var(--color-textsecondary)', font: { size: 11 } }
+        grid: { color: gridColor, drawBorder: false },
+        border: { color: borderColor },
+        ticks: { color: textSecondary, font: { family: pixelFont, size: 10 } },
       },
       y: {
-        grid: { color: 'var(--color-border)' },
-        ticks: { color: 'var(--color-textsecondary)', font: { size: 11 } },
+        grid: { color: gridColor, drawBorder: false },
+        border: { color: borderColor },
+        ticks: { color: textSecondary, font: { family: pixelFont, size: 10 } },
         max: 100,
-      }
-    }
+      },
+    },
   }
 
   if (loading) return (
@@ -175,7 +214,7 @@ export default function Analytics() {
           ) : (
             <div className="flex flex-col sm:flex-row items-center gap-6">
               <div className="w-40 h-40 flex-shrink-0">
-                <Doughnut data={doughnutData} options={doughnutOptions} />
+                <Doughnut key={themeVersion} data={doughnutData} options={doughnutOptions} />
               </div>
               <div className="flex flex-col gap-2 flex-1">
                 {[
@@ -206,7 +245,7 @@ export default function Analytics() {
               <p className="text-textsecondary text-sm">No projects yet</p>
             </div>
           ) : (
-            <Bar data={barData} options={barOptions} />
+            <Bar key={themeVersion} data={barData} options={barOptions} />
           )}
         </div>
       </div>
@@ -237,7 +276,7 @@ export default function Analytics() {
               const done = parseInt(p.done_tasks) || 0
               const pct = total > 0 ? Math.round((done / total) * 100) : 0
               return (
-                <div key={p.id} className="grid grid-cols-12 gap-4 px-5 py-3 items-center hover:bg-black hover:text-white transition-colors">
+                <div key={p.id} className="grid grid-cols-12 gap-4 px-5 py-3 items-center hover:bg-background transition-colors">
                   <div className="col-span-4">
                     <p className="text-textprimary text-sm truncate">{p.name}</p>
                   </div>

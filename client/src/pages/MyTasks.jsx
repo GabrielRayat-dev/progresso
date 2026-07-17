@@ -192,7 +192,7 @@ export default function MyTasks() {
                   {filtered.map(task => (
                     <div
                       key={task.id}
-                      className="grid grid-cols-12 gap-4 px-4 py-3 hover:bg-black hover:text-white transition-colors items-center"
+                      className="grid grid-cols-12 gap-4 px-4 py-3 hover:bg-background transition-colors items-center"
                     >
                       {/* Task name */}
                       <div className="col-span-5 flex items-center gap-2 min-w-0">
