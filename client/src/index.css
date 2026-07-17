@@ -76,6 +76,13 @@
   box-shadow: 4px 4px 0 0 var(--color-shadow);
 }
 
+/* Razor-sharp pixel-art scaling — disable the browser's smoothing so the
+   32x32 SVG sprite tiles keep hard edges when drawn at any size. */
+@utility pixel-img {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
 /* Subtle single-notch pixel corners for small controls only (buttons, inputs,
    pills, progress bar). Larger surfaces use slightly rounded corners instead
    (see .card / .pixel-card-retro) so layout wrappers never get clipped. */
