@@ -155,9 +155,9 @@ export default function Sidebar() {
               profileActive ? 'bg-surface' : ''
             }`}
           >
-            <div className="w-8 h-8 border-[3px] border-border bg-primary flex items-center justify-center flex-shrink-0 overflow-hidden rounded-lg">
+            <div className="w-8 h-8 border-[3px] border-border bg-primary flex items-center justify-center flex-shrink-0 overflow-hidden rounded-full">
               {user?.avatar_url ? (
-                <img src={user.avatar_url} alt={user.full_name} className="w-8 h-8 object-cover" />
+                <img src={user.avatar_url} alt={user.full_name} className="w-8 h-8 object-cover rounded-full" />
               ) : (
                 <span className="text-black text-xs font-pixel">{initials}</span>
               )}
