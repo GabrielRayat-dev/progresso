@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import api from '../api/index'
+import ThemeToggle from '../components/layout/ThemeToggle'
+import { navIcons } from '../constants/navIcons'
 
 export default function Register() {
   const { login } = useAuth()
@@ -48,152 +50,158 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-background flex flex-col">
 
-        {/* Logo */}
-        <div className="flex items-center justify-center gap-2 mb-8">
-          <div className="w-8 h-8 border-[3px] border-border shadow-retro bg-primary flex items-center justify-center">
-            <i className="ti ti-chart-bar text-white text-sm" aria-hidden="true"></i>
-          </div>
-          <span className="font-medium text-lg text-textprimary">Progresso</span>
+      {/* Header with theme toggle */}
+      <header className="sticky top-0 z-50 bg-background border-b-[3px] border-border">
+        <div className="flex items-center justify-between px-4 md:px-8 py-3 max-w-7xl mx-auto">
+          <Link to="/" className="flex items-center gap-2">
+            <img src={navIcons.logo} alt="Progresso logo" className="w-8 h-8 pixel-img flex-shrink-0" />
+            <span className="font-pixel text-textprimary text-base uppercase tracking-wide">Progresso</span>
+          </Link>
+          <ThemeToggle />
         </div>
+      </header>
 
-        {/* Card */}
-        <div className="card-lg">
-          <h1 className="text-xl font-medium text-textprimary mb-1">Create your account</h1>
-          <p className="text-textsecondary text-sm mb-6">
-            Free forever · No credit card required
+      <div className="flex-1 flex items-center justify-center px-4 py-10">
+        <div className="w-full max-w-md">
+
+          {/* Card */}
+          <div className="card-lg">
+            <h1 className="font-pixel text-2xl uppercase text-textprimary mb-1">Create your account</h1>
+            <p className="text-textsecondary text-sm mb-6">
+              Free forever · No credit card required
+            </p>
+
+            {/* Error */}
+            {error && (
+              <div className="flex items-center gap-2 border-[3px] border-danger px-4 py-3 mb-4 bg-danger/10">
+                <i className="ti ti-alert-circle text-danger text-sm" aria-hidden="true"></i>
+                <span className="text-danger text-sm">{error}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-textsecondary text-xs mb-1.5">
+                  Full name
+                </label>
+                <input
+                  type="text"
+                  name="full_name"
+                  value={form.full_name}
+                  onChange={handleChange}
+                  placeholder="Juan Dela Cruz"
+                  required
+                  className="input"
+                />
+              </div>
+
+              <div>
+                <label className="block text-textsecondary text-xs mb-1.5">
+                  Email address
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  placeholder="you@email.com"
+                  required
+                  className="input"
+                />
+              </div>
+
+              <div>
+                <label className="block text-textsecondary text-xs mb-1.5">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  name="password"
+                  value={form.password}
+                  onChange={handleChange}
+                  placeholder="At least 6 characters"
+                  required
+                  className="input"
+                />
+              </div>
+
+              <div>
+                <label className="block text-textsecondary text-xs mb-1.5">
+                  Confirm password
+                </label>
+                <input
+                  type="password"
+                  name="confirm_password"
+                  value={form.confirm_password}
+                  onChange={handleChange}
+                  placeholder="Repeat your password"
+                  required
+                  className="input"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="btn btn-primary btn-block disabled:opacity-50 mt-2"
+              >
+                {loading ? (
+                  <>
+                    <i className="ti ti-loader-2 animate-spin" aria-hidden="true"></i>
+                    Creating account...
+                  </>
+                ) : (
+                  <>
+                    <i className="ti ti-user-plus" aria-hidden="true"></i>
+                    Create account
+                  </>
+                )}
+              </button>
+            </form>
+
+            {/* Divider */}
+            <div className="flex items-center gap-3 my-5">
+              <div className="flex-1 h-px bg-border"></div>
+              <span className="text-textsecondary text-xs">by signing up you agree to our terms</span>
+              <div className="flex-1 h-px bg-border"></div>
+            </div>
+
+            {/* Features reminder */}
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { icon: 'ti-infinity', text: 'Free forever' },
+                { icon: 'ti-users', text: 'Invite teammates' },
+                { icon: 'ti-chart-bar', text: 'Analytics included' },
+                { icon: 'ti-lock', text: 'Secure and private' },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-2 text-textsecondary text-xs">
+                  <i className={`ti ${item.icon} text-primary text-xs`} aria-hidden="true"></i>
+                  {item.text}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Footer */}
+          <p className="text-center text-textsecondary text-sm mt-6">
+            Already have an account?{' '}
+            <Link to="/login" className="text-primary hover:underline">
+              Sign in
+            </Link>
+          </p>
+          <p className="text-center mt-3">
+            <Link
+              to="/"
+              className="text-textsecondary text-xs hover:text-textprimary transition-colors flex items-center justify-center gap-1"
+            >
+              <i className="ti ti-arrow-left text-xs" aria-hidden="true"></i>
+              Back to home
+            </Link>
           </p>
 
-          {/* Error */}
-          {error && (
-            <div className="flex items-center gap-2 border-[3px] border-danger px-4 py-3 mb-4 bg-danger/10">
-              <i className="ti ti-alert-circle text-danger text-sm" aria-hidden="true"></i>
-              <span className="text-danger text-sm">{error}</span>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-textsecondary text-xs mb-1.5">
-                Full name
-              </label>
-              <input
-                type="text"
-                name="full_name"
-                value={form.full_name}
-                onChange={handleChange}
-                placeholder="Juan Dela Cruz"
-                required
-                className="input"
-              />
-            </div>
-
-            <div>
-              <label className="block text-textsecondary text-xs mb-1.5">
-                Email address
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={form.email}
-                onChange={handleChange}
-                placeholder="you@email.com"
-                required
-                className="input"
-              />
-            </div>
-
-            <div>
-              <label className="block text-textsecondary text-xs mb-1.5">
-                Password
-              </label>
-              <input
-                type="password"
-                name="password"
-                value={form.password}
-                onChange={handleChange}
-                placeholder="At least 6 characters"
-                required
-                className="input"
-              />
-            </div>
-
-            <div>
-              <label className="block text-textsecondary text-xs mb-1.5">
-                Confirm password
-              </label>
-              <input
-                type="password"
-                name="confirm_password"
-                value={form.confirm_password}
-                onChange={handleChange}
-                placeholder="Repeat your password"
-                required
-                className="input"
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn btn-primary btn-block disabled:opacity-50 mt-2"
-            >
-              {loading ? (
-                <>
-                  <i className="ti ti-loader-2 animate-spin" aria-hidden="true"></i>
-                  Creating account...
-                </>
-              ) : (
-                <>
-                  <i className="ti ti-user-plus" aria-hidden="true"></i>
-                  Create account
-                </>
-              )}
-            </button>
-          </form>
-
-          {/* Divider */}
-          <div className="flex items-center gap-3 my-5">
-            <div className="flex-1 h-px bg-border"></div>
-            <span className="text-textsecondary text-xs">by signing up you agree to our terms</span>
-            <div className="flex-1 h-px bg-border"></div>
-          </div>
-
-          {/* Features reminder */}
-          <div className="grid grid-cols-2 gap-2">
-            {[
-              { icon: 'ti-infinity', text: 'Free forever' },
-              { icon: 'ti-users', text: 'Invite teammates' },
-              { icon: 'ti-chart-bar', text: 'Analytics included' },
-              { icon: 'ti-lock', text: 'Secure and private' },
-            ].map((item, i) => (
-              <div key={i} className="flex items-center gap-2 text-textsecondary text-xs">
-                <i className={`ti ${item.icon} text-primary text-xs`} aria-hidden="true"></i>
-                {item.text}
-              </div>
-            ))}
-          </div>
         </div>
-
-        {/* Footer */}
-        <p className="text-center text-textsecondary text-sm mt-6">
-          Already have an account?{' '}
-          <Link to="/login" className="text-primary hover:underline">
-            Sign in
-          </Link>
-        </p>
-        <p className="text-center mt-3">
-          <Link
-            to="/"
-            className="text-textsecondary text-xs hover:text-textprimary transition-colors flex items-center justify-center gap-1"
-          >
-            <i className="ti ti-arrow-left text-xs" aria-hidden="true"></i>
-            Back to home
-          </Link>
-        </p>
-
       </div>
     </div>
   )
