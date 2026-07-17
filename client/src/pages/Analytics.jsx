@@ -11,6 +11,7 @@ import {
 } from 'chart.js'
 import api from '../api/index'
 import RetroBar from '../components/RetroBar'
+import CustomSelect from '../components/CustomSelect'
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement)
 
@@ -171,16 +172,15 @@ export default function Analytics() {
           <h2 className="font-pixel text-base uppercase tracking-wide text-textprimary">Analytics</h2>
           <p className="text-textsecondary text-sm mt-1">Track your progress and performance</p>
         </div>
-        <select
+        <CustomSelect
           value={selectedProject}
-          onChange={e => setSelectedProject(e.target.value)}
-          className="input"
-        >
-          <option value="all">All projects</option>
-          {projects.map(p => (
-            <option key={p.id} value={p.id}>{p.name}</option>
-          ))}
-        </select>
+          onChange={setSelectedProject}
+          className="w-full md:w-56"
+          options={[
+            { value: 'all', label: 'All projects' },
+            ...projects.map(p => ({ value: p.id, label: p.name })),
+          ]}
+        />
       </div>
 
       {/* Metrics */}
