@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { useAuth } from '../../context/AuthContext'
+import { Link, useLocation } from 'react-router-dom'
 import { navIcons } from '../../constants/navIcons'
 
 const COLLAPSE_KEY = 'sidebarCollapsed'
@@ -56,8 +55,6 @@ function NavLink({ item, isActive, collapsed }) {
 
 export default function Sidebar() {
   const location = useLocation()
-  const navigate = useNavigate()
-  const { user, logout } = useAuth()
   const [isCollapsed, setIsCollapsed] = useState(readCollapsed)
 
   const toggleCollapse = () => {
@@ -67,18 +64,6 @@ export default function Sidebar() {
       return next
     })
   }
-
-  const handleLogout = () => {
-    logout()
-    navigate('/')
-  }
-
-  const initials = user?.full_name
-    ?.split(' ')
-    .map((n) => n[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2)
 
   const profileActive = location.pathname === '/profile'
 
@@ -128,69 +113,24 @@ export default function Sidebar() {
         ))}
       </nav>
 
-      {/* Bottom: Settings + Sign out, then the current user */}
+      {/* Bottom: Settings action only */}
       <div className="space-y-1 border-t-[3px] border-border py-2">
         <NavLink
           item={{ icon: navIcons.settings, label: 'Settings', path: '/profile' }}
           collapsed={isCollapsed}
           isActive={profileActive}
         />
-        <button
-          onClick={handleLogout}
-          title={isCollapsed ? 'Sign out' : undefined}
-          className={`group relative flex w-full items-center gap-3 px-4 py-2.5 font-pixel text-xs uppercase tracking-wide text-danger transition-colors duration-200 ${
-            isCollapsed ? 'justify-center px-0' : ''
-          } hover:text-primary`}
-        >
-          <SignOutGlyph collapsed={isCollapsed} />
-        </button>
       </div>
 
-      {/* User — only show the full block when expanded to keep collapse clean */}
+      {/* System footer — version + copyright, aligned to the link grid */}
       {!isCollapsed && (
-        <div className="px-2 py-3 border-t-[3px] border-border">
-          <Link
-            to="/profile"
-            className={`flex items-center gap-3 px-2 py-1.5 transition-colors rounded-lg hover:bg-surface ${
-              profileActive ? 'bg-surface' : ''
-            }`}
-          >
-            <div className="w-8 h-8 border-[3px] border-border bg-primary flex items-center justify-center flex-shrink-0 overflow-hidden rounded-full">
-              {user?.avatar_url ? (
-                <img src={user.avatar_url} alt={user.full_name} className="w-8 h-8 object-cover rounded-full" />
-              ) : (
-                <span className="text-black text-xs font-pixel">{initials}</span>
-              )}
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-textprimary text-xs font-medium truncate">{user?.full_name}</p>
-              <p className="text-textsecondary text-xs truncate">{user?.email}</p>
-            </div>
-          </Link>
+        <div className="border-t-[3px] border-border px-4 py-3">
+          <p className="font-mono text-xs uppercase text-textsecondary truncate">
+            v1.0.0 • © 2026 Progresso
+          </p>
         </div>
       )}
     </aside>
   )
 }
 
-// Small pixel-style sign-out glyph (drawn as a bordered box with an arrow)
-// so the bottom row uses the same icon sizing as nav items.
-function SignOutGlyph({ collapsed }) {
-  return (
-    <span className="flex items-center gap-3 w-full">
-      <svg
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        aria-hidden="true"
-        className="w-6 h-6 flex-shrink-0"
-      >
-        <path d="M10 4h6v2h2v12h-2v2h-6v-2h4V6h-4V4z" fill="currentColor" />
-        <path d="M3 10h8v4H3v-4z" fill="currentColor" />
-        <path d="M9 12l-3 3 3 3 1-1-2-2 2-2-1-1z" fill="currentColor" />
-      </svg>
-      {!collapsed && <span>Sign out</span>}
-    </span>
-  )
-}
