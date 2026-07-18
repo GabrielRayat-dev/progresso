@@ -237,6 +237,32 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* How it works */}
+      <section className="px-8 py-12 max-w-4xl mx-auto">
+        <h2 className="font-pixel text-xl uppercase text-textprimary text-center mb-3">
+          How it works
+        </h2>
+        <p className="text-textsecondary text-center text-sm mb-10">
+          Three steps from chaos to clarity.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {[
+            { step: 'Step 1', icon: navIcons.folder, title: 'Create your project', desc: 'Spin up a project, pick its type, and invite your team by email in seconds.' },
+            { step: 'Step 2', icon: navIcons.analytics, title: 'Track every task', desc: 'Assign tasks, update statuses in one click, and watch the progress bar fill as work gets done.' },
+            { step: 'Step 3', icon: navIcons.bell, title: 'Stay in sync', desc: 'Get notified on comments, assignments, and deadlines — no more digging through group chat.' },
+          ].map((s, i) => (
+            <div key={i} className="card text-center">
+              <div className="w-12 h-12 flex items-center justify-center mx-auto mb-4">
+                <img src={s.icon} alt="" aria-hidden="true" className="w-7 h-7 pixel-img" />
+              </div>
+              <div className="font-pixel text-[10px] uppercase text-primary mb-1">{s.step}</div>
+              <h4 className="font-pixel text-xs uppercase text-textprimary mb-2">{s.title}</h4>
+              <p className="text-textsecondary text-xs leading-relaxed">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Features */}
       <section className="px-8 py-12 max-w-4xl mx-auto">
         <h2 className="font-pixel text-xl uppercase text-textprimary text-center mb-3">
@@ -317,9 +343,14 @@ export default function Landing() {
             <img src={navIcons.logo} alt="Progresso logo" className="h-6 w-6 object-contain flex-shrink-0" />
             <span className="font-pixel text-textprimary text-sm uppercase tracking-wide">Progresso</span>
           </Link>
-          <p className="text-xs text-textsecondary text-center">
-            Built by Gabriel Rayat · BSCS 3rd year
-          </p>
+          <a
+            href="https://portfolio-gabriel-rayat.vercel.app"
+            target="_blank"
+            rel="noreferrer"
+            className="text-xs text-textsecondary text-center hover:text-primary transition-colors"
+          >
+            Built by Gabriel Rayat – BSCS 3rd year
+          </a>
           <p className="text-xs text-textsecondary text-center">
             Move forward, together.
           </p>
