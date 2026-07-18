@@ -56,7 +56,7 @@ export default function Register() {
       <header className="sticky top-0 z-50 bg-background border-b-[3px] border-border">
         <div className="flex items-center justify-between px-4 md:px-8 py-3 max-w-7xl mx-auto">
           <Link to="/" className="flex items-center gap-2">
-            <img src={navIcons.logo} alt="Progresso logo" className="w-8 h-8 pixel-img flex-shrink-0" />
+            <img src={navIcons.logo} alt="Progresso logo" className="h-8 w-8 object-contain flex-shrink-0" />
             <span className="font-pixel text-textprimary text-base uppercase tracking-wide">Progresso</span>
           </Link>
           <ThemeToggle />

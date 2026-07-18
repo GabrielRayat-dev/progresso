@@ -68,7 +68,7 @@ export default function Landing() {
       <div className="sticky top-0 z-50 bg-background border-b-[3px] border-border">
         <nav className="flex items-center justify-between px-4 md:px-8 py-3 md:py-4 max-w-7xl mx-auto">
           <Link to="/" className="flex items-center gap-2">
-            <img src={navIcons.logo} alt="Progresso logo" className="w-8 h-8 pixel-img flex-shrink-0" />
+            <img src={navIcons.logo} alt="Progresso logo" className="h-8 w-8 object-contain flex-shrink-0" />
             <span className="font-pixel text-textprimary text-base uppercase tracking-wide">Progresso</span>
           </Link>
 
@@ -314,7 +314,7 @@ export default function Landing() {
       <footer className="border-t-[3px] border-border px-8 py-6">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 max-w-7xl mx-auto">
           <Link to="/" className="flex items-center gap-2">
-            <img src={navIcons.logo} alt="Progresso logo" className="w-6 h-6 pixel-img flex-shrink-0" />
+            <img src={navIcons.logo} alt="Progresso logo" className="h-6 w-6 object-contain flex-shrink-0" />
             <span className="font-pixel text-textprimary text-sm uppercase tracking-wide">Progresso</span>
           </Link>
           <p className="text-xs text-textsecondary text-center">

@@ -84,7 +84,7 @@ export default function Sidebar() {
             <img
               src={navIcons.logo}
               alt="Progresso logo"
-              className="w-8 h-8 pixel-img flex-shrink-0"
+              className="h-8 w-8 object-contain flex-shrink-0"
             />
             <span className="font-pixel text-textprimary text-sm uppercase tracking-wide truncate">
               Progresso
