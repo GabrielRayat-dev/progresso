@@ -44,6 +44,44 @@ export default function Landing() {
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef(null)
 
+  // Looping XP bar in the dashboard (RetroBar) style: a solid fill with
+  // subtle retro notches, color-shifting red → orange → green as it fills.
+  // Staged 10s loop: 0→25% (pause) →50% (pause) →100%, hold 1s, reset.
+  const CYCLE_MS = 10000
+  const FILL_A = 1400   // 0 → 25%
+  const PAUSE_1 = 800    // hold at 25%
+  const FILL_B = 1400   // 25 → 50%
+  const PAUSE_2 = 800    // hold at 50%
+  const FILL_C = 4600   // 50 → 100%
+  const HOLD = 1000       // hold at 100% before reset
+  const [progress, setProgress] = useState(0)
+  const startRef = useRef(null)
+  useEffect(() => {
+    let raf
+    const step = (e) => {
+      if (e < FILL_A) return (e / FILL_A) * 25
+      if (e < FILL_A + PAUSE_1) return 25
+      if (e < FILL_A + PAUSE_1 + FILL_B) return 25 + ((e - FILL_A - PAUSE_1) / FILL_B) * 25
+      if (e < FILL_A + PAUSE_1 + FILL_B + PAUSE_2) return 50
+      if (e < CYCLE_MS - HOLD) return 50 + ((e - FILL_A - PAUSE_1 - FILL_B - PAUSE_2) / FILL_C) * 50
+      return 100
+    }
+    const tick = (t) => {
+      if (startRef.current === null) startRef.current = t
+      const elapsed = (t - startRef.current) % CYCLE_MS
+      setProgress(step(elapsed))
+      raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [])
+
+  // Solid fill color shifts with the bar: red (0–25) → orange/yellow (26–50) → green (51–100)
+  const barColor =
+    progress < 26 ? 'var(--color-danger)'
+      : progress < 51 ? 'var(--color-warning)'
+      : 'var(--color-success)'
+
   // Close the mobile menu on outside click or Escape
   useEffect(() => {
     if (!menuOpen) return
@@ -135,12 +173,17 @@ export default function Landing() {
           and activity logs in one place. No more &ldquo;anong progress mo?&rdquo; in the group chat.
         </p>
 
-        {/* XP progress bar */}
+        {/* XP progress bar — dashboard RetroBar style, looping */}
         <div className="w-full max-w-xs mb-8">
-          <div className="h-3 border-2 border-border bg-surface">
-            <div className="h-full bg-primary" style={{ width: '75%' }}></div>
+          <div className="relative h-5 w-full border-[3px] border-border bg-surface overflow-hidden pixel-corners-sm">
+            <div
+              className="h-full transition-colors duration-500 ease-in-out"
+              style={{ width: `${progress}%`, backgroundColor: barColor }}
+            />
           </div>
-          <p className="font-pixel text-[10px] uppercase text-textsecondary mt-1 text-left">750 / 1000 XP to next level</p>
+          <p className="font-pixel text-[10px] uppercase text-textsecondary mt-1 text-center">
+            {Math.round(progress)}%
+          </p>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3">
