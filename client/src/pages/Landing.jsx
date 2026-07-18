@@ -44,43 +44,59 @@ export default function Landing() {
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef(null)
 
-  // Looping XP bar in the dashboard (RetroBar) style: a solid fill with
-  // subtle retro notches, color-shifting red → orange → green as it fills.
-  // Staged 10s loop: 0→25% (pause) →50% (pause) →100%, hold 1s, reset.
-  const CYCLE_MS = 10000
-  const FILL_A = 1400   // 0 → 25%
-  const PAUSE_1 = 800    // hold at 25%
-  const FILL_B = 1400   // 25 → 50%
-  const PAUSE_2 = 800    // hold at 50%
-  const FILL_C = 4600   // 50 → 100%
-  const HOLD = 1000       // hold at 100% before reset
+  // Looping "level-up" bar in the dashboard (RetroBar) style. The segmented
+  // pixel fill snaps between discrete steps — 30% → 70% → 100% — holds at each,
+  // then resets to 0% and loops. The percentage label shows inside the bar only
+  // once it lands on a step (never mid-transition, never at 0%).
+  // Start the label at 30% so there's a value on first paint. The label is
+  // never cleared, so the reserved space below stays locked and the user
+  // always sees a value (30 / 70 / 100) — even mid-animation.
   const [progress, setProgress] = useState(0)
-  const startRef = useRef(null)
+  const [label, setLabel] = useState('30%')
   useEffect(() => {
-    let raf
-    const step = (e) => {
-      if (e < FILL_A) return (e / FILL_A) * 25
-      if (e < FILL_A + PAUSE_1) return 25
-      if (e < FILL_A + PAUSE_1 + FILL_B) return 25 + ((e - FILL_A - PAUSE_1) / FILL_B) * 25
-      if (e < FILL_A + PAUSE_1 + FILL_B + PAUSE_2) return 50
-      if (e < CYCLE_MS - HOLD) return 50 + ((e - FILL_A - PAUSE_1 - FILL_B - PAUSE_2) / FILL_C) * 50
-      return 100
+    const timers = []
+    const wait = (ms) => new Promise((resolve) => {
+      const id = setTimeout(resolve, ms)
+      timers.push(id)
+    })
+    let cancelled = false
+    const PHASES = [
+      { value: 30, hold: 2400 },  // animate to 30%, hold
+      { value: 70, hold: 2400 },  // animate to 70%, hold
+      { value: 100, hold: 2320 }, // animate to 100%, hold briefly
+      { value: 0, hold: 800 },    // reset to empty (label keeps the last milestone)
+    ]
+    const loop = async () => {
+      while (!cancelled) {
+        for (const phase of PHASES) {
+          if (cancelled) return
+          // Snap the label to the upcoming value right away so it's never
+          // blank; during the reset we keep the previous milestone instead
+          // of flashing an empty/zero label.
+          if (phase.value !== 0) setLabel(`${phase.value}%`)
+          setProgress(phase.value)
+          await wait(520)         // let the width transition run (duration-500)
+          if (cancelled) return
+          await wait(phase.hold)  // hold at the step / reset pause
+        }
+      }
     }
-    const tick = (t) => {
-      if (startRef.current === null) startRef.current = t
-      const elapsed = (t - startRef.current) % CYCLE_MS
-      setProgress(step(elapsed))
-      raf = requestAnimationFrame(tick)
+    loop()
+    return () => {
+      cancelled = true
+      timers.forEach(clearTimeout)
     }
-    raf = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf)
   }, [])
 
-  // Solid fill color shifts with the bar: red (0–25) → orange/yellow (26–50) → green (51–100)
-  const barColor =
-    progress < 26 ? 'var(--color-danger)'
-      : progress < 51 ? 'var(--color-warning)'
-      : 'var(--color-success)'
+  // Segmented pixel fill + tier color, identical to the dashboard RetroBar:
+  //   0–33%  low    → danger red
+  //   34–74% medium → warning yellow/orange
+  //   75–100 high   → active theme accent
+  const tierColor =
+    progress <= 33 ? 'var(--color-danger)' :
+    progress <= 74 ? 'var(--color-warning)' :
+    'var(--color-primary)'
+  const segment = `repeating-linear-gradient(90deg, ${tierColor} 0, ${tierColor} 10px, rgba(0,0,0,0.18) 10px, rgba(0,0,0,0.18) 12px)`
 
   // Close the mobile menu on outside click or Escape
   useEffect(() => {
@@ -173,16 +189,24 @@ export default function Landing() {
           and activity logs in one place. No more &ldquo;anong progress mo?&rdquo; in the group chat.
         </p>
 
-        {/* XP progress bar — dashboard RetroBar style, looping */}
+        {/* Level-up progress bar — dashboard RetroBar style, step-based loop */}
         <div className="w-full max-w-xs mb-8">
-          <div className="relative h-5 w-full border-[3px] border-border bg-surface overflow-hidden pixel-corners-sm">
+          <div
+            className="relative h-5 w-full border-[3px] border-border bg-surface overflow-hidden pixel-corners-sm"
+            role="progressbar"
+            aria-valuenow={progress}
+            aria-valuemin={0}
+            aria-valuemax={100}
+          >
             <div
-              className="h-full transition-colors duration-500 ease-in-out"
-              style={{ width: `${progress}%`, backgroundColor: barColor }}
+              className="h-full transition-[width] duration-500"
+              style={{ width: `${progress}%`, backgroundImage: segment }}
             />
           </div>
-          <p className="font-pixel text-[10px] uppercase text-textsecondary mt-1 text-center">
-            {Math.round(progress)}%
+          {/* Percentage label — fixed-height container so it never shifts layout;
+              the text content still updates only at the 30/70/100 steps */}
+          <p className="font-pixel text-xs text-black dark:text-white mt-1 text-center h-4 leading-4">
+            {label}
           </p>
         </div>
 
