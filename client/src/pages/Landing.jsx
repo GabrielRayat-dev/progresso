@@ -172,13 +172,6 @@ export default function Landing() {
 
       {/* Hero */}
       <section className="flex flex-col items-center text-center px-6 pt-16 pb-12 max-w-5xl mx-auto">
-        {/* Gamified stat row */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
-          <span className="pill pill-outline font-pixel">LVL 1</span>
-          <span className="pill pill-outline font-pixel">750 XP</span>
-          <span className="pill pill-outline font-pixel">STREAK 3</span>
-        </div>
-
         <h1 className="font-pixel text-2xl sm:text-3xl md:text-4xl text-textprimary max-w-2xl leading-snug mb-5">
           Stop chasing teammates.
           <span className="text-primary block mt-2">Start tracking progress.</span>
