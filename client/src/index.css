@@ -70,6 +70,27 @@
   ::-webkit-scrollbar-thumb { background: var(--color-border); }
 }
 
+/* Thin retro scrollbar for the notification panel — a solid accent-color
+   thumb on a framed track so it reads as part of the console, not a generic
+   OS scrollbar. Uses --color-primary so it follows the global Accent Color
+   setting (theme-* class on <html>). */
+.notif-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary) var(--color-surface);
+}
+.notif-scroll::-webkit-scrollbar { width: 6px; }
+.notif-scroll::-webkit-scrollbar-track {
+  background: var(--color-surface);
+  border-left: 2px solid var(--color-border);
+}
+.notif-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  image-rendering: pixelated;
+}
+.notif-scroll::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--color-primary) 80%, #000);
+}
+
 /* Hard retro offset shadow — used everywhere instead of soft shadows.
    Shadow color flips with the theme so the drop always reads. */
 @utility shadow-retro {

@@ -21,4 +21,14 @@ const markAllRead = async (req, res) => {
   }
 }
 
-module.exports = { getNotifications, markAllRead }
+// ─── MARK ONE AS READ ────────────────────────────────────
+const markOneRead = async (req, res) => {
+  try {
+    await NotificationModel.markOneRead(req.user.id, req.params.id)
+    res.json({ message: 'Notification marked as read.' })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+}
+
+module.exports = { getNotifications, markAllRead, markOneRead }

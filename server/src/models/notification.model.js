@@ -40,7 +40,15 @@ const NotificationModel = {
       [user_id]
     )
     return parseInt(result.rows[0].count)
-  }
+  },
+
+  // Mark a single notification as read
+  markOneRead: async (user_id, id) => {
+    await db.query(
+      'UPDATE notifications SET is_read = true WHERE user_id = $1 AND id = $2',
+      [user_id, id]
+    )
+  },
 
 }
 

@@ -3,7 +3,7 @@ import { navIcons } from '../../constants/navIcons'
 import { useNotifications } from '../../context/NotificationsContext'
 
 export default function HeaderNavigation({ isDarkMode, toggleTheme }) {
-  const { notifications, unreadCount, markAllRead, fetchNotifications } = useNotifications()
+  const { notifications, unreadCount, markAllRead, markOneRead, dismissNotification, fetchNotifications } = useNotifications()
   const [isOpen, setIsOpen] = useState(false)
   const bellRef = useRef(null)
   const panelRef = useRef(null)
@@ -35,12 +35,7 @@ export default function HeaderNavigation({ isDarkMode, toggleTheme }) {
   }, [isOpen])
 
   const handleBellClick = () => {
-    const next = !isOpen
-    setIsOpen(next)
-    if (next && unreadCount > 0) {
-      // Opening the panel: mark everything read and clear the purple dot
-      markAllRead()
-    }
+    setIsOpen((prev) => !prev)
   }
 
   const modeIcon = isDarkMode ? navIcons.light : navIcons.dark
@@ -58,10 +53,10 @@ export default function HeaderNavigation({ isDarkMode, toggleTheme }) {
         aria-expanded={isOpen}
       >
         <img src={navIcons.bell} alt="" aria-hidden="true" className="w-6 h-6 pixel-img" />
-        {/* Purple unread badge */}
+        {/* Unread badge — uses the active accent color */}
         {unreadCount > 0 && (
           <span
-            className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-[#8B5CF6] border-2 border-border text-white text-[10px] font-pixel leading-none"
+            className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-primary border-2 border-border text-white text-[10px] font-pixel leading-none"
             aria-hidden="true"
           >
             {unreadCount > 99 ? '99+' : unreadCount}
@@ -73,33 +68,79 @@ export default function HeaderNavigation({ isDarkMode, toggleTheme }) {
       {isOpen && (
         <div
           ref={panelRef}
-          className="absolute right-0 top-[125%] bg-surface border-[3px] border-border rounded-lg shadow-retro z-50 min-w-50 p-4"
+          className="absolute right-0 top-[125%] w-80 max-h-[400px] flex flex-col bg-surface border-[3px] border-border rounded-lg shadow-retro z-50 p-4"
           role="dialog"
           aria-label="Notification panel"
         >
-          <div className="flex items-start gap-3">
-            <img src={navIcons.bell} alt="" className="w-5 h-5 pixel-img shrink-0" />
-            <div className="min-w-0">
-              <p className="text-sm font-pixel text-textprimary">
-                {unreadCount > 0 ? `You have ${unreadCount} new` : 'Notifications'}
+          {/* Header: title + Mark all as read */}
+          <div className="flex items-center justify-between gap-2 pb-3 border-b-2 border-border">
+            <div className="flex items-center gap-2 min-w-0">
+              <img src={navIcons.bell} alt="" className="w-5 h-5 pixel-img shrink-0" />
+              <p className="text-sm font-pixel text-textprimary truncate">
+                {unreadCount > 0 ? `${unreadCount} unread` : 'Notifications'}
               </p>
-
-              {notifications.length > 0 ? (
-                <ul className="mt-2 space-y-1 text-sm text-textsecondary max-h-64 overflow-y-auto border-t-2 border-border pt-2">
-                  {notifications.map((n) => (
-                    <li
-                      key={n.id}
-                      className={`flex items-start gap-2 ${n.is_read ? 'opacity-60' : ''}`}
-                    >
-                      <span className="text-xs font-pixel">•</span>
-                      <span className="font-mono break-words">{n.message}</span>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="mt-2 text-sm text-textsecondary font-mono">No notifications yet</p>
-              )}
             </div>
+            {unreadCount > 0 && (
+              <button
+                type="button"
+                onClick={markAllRead}
+                className="shrink-0 font-pixel text-[10px] uppercase tracking-wide text-primary border-[2px] border-transparent hover:border-primary hover:bg-primary/10 px-2 py-1 transition-colors cursor-pointer"
+              >
+                Mark all read
+              </button>
+            )}
+          </div>
+
+          {/* Scrollable list — fills the remaining height of the panel */}
+          <div className="notif-scroll flex-1 overflow-y-auto mt-3">
+            {notifications.length > 0 ? (
+              <ul className="space-y-2">
+                {notifications.map((n) => (
+                  <li
+                    key={n.id}
+                    role="button"
+                    tabIndex={n.is_read ? -1 : 0}
+                    aria-label={n.is_read ? 'Notification read' : 'Mark notification as read'}
+                    onClick={() => !n.is_read && markOneRead(n.id)}
+                    onKeyDown={(e) => {
+                      if (!n.is_read && (e.key === 'Enter' || e.key === ' ')) {
+                        e.preventDefault()
+                        markOneRead(n.id)
+                      }
+                    }}
+                    className={`group flex items-start gap-2 rounded-md p-2 border-[2px] border-transparent transition-colors ${
+                      n.is_read
+                        ? 'bg-transparent cursor-default'
+                        : 'bg-primary/10 hover:bg-primary/20 cursor-pointer'
+                    }`}
+                  >
+                    <span
+                      className={`mt-0.5 text-xs font-pixel leading-none ${
+                        n.is_read ? 'text-textsecondary' : 'text-primary'
+                      }`}
+                    >
+                      •
+                    </span>
+                    <span className="flex-1 font-mono text-sm text-textsecondary break-words">
+                      {n.message}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        dismissNotification(n.id)
+                      }}
+                      aria-label="Dismiss notification"
+                      className="shrink-0 w-5 h-5 flex items-center justify-center font-pixel text-sm leading-none text-textsecondary rounded hover:text-danger hover:bg-danger/10 cursor-pointer transition-colors"
+                    >
+                      ×
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="py-8 text-center text-sm text-textsecondary font-mono">No notifications yet</p>
+            )}
           </div>
         </div>
       )}
