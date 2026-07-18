@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import api from '../api/index'
-import { COLOR_THEMES, getColorTheme, setColorTheme, isDarkMode, setDarkMode } from '../theme'
+import { COLOR_THEMES, getColorTheme, setColorTheme } from '../theme'
+import { useTheme } from '../context/ThemeContext'
 
 export default function Profile() {
   const { user, login } = useAuth()
@@ -20,15 +21,9 @@ export default function Profile() {
   const [uploadingAvatar, setUploadingAvatar] = useState(false)
   const [memberSince, setMemberSince] = useState(user?.created_at || '')
 
-  // Theme: light/dark mode + accent color theme
-  const [dark, setDarkModeState] = useState(isDarkMode)
+  // Theme: light/dark mode (shared global state) + accent color theme
+  const { dark, toggleTheme } = useTheme()
   const [colorTheme, setColorThemeState] = useState(getColorTheme)
-
-  const toggleMode = () => {
-    const next = !dark
-    setDarkModeState(next)
-    setDarkMode(next)
-  }
 
   const chooseColorTheme = (id) => {
     setColorThemeState(setColorTheme(id))
@@ -309,7 +304,7 @@ export default function Profile() {
             role="switch"
             aria-checked={dark}
             aria-label="Toggle dark mode"
-            onClick={toggleMode}
+            onClick={toggleTheme}
             className={`relative inline-flex h-7 w-12 flex-shrink-0 items-center border-[3px] border-border shadow-retro transition-colors ${dark ? 'bg-primary' : 'bg-border'}`}
           >
             <span

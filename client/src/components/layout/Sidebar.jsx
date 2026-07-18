@@ -95,7 +95,7 @@ export default function Sidebar() {
           onClick={toggleCollapse}
           aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           aria-expanded={!isCollapsed}
-          className="w-8 h-8 flex items-center justify-center border-[3px] border-border bg-surface text-textprimary font-pixel text-sm rounded-lg shadow-retro transition-transform hover:bg-black hover:text-white active:translate-x-[4px] active:translate-y-[4px] active:shadow-none flex-shrink-0"
+          className="w-8 h-8 flex items-center justify-center border-[3px] border-border bg-surface text-textprimary font-pixel text-sm rounded-lg shadow-retro transition-all duration-200 hover:border-primary hover:bg-primary/10 hover:text-primary active:translate-x-[4px] active:translate-y-[4px] active:shadow-none flex-shrink-0"
         >
           {isCollapsed ? '»' : '«'}
         </button>

@@ -1,20 +1,15 @@
 import { useState, useRef, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
-import { isDarkMode, setDarkMode } from '../../theme'
+import { useTheme } from '../../context/ThemeContext'
 import HeaderNavigation from './HeaderNavigation'
 
 export default function Navbar({ title, subtitle }) {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
+  const { dark, toggleTheme } = useTheme()
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef(null)
-  const [dark, setDark] = useState(isDarkMode())
-  const toggleTheme = () => {
-    const next = !dark
-    setDark(next)
-    setDarkMode(next)
-  }
 
   const initials = user?.full_name
     ?.split(' ')
