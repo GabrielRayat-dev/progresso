@@ -147,7 +147,10 @@ export default function Dashboard() {
                       })()}
                     </div>
                     <div className="flex items-center gap-2">
-                      <RetroBar value={percent} />
+                      <div className="flex-1">
+                        <RetroBar value={percent} />
+                      </div>
+                      <span className="text-black dark:text-white font-pixel text-xs shrink-0">{percent}%</span>
                     </div>
                     <div className="flex items-center justify-between mt-2">
                       <span className="text-textsecondary text-xs">{done} of {total} tasks done</span>

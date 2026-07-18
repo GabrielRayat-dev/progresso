@@ -169,6 +169,7 @@ export default function Projects() {
                   <div className="flex-1">
                     <RetroBar value={percent} />
                   </div>
+                  <span className="text-black dark:text-white font-pixel text-xs shrink-0">{percent}%</span>
                 </div>
 
                 {/* Footer */}

@@ -1,7 +1,8 @@
 // RetroBar — chunky stepped "health bar" progress indicator.
-// The fill uses a repeating gradient to fake segmented steps, and the
-// percentage is overlaid in the pixel display font. Fill color auto-maps to a
-// completion tier (red → yellow → accent) unless an explicit `color` is passed.
+// The bar shows only the colored/segmented fill; the precise percentage is
+// rendered by the caller to the right of the bar (see Dashboard / ProjectDetail).
+// Fill color auto-maps to a completion tier (red → yellow → accent) unless an
+// explicit `color` is passed.
 
 export default function RetroBar({ value = 0, color, className = '' }) {
   const pct = Math.max(0, Math.min(100, Math.round(value)))
@@ -30,9 +31,6 @@ export default function RetroBar({ value = 0, color, className = '' }) {
         className="h-full transition-[width] duration-500"
         style={{ width: `${pct}%`, backgroundImage: segment }}
       />
-      <span className="absolute inset-0 flex items-center justify-center font-display text-[10px] text-black">
-        {pct}%
-      </span>
     </div>
   )
 }

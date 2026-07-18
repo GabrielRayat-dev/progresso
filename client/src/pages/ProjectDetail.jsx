@@ -226,7 +226,7 @@ export default function ProjectDetail() {
         <div className="card mb-4">
           <div className="flex items-center justify-between mb-2">
             <span className="text-textsecondary text-xs">Overall progress</span>
-            <span className="text-black font-pixel text-xs">{percent}%</span>
+            <span className="text-black dark:text-white font-pixel text-xs">{percent}%</span>
           </div>
           <RetroBar value={percent} />
         </div>

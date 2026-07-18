@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* Map Tailwind's `dark:` variant to the app's `.dark` class toggle
+   (theme.js adds/removes `.dark` on <html>). Tailwind v4 defaults
+   `dark:` to the OS prefers-color-scheme, which would NOT respond to the
+   in-app theme switch — this makes `dark:` follow the class instead. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* Light mode is the base; dark mode overrides these tokens under `.dark`.
    Toggling `.dark` on <html> flips the whole theme at once.
 
