@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')
+const rateLimit = require('express-rate-limit')
 require('dotenv').config()
 require('./src/db')
 
@@ -14,6 +15,27 @@ const notificationRoutes = require('./src/routes/notification.routes')
 const app = express()
 app.use(cors())
 app.use(express.json())
+
+// Rate limiting
+const generalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: { error: 'Too many requests. Please try again later.' },
+  standardHeaders: true,
+  legacyHeaders: false
+})
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // limit each IP to 10 requests per windowMs
+  message: { error: 'Too many requests. Please try again later.' },
+  standardHeaders: true,
+  legacyHeaders: false
+})
+
+// Apply rate limiters
+app.use('/api/auth', authLimiter)
+app.use('/api', generalLimiter)
 
 app.use('/api/auth', authRoutes)
 app.use('/api/projects', projectRoutes)
