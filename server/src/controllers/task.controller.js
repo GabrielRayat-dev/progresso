@@ -2,6 +2,7 @@ const TaskModel = require('../models/task.model')
 const ActivityModel = require('../models/activity.model')
 const NotificationModel = require('../models/notification.model')
 const UserModel = require('../models/user.model')
+const MemberModel = require('../models/member.model')
 
 // ─── CREATE TASK ──────────────────────────────────────────
 const createTask = async (req, res) => {
@@ -44,6 +45,12 @@ const createTask = async (req, res) => {
 // ─── GET ALL TASKS IN PROJECT ─────────────────────────────
 const getProjectTasks = async (req, res) => {
   try {
+    // Verify user is a member of the project
+    const membership = await MemberModel.findMembership(req.params.project_id, req.user.id)
+    if (!membership) {
+      return res.status(403).json({ error: 'You are not authorized to access this resource.' })
+    }
+
     const tasks = await TaskModel.findByProject(req.params.project_id)
     res.json({ count: tasks.length, tasks })
   } catch (err) {
@@ -68,6 +75,13 @@ const getTask = async (req, res) => {
     if (!task) {
       return res.status(404).json({ error: 'Task not found.' })
     }
+
+    // Verify user is a member of the project the task belongs to
+    const membership = await MemberModel.findMembership(task.project_id, req.user.id)
+    if (!membership) {
+      return res.status(403).json({ error: 'You are not authorized to access this resource.' })
+    }
+
     res.json(task)
   } catch (err) {
     res.status(500).json({ error: err.message })

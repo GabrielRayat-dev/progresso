@@ -61,6 +61,13 @@ const getProject = async (req, res) => {
     if (!project) {
       return res.status(404).json({ error: 'Project not found.' })
     }
+
+    // Verify user is a member of the project
+    const membership = await MemberModel.findMembership(req.params.project_id, req.user.id)
+    if (!membership) {
+      return res.status(403).json({ error: 'You are not authorized to access this resource.' })
+    }
+
     res.json(project)
   } catch (err) {
     res.status(500).json({ error: err.message })
@@ -76,6 +83,16 @@ const updateProject = async (req, res) => {
       name, description, type, deadline, status
     )
 
+    // Check if user is project leader before allowing update
+    const membership = await MemberModel.findMembership(
+      req.params.project_id, req.user.id
+    )
+    if (!membership || membership.role !== 'leader') {
+      return res.status(403).json({
+        error: 'You must be the project leader to update this project.'
+      })
+    }
+
     await ActivityModel.log(
       req.params.project_id, null, req.user.id,
       'project_updated', null, name
@@ -90,6 +107,18 @@ const updateProject = async (req, res) => {
 // ─── DELETE PROJECT ───────────────────────────────────────
 const deleteProject = async (req, res) => {
   try {
+    const project = await ProjectModel.findById(req.params.project_id)
+    if (!project) {
+      return res.status(404).json({ error: 'Project not found.' })
+    }
+
+    // Verify user is the owner before allowing delete
+    if (project.owner_id !== req.user.id) {
+      return res.status(403).json({
+        error: 'You are not authorized to delete this project.'
+      })
+    }
+
     await ProjectModel.delete(req.params.project_id)
     res.json({ message: 'Project deleted.' })
   } catch (err) {
