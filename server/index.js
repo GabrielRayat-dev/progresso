@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')
+const helmet = require('helmet')
 const rateLimit = require('express-rate-limit')
 require('dotenv').config()
 require('./src/db')
@@ -13,7 +14,14 @@ const commentRoutes = require('./src/routes/comment.routes')
 const notificationRoutes = require('./src/routes/notification.routes')
 
 const app = express()
-app.use(cors())
+app.use(helmet())
+app.use(cors({
+  origin: [
+    'https://your-progresso-app.vercel.app',
+    'http://localhost:5173'
+  ],
+  credentials: true
+}))
 app.use(express.json())
 
 // Rate limiting
